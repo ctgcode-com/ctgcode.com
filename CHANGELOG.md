@@ -24,3 +24,9 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Cambiado
 
 - Guía de inicialización en la documentación para reflejar el uso de pnpm en lugar de npm.
+
+## [0.2.1] - 2026-07-02
+
+### Cambiado
+
+- Corregida la sección de estructura del repositorio en el `README.md` para adaptarla a la configuración actual del entorno.

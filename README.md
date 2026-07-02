@@ -16,8 +16,13 @@ El proyecto está estructurado utilizando herramientas de última generación pa
 
 ## Estructura del Repositorio
 
-En este _commit_ inicial se establece la base legal, el control de versiones y la documentación del proyecto:
+El proyecto se organiza bajo una arquitectura desacoplada y estática, distribuyendo sus componentes principales de la siguiente forma:
 
+- `src/`: Código fuente de la aplicación, incluyendo páginas, componentes de Astro y estilos nativos.
+- `public/`: Archivos estáticos globales (imágenes, fuentes, favicons y recursos del sistema).
+- `astro.config.mjs`: Archivo central de configuración y comportamiento del framework.
+- `tsconfig.json`: Directrices y estándares de tipado estricto para TypeScript.
+- `CLAUDE.md`: Configuración operativa y estándares de desarrollo para asistentes de IA.
 - `.gitignore`: Exclusión de directorios de dependencias (`node_modules`), compilaciones de producción e información sensible de configuración local.
 - `LICENSE.md`: Términos de propiedad intelectual y derechos de autor vigentes en Colombia.
 - `CHANGELOG.md`: Registro estructurado y cronológico de los cambios del sistema.
