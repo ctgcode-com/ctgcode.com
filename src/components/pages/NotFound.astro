@@ -1,0 +1,97 @@
+---
+/**
+ * NotFound — la página 404: "el náufrago".
+ *
+ * Narrativa de marca: te perdiste en el mar de noche. El sol —el «0» del 404—
+ * se hunde en el horizonte, los «4» flotan como boyas, y el faro (el CTA) te
+ * guía de vuelta a puerto: Cartagena, coordenadas reales en la voz mono.
+ *
+ * Es una sola ruta para ambos idiomas: se sirve en español y un script mínimo
+ * cambia los textos a inglés si el navegador lo prefiere (mismo patrón que la
+ * vista de enrutamiento). Estilos en styles/not-found.css.
+ */
+import Layout from "../../layouts/Layout.astro";
+import CTA from "../ui/CTA.astro";
+import { locales } from "../../data/i18n";
+import "../../styles/not-found.css";
+
+const t = locales.es.notFound;
+const en = locales.en.notFound;
+---
+
+<Layout title="404 — CTG Code" description={t.lead} pageName="404">
+  <main class="nf-scene u-grid" data-tone="night">
+    <a class="brand-mono nf-brand" href="/">
+      <span class="brace">&#123;</span> ctgcode <span class="brace">&#125;</span
+      >
+    </a>
+
+    <p class="eyebrow nf-status" data-nf="status">{t.status}</p>
+
+    <!-- 4 ☀ 4 — el sol del logo hundiéndose en el horizonte -->
+    <div class="nf-figure bleed-wide" role="img" aria-label="404">
+      <span class="nf-digit">4</span>
+      <span class="nf-sun">
+        <svg viewBox="46 46 108 108" xmlns="http://www.w3.org/2000/svg">
+          <g fill="currentColor">
+            <path d="M100 50 L107 66 L93 66 Z"></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(45 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(90 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(135 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(180 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(225 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(270 100 100)"
+            ></path>
+            <path d="M100 50 L107 66 L93 66 Z" transform="rotate(315 100 100)"
+            ></path>
+          </g>
+          <circle
+            cx="100"
+            cy="100"
+            r="22"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="8"></circle>
+        </svg>
+        <span class="nf-wake"></span>
+      </span>
+      <span class="nf-digit nf-digit--late">4</span>
+    </div>
+
+    <div class="nf-message">
+      <h1 data-nf="title">{t.title}</h1>
+      <p class="nf-lead" data-nf="lead">{t.lead}</p>
+
+      <div class="nf-actions">
+        <CTA href="/" data-nf="cta">{t.cta}</CTA>
+      </div>
+
+      <p class="nf-coords" data-nf="coords">{t.coords}</p>
+    </div>
+  </main>
+
+  <script is:inline define:vars={{ en }}>
+    (function () {
+      const browserLang = (navigator.language || "")
+        .split(",")[0]
+        .split("-")[0]
+        .toLowerCase();
+      if (browserLang !== "en") return;
+
+      document.documentElement.lang = "en";
+
+      for (const key of ["status", "title", "lead", "cta", "coords"]) {
+        const el = document.querySelector(`[data-nf="${key}"]`);
+        if (el) el.textContent = en[key];
+      }
+
+      const cta = document.querySelector('[data-nf="cta"]');
+      if (cta) cta.setAttribute("href", "/en/");
+    })();
+  </script>
+</Layout>

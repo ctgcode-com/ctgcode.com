@@ -171,3 +171,35 @@
 .cta:active {
   transform: translateY(-1px) rotate(0deg) scale(0.98);
 }
+
+/* ---- Aire caliente ---------------------------------------------------------
+   Al pasar el cursor, las letras se ven a través del calor que sube de la
+   brasa: una refracción térmica suave, continua y aleatoria (feTurbulence +
+   feDisplacementMap con el campo de ruido mutando en el tiempo). El filtro
+   se aplica solo al texto para no deformar el anillo ni la silueta. */
+.cta-label {
+  display: inline-block;
+}
+
+.cta:hover .cta-label,
+.cta:focus-visible .cta-label {
+  filter: url(#cta-heat);
+  will-change: filter;
+}
+
+/* Las defs del filtro no ocupan sitio ni participan del flex */
+.cta-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* El SMIL del filtro no lo detiene la regla global de reduced-motion (solo
+   cubre animaciones/transiciones CSS): aquí se desactiva el efecto entero. */
+@media (prefers-reduced-motion: reduce) {
+  .cta:hover .cta-label,
+  .cta:focus-visible .cta-label {
+    filter: none;
+  }
+}

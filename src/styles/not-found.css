@@ -1,0 +1,202 @@
+/* ===========================================================================
+   NOT FOUND — "el náufrago"   (estilos de components/pages/NotFound.astro)
+
+   Narrativa de marca: te perdiste en el mar de noche. El sol —el «0» del
+   404— se está hundiendo en el horizonte; los dos «4» flotan a la deriva
+   como boyas, y todo lo que queda bajo la línea del agua se ve sumergido.
+   El faro (el CTA) sigue encendido para guiarte de vuelta a puerto:
+   Cartagena, con sus coordenadas reales en la voz mono del estudio.
+   =========================================================================== */
+
+.nf-scene {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  align-content: center;
+  padding-block: var(--space-2xl);
+  /* Cielo nocturno con el rescoldo del sol hundiéndose cerca del horizonte */
+  background:
+    radial-gradient(
+      42% 26% at 34% 52%,
+      color-mix(in oklab, var(--palette-coral) 16%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      70% 55% at 82% -12%,
+      color-mix(in oklab, var(--palette-deep) 55%, transparent),
+      transparent 70%
+    ),
+    var(--color-bg);
+}
+
+/* ---- Marca mínima (vuelta a casa siempre visible) ------------------------ *
+ * El aspecto lo da .brand-mono (identity.css); aquí solo el posicionamiento. */
+.nf-brand {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--content-padding);
+  z-index: 3;
+}
+
+/* ---- Estado (eyebrow mono) ------------------------------------------------ */
+.nf-status {
+  margin-bottom: var(--space-md);
+}
+
+/* ---- La figura: 4 ☀ 4 sobre el horizonte ---------------------------------- */
+.nf-figure {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.06em;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: clamp(6.5rem, 22vw, 15rem);
+  line-height: 1;
+  letter-spacing: var(--tracking-tighter);
+  color: var(--color-heading);
+  user-select: none;
+}
+
+/* El horizonte: una línea de atardecer que cruza todo el viewport a la
+   altura exacta del centro del sol (el centro de la figura). */
+.nf-figure::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200vw;
+  height: 1px;
+  z-index: 2;
+  background: var(--gradient-sunset);
+  opacity: 0.5;
+  box-shadow: 0 0 14px color-mix(in oklab, var(--palette-amber) 40%, transparent);
+}
+
+/* El mar: un panel translúcido que cubre todo lo que queda bajo el horizonte.
+   Su backdrop-filter "sumerge" (difumina, enfría y oscurece) la mitad
+   inferior de los dígitos y del cielo; el contenido pintado por encima
+   (mensaje, CTA) flota nítido sobre el agua. */
+.nf-figure::after {
+  content: "";
+  position: absolute;
+  top: calc(50% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200vw;
+  height: 120vh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--palette-deep) 34%, transparent) 0%,
+    color-mix(in oklab, var(--palette-night) 72%, transparent) 60%
+  );
+  backdrop-filter: blur(2.5px) saturate(0.85) brightness(0.75);
+  -webkit-backdrop-filter: blur(2.5px) saturate(0.85) brightness(0.75);
+}
+
+/* Los «4»: boyas a la deriva, cada una con su propio vaivén */
+.nf-digit {
+  animation: nf-bob 5.4s var(--ease-soft) infinite;
+}
+
+.nf-digit--late {
+  animation-duration: 6.6s;
+  animation-delay: -2.2s;
+}
+
+@keyframes nf-bob {
+  0%,
+  100% {
+    transform: translateY(-0.02em);
+  }
+  50% {
+    transform: translateY(0.03em);
+  }
+}
+
+/* El sol que se hunde (el «0») — anclado al horizonte, girando despacio */
+.nf-sun {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 0.78em;
+  height: 0.78em;
+}
+
+.nf-sun svg {
+  width: 100%;
+  height: 100%;
+  color: var(--palette-amber);
+  filter: drop-shadow(0 0 22px color-mix(in oklab, var(--palette-coral) 45%, transparent));
+  animation: nf-spin 70s linear infinite;
+}
+
+@keyframes nf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* La estela del sol en el agua (queda bajo el panel del mar: se difumina) */
+.nf-wake {
+  position: absolute;
+  top: calc(50% + 0.08em);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.3em;
+  height: 0.55em;
+  background: radial-gradient(
+    50% 55% at 50% 24%,
+    color-mix(in oklab, var(--palette-amber) 42%, transparent),
+    transparent 72%
+  );
+  filter: blur(6px);
+  animation: nf-shimmer 5.8s var(--ease-soft) infinite;
+}
+
+@keyframes nf-shimmer {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1.18);
+  }
+}
+
+/* ---- El mensaje: flota nítido sobre el agua ------------------------------- */
+.nf-message {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--space-lg);
+}
+
+.nf-message h1 {
+  font-size: var(--text-2xl);
+  max-width: var(--measure-narrow);
+}
+
+.nf-lead {
+  margin-top: var(--space-sm);
+  max-width: var(--measure-narrow);
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+.nf-actions {
+  margin-top: var(--space-lg);
+}
+
+/* Coordenadas de puerto seguro: metadatos en la voz mono del estudio */
+.nf-coords {
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}

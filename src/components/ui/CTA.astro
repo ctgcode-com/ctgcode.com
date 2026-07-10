@@ -30,5 +30,35 @@ const attrs = href ? { href } : { type: type ?? "button" };
   {...attrs}
   {...rest}
 >
-  <slot />
+  <span class="cta-label"><slot /></span>
+
+  <!-- Filtro "aire caliente": ruido térmico que desplaza las letras al hover.
+       Si hay varios CTA en la página el id se repite; url(#cta-heat) resuelve
+       al primero y el efecto es idéntico para todos. -->
+  <svg class="cta-defs" aria-hidden="true" focusable="false">
+    <filter id="cta-heat" x="-25%" y="-40%" width="150%" height="180%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.012 0.085"
+        numOctaves="2"
+        seed="7"
+        result="noise"
+      >
+        <animate
+          attributeName="baseFrequency"
+          values="0.012 0.085; 0.017 0.1; 0.01 0.07; 0.012 0.085"
+          dur="7s"
+          repeatCount="indefinite"
+        />
+      </feTurbulence>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="noise"
+        scale="3.2"
+        xChannelSelector="R"
+        yChannelSelector="G"
+      />
+      <feGaussianBlur stdDeviation="0.25" />
+    </filter>
+  </svg>
 </Tag>

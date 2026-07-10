@@ -149,3 +149,32 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - Los estilos de cada componente se movieron a su propia hoja en `src/styles/` importada desde el componente (patrón de `router-page.css`); los componentes ya no llevan `<style>` inline.
 - El comportamiento de cliente (toggle del menú, bloqueo de scroll, medición de la altura de la barra) permanece colocado en el `<script>` del propio `Navbar.astro`.
+
+## [0.7.0] - 2026-07-10
+
+### Añadido
+
+- **`src/components/pages/NotFound.astro`** y **`src/styles/not-found.css`**: página 404 «el náufrago». El «0» del 404 es el sol del logo hundiéndose en el horizonte; los «4» flotan como boyas y el mar (panel con `backdrop-filter`) sumerge la mitad inferior. Textos y coordenadas de puerto en voz mono; una sola ruta con textos ES/EN según el navegador.
+- **`src/components/pages/Router.astro`** y **`src/styles/router.css`**: nueva página de entrada «la carta de navegación». Una brújula construida con el sol del logo (sus 8 rayos son la rosa de los vientos) busca el rumbo y, al detectar el idioma, la aguja se asienta (resorte amortiguado) sobre la orilla `es`/`en`. Responsive con contenedor acotado al viewport.
+- **`src/styles/identity.css`**: helper `.brand-mono` — marca mínima «{ ctgcode }» para páginas fuera del flujo (router, 404); las llaves se abren al hover y se recogen al pulsar.
+- **`src/styles/base.css`**: barra de scroll con estética de atardecer (pulgar ámbar→coral→ocaso sobre carril de mar profundo).
+- **`src/components/ui/CTA.astro`** y **`src/styles/cta.css`**: refracción térmica («aire caliente») sobre el texto del CTA al hover, con ruido de turbulencia que muta en el tiempo (SVG `feTurbulence` + `feDisplacementMap`).
+- **`src/data/i18n.ts`** y **`src/data/locales/{es,en}.ts`**: secciones `notFound` y `router` en el esquema y ambos idiomas.
+
+### Cambiado
+
+- **`src/pages/404.astro`** y **`src/pages/index.astro`**: reducidas a delegar en los componentes `NotFound` y `Router`.
+- **`src/pages/index.astro`**: la entrada detecta el idioma del navegador, orienta la brújula y **redirige automáticamente** (`window.location.replace`) a la ruta localizada.
+
+### Corregido
+
+- **Bloqueo de la interacción en móvil por el _long-press_ nativo de los `<a>`**: al mantener pulsado un enlace, el callout/preview y el arrastre nativos podían quedar colgados y capturar los toques, dejando el sitio inservible hasta recargar. Cortado a nivel global en el `a` de `base.css` (`-webkit-touch-callout`, `-webkit-user-drag`, `touch-action: manipulation`); los controles añaden `user-select: none` y `draggable="false"`.
+
+### Eliminado
+
+- **`src/components/ui/RouterPage.astro`** y **`src/styles/router-page.css`**: reemplazados por la nueva página de entrada (`Router.astro` / `router.css`).
+
+### Técnico
+
+- Las páginas fuera del flujo (`404`, entrada) siguen el patrón del proyecto: ruta delgada → componente en `components/pages/` → hoja propia en `src/styles/`.
+- Toda animación respeta `prefers-reduced-motion`; en el CTA se apaga además el filtro SVG (que el `@media` global de movimiento no alcanza al SMIL).

@@ -52,6 +52,14 @@ a {
   transition:
     background-size var(--dur-base) var(--ease-tide),
     color var(--dur-fast) var(--ease-soft);
+  /* Táctil: neutraliza el long-press nativo (callout/preview + arrastre del
+     enlace) que, si se cuelga, captura los toques y bloquea la interacción del
+     sitio hasta recargar. Se conserva la selección de texto (enlaces de
+     contenido). Los controles que además no deban seleccionarse añaden
+     `user-select: none` por su cuenta. */
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  touch-action: manipulation;
 }
 
 a:hover {
@@ -101,4 +109,53 @@ pre code {
   outline: var(--border-thick) solid var(--color-focus);
   outline-offset: 3px;
   border-radius: var(--radius-xs);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar — el sol recorriendo la noche.
+   El pulgar es una píldora de atardecer (ámbar → coral → ocaso) flotando
+   sobre un carril de mar profundo; al agarrarla, se aviva.
+--------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-sunk);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--palette-amber) 0%,
+    var(--palette-coral) 55%,
+    var(--palette-ocaso) 100%
+  );
+  border-radius: var(--radius-pill);
+  /* Borde del color del carril: la píldora "flota" con aire alrededor */
+  border: 3px solid var(--color-surface-sunk);
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    var(--palette-amber) 0%,
+    var(--palette-coral) 100%
+  );
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-surface-sunk);
+}
+
+/* Firefox no soporta los pseudoelementos webkit: par de colores equivalente.
+   El @supports evita que Chromium (121+) descarte el gradiente de arriba al
+   ver scrollbar-color declarado. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--palette-coral) var(--color-surface-sunk);
+  }
 }

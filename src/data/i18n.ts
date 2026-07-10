@@ -15,6 +15,20 @@ export type LocaleSchema = {
         title: string;
         description: string;
     };
+    notFound: {
+        status: string;
+        title: string;
+        lead: string;
+        cta: string;
+        coords: string;
+    };
+    router: {
+        eyebrow: string;
+        title: string;
+        lead: string;
+        detecting: string;
+        ready: string;
+    };
 };
 
 export const languages = {

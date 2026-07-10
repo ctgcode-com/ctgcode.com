@@ -1,6 +1,6 @@
 /* ===========================================================================
    HELPERS DE IDENTIDAD  (marca, no relleno)
-   El CTA vive en su propio componente (components/ui/Button.astro).
+   El CTA vive en su propio componente (components/ui/CTA.astro).
    =========================================================================== */
 
 /* Texto con el atardecer completo — solo para momentos clave (logo, hero) */
@@ -20,4 +20,47 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-brand-soft);
+}
+
+/* Marca mínima en voz mono — «{ ctgcode }» — para páginas fuera del flujo
+   principal (router de idioma, 404), donde la navbar completa sobraría. */
+.brand-mono {
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.brand-mono:hover,
+.brand-mono:focus-visible {
+  color: var(--color-brand-soft);
+}
+
+/* Las llaves del logo, en texto. Al pasar el cursor se abren (dejan respirar
+   el nombre) y al pulsar se recogen hacia adentro, como un botón hundiéndose. */
+.brand-mono .brace {
+  display: inline-block;
+  color: var(--color-brand-soft);
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.brand-mono:hover .brace:first-of-type,
+.brand-mono:focus-visible .brace:first-of-type {
+  transform: translateX(-0.3em);
+}
+
+.brand-mono:hover .brace:last-of-type,
+.brand-mono:focus-visible .brace:last-of-type {
+  transform: translateX(0.3em);
+}
+
+/* Pulsado: las llaves abrazan el nombre (más adentro que en reposo) */
+.brand-mono:active .brace:first-of-type {
+  transform: translateX(0.16em);
+}
+
+.brand-mono:active .brace:last-of-type {
+  transform: translateX(-0.16em);
 }

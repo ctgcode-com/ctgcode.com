@@ -44,10 +44,11 @@ ctgcode.com/
 │   │   ├── global/                # Componentes globales y de alcance transversal.
 │   │   │   └── Navbar.astro       # Cabecera responsiva: marca, navegación, switch de idioma, CTA y menú móvil.
 │   │   ├── pages/                 # Componentes de composición de páginas completas.
-│   │   │   └── Home.astro         # Composición de la home (única fuente de la verdad), parametrizada por idioma.
+│   │   │   ├── Home.astro         # Composición de la home (única fuente de la verdad), parametrizada por idioma.
+│   │   │   ├── NotFound.astro     # Página 404 «el náufrago».
+│   │   │   └── Router.astro       # Página de entrada «la carta de navegación» (detección de idioma).
 │   │   └── ui/                    # Componentes de interfaz reutilizables.
-│   │       ├── CTA.astro          # Botón de acción de marca («el faro del atardecer»).
-│   │       └── RouterPage.astro   # Componente visual para la transición/ruta inicial del sitio.
+│   │       └── CTA.astro          # Botón de acción de marca («el faro del atardecer»).
 │   ├── content.config.ts          # Definición de colecciones de contenido y su validación con Astro Content Collections.
 │   ├── data/                      # Datos estáticos y configuración reutilizable.
 │   │   ├── i18n.ts                # Definición de idiomas y estructura de traducciones.
@@ -58,8 +59,8 @@ ctgcode.com/
 │   ├── layouts/                   # Layouts base de la aplicación.
 │   │   └── Layout.astro           # Layout principal con SEO, metadata OG y carga de estilos globales.
 │   ├── pages/                     # Páginas y rutas del sitio.
-│   │   ├── 404.astro              # Página de error 404 personalizada.
-│   │   ├── index.astro            # Página de entrada que redirige a la versión de idioma por defecto.
+│   │   ├── 404.astro              # Página 404 (delega en el componente NotFound).
+│   │   ├── index.astro            # Entrada que detecta el idioma y redirige (delega en Router).
 │   │   ├── en/                    # Carpeta para las páginas en inglés.
 │   │   │   └── index.astro        # Ruta en inglés (delega en el componente Home).
 │   │   └── es/                    # Carpeta para las páginas en español.
@@ -68,15 +69,16 @@ ctgcode.com/
 │       ├── global.css             # Punto de entrada (barrel) que orquesta el sistema de diseño.
 │       ├── tokens.css             # Tokens del sistema: paleta, color, spacing, tipografía, movimiento…
 │       ├── reset.css              # Reset moderno del documento.
-│       ├── base.css               # Elementos base: titulares, texto, enlaces, código y foco.
+│       ├── base.css               # Elementos base: titulares, texto, enlaces, código, foco y scrollbar.
 │       ├── layout.css             # Primitivas de composición (grid con breakout, stack, cluster, section).
 │       ├── tones.css              # Temperatura de sección ([data-tone]): el atardecer al hacer scroll.
-│       ├── identity.css           # Helpers de identidad de marca (.text-sunset, .eyebrow).
+│       ├── identity.css           # Helpers de identidad de marca (.text-sunset, .eyebrow, .brand-mono).
 │       ├── motion.css             # Accesibilidad del movimiento (prefers-reduced-motion).
 │       ├── cta.css                # Estilos del CTA de marca (components/ui/CTA.astro).
 │       ├── home.css               # Estilos de la home (components/pages/Home.astro).
 │       ├── navbar.css             # Estilos de la navbar (components/global/Navbar.astro).
-│       └── router-page.css        # Estilos visuales para la vista de enrutamiento inicial.
+│       ├── not-found.css          # Estilos de la 404 (components/pages/NotFound.astro).
+│       └── router.css             # Estilos de la entrada (components/pages/Router.astro).
 ├── .gitignore                     # Reglas de Git para ignorar artefactos generados y archivos locales no deseados.
 ├── astro.config.mjs               # Configuración principal de Astro y sus integraciones.
 ├── bun.lock                       # Lockfile de Bun para reproducibilidad de dependencias.
