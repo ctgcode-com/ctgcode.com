@@ -1,0 +1,93 @@
+---
+/**
+ * CookieBanner — consentimiento de cookies (Google Consent Mode v2).
+ *
+ * El consentimiento arranca DENEGADO por defecto en el Layout (antes de cargar
+ * gtag.js). Este banner solo aparece si el usuario aún no ha decidido; al
+ * aceptar o rechazar, actualiza el consentimiento en gtag y guarda la
+ * preferencia para no volver a preguntar. No bloquea la interacción con el
+ * sitio. Estilos en cookie-banner.css.
+ */
+import { locales } from "../../data/i18n";
+import "../../styles/cookie-banner.css";
+
+interface Props {
+  lang: keyof typeof locales;
+}
+
+const { lang } = Astro.props;
+const t = locales[lang].cookies;
+---
+
+<div class="cookie-banner" data-cookie-banner hidden>
+  <div class="cb-card">
+    <span class="cb-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path
+          d="M12 3a9 9 0 1 0 9 9 3 3 0 0 1-3-3 3 3 0 0 1-3-3 9 9 0 0 0-3-3z"
+        />
+        <circle cx="9" cy="10" r="1" fill="currentColor" stroke="none" />
+        <circle cx="14" cy="14" r="1" fill="currentColor" stroke="none" />
+        <circle cx="10.5" cy="15.5" r="0.8" fill="currentColor" stroke="none" />
+      </svg>
+    </span>
+
+    <p class="cb-msg">{t.message}</p>
+
+    <div class="cb-actions">
+      <button class="cb-btn cb-reject" type="button" data-cb-reject>
+        {t.reject}
+      </button>
+      <button class="cb-btn cb-accept" type="button" data-cb-accept>
+        {t.accept}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const KEY = "ctg-cookie-consent";
+  const banner = document.querySelector<HTMLElement>("[data-cookie-banner]");
+
+  if (banner && !localStorage.getItem(KEY)) {
+    banner.hidden = false;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => banner.setAttribute("data-open", "")),
+    );
+
+    const decide = (value: "granted" | "denied") => {
+      try {
+        localStorage.setItem(KEY, value);
+      } catch (e) {}
+
+      const state = value; // "granted" | "denied"
+      const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void })
+        .gtag;
+      gtag?.("consent", "update", {
+        ad_storage: state,
+        ad_user_data: state,
+        ad_personalization: state,
+        analytics_storage: state,
+      });
+
+      banner.removeAttribute("data-open");
+      banner.addEventListener(
+        "transitionend",
+        () => {
+          banner.hidden = true;
+        },
+        { once: true },
+      );
+
+      // Avisa a otros avisos (p. ej. el de idioma) que ya se decidió.
+      document.dispatchEvent(new CustomEvent("ctg-consent-resolved"));
+    };
+
+    banner
+      .querySelector<HTMLButtonElement>("[data-cb-accept]")
+      ?.addEventListener("click", () => decide("granted"));
+    banner
+      .querySelector<HTMLButtonElement>("[data-cb-reject]")
+      ?.addEventListener("click", () => decide("denied"));
+  }
+</script>

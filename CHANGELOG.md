@@ -235,3 +235,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Eliminado
 
 - **`src/components/pages/Router.astro`** y **`src/styles/router.css`**: la página de enrutamiento por redirección, ya innecesaria. También la ruta `src/pages/es/` (el español ahora es la raíz) y la sección `router` del esquema i18n.
+
+## [0.12.0] - 2026-07-11
+
+### Añadido
+
+- **`src/components/global/CookieBanner.astro`** y **`src/styles/cookie-banner.css`**: banner de consentimiento de cookies. Aparece solo si el usuario aún no ha decidido; al aceptar o rechazar actualiza el consentimiento en gtag y **guarda la preferencia** (no se vuelve a preguntar). No bloquea la interacción y habla el idioma de la página.
+- **`src/data/locales/{es,en}.ts`**: sección `cookies`.
+
+### Cambiado
+
+- **`src/layouts/Layout.astro`**: implementado **Google Consent Mode v2**. El consentimiento arranca **denegado** (`ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`) **antes** de cargar `gtag.js`; solo se concede si el usuario acepta, y la preferencia guardada se reaplica en cada visita. Los scripts de Google Tag pasan al hilo principal (el orden que exige el consentimiento no lo garantiza Partytown). El banner se monta en todas las páginas.
+- **`src/components/global/LangNotice.astro`**: espera a que se resuelva el consentimiento de cookies antes de mostrarse, para no solapar dos avisos.

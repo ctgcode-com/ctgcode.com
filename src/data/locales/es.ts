@@ -50,6 +50,11 @@ const es: LocaleSchema = {
         action: 'Ver en español',
         dismiss: 'Cerrar aviso',
     },
+    cookies: {
+        message: 'Usamos cookies para medir el tráfico y mejorar el sitio. Nada se activa hasta que decidas.',
+        accept: 'Aceptar',
+        reject: 'Rechazar',
+    },
     footer: {
         eyebrow: 'estudio de software · cartagena de indias',
         claim: '¿Zarpamos?',

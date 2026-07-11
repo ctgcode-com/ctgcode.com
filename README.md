@@ -47,6 +47,7 @@ ctgcode.com/
 │   │   └── logo.svg               # Logo principal de CTG Code usado en la interfaz y en las OG images.
 │   ├── components/                # Componentes reutilizables del sitio.
 │   │   ├── global/                # Componentes globales y de alcance transversal.
+│   │   │   ├── CookieBanner.astro # Consentimiento de cookies (Google Consent Mode v2), denegado por defecto.
 │   │   │   ├── Footer.astro       # Cierre del sitio «el fondo del mar»: invitación, mapa, colofón y marca hundida.
 │   │   │   ├── LangNotice.astro   # Aviso de idioma disponible (cambio manual, sin redirección automática).
 │   │   │   └── Navbar.astro       # Cabecera responsiva: marca, navegación, switch de idioma, CTA y menú móvil.
@@ -78,6 +79,7 @@ ctgcode.com/
 │       ├── tones.css              # Temperatura de sección ([data-tone]): el atardecer al hacer scroll.
 │       ├── identity.css           # Helpers de identidad de marca (.text-sunset, .eyebrow, .brand-mono).
 │       ├── motion.css             # Accesibilidad del movimiento (prefers-reduced-motion).
+│       ├── cookie-banner.css      # Estilos del banner de cookies (components/global/CookieBanner.astro).
 │       ├── cta.css                # Estilos del CTA de marca (components/ui/CTA.astro).
 │       ├── footer.css             # Estilos del footer (components/global/Footer.astro).
 │       ├── home.css               # Estilos de la home (components/pages/Home.astro).

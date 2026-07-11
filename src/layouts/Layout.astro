@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from '../data/site';
 import { locales, localizedPath } from '../data/i18n';
+import CookieBanner from '../components/global/CookieBanner.astro';
 import '../styles/global.css';
 
 import '@fontsource-variable/plus-jakarta-sans/index.css';
@@ -77,22 +78,53 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- Conexión con Google Ads y Google Analytics (Google Tag) -->
+    <!-- Google Consent Mode v2 — SIEMPRE primero, antes de cargar gtag.js.
+         Por defecto TODO denegado: no se activan cookies de analítica ni de
+         anuncios hasta que el usuario acepte en el banner. Si ya aceptó en una
+         visita anterior, se reaplica de inmediato (preferencia guardada). -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500,
+      });
+
+      try {
+        if (localStorage.getItem("ctg-cookie-consent") === "granted") {
+          gtag("consent", "update", {
+            ad_storage: "granted",
+            ad_user_data: "granted",
+            ad_personalization: "granted",
+            analytics_storage: "granted",
+          });
+        }
+      } catch (e) {}
+    </script>
+
+    <!-- Google tag (gtag.js). En el hilo principal a propósito: el Consent Mode
+         necesita un orden garantizado que Partytown no asegura. -->
     {googleAdsId && googleAnalyticsId && (
       <>
-        <script is:inline type="text/partytown" async src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}></script>
-        <script is:inline type="text/partytown" define:vars={{ googleAdsId, googleAnalyticsId }}>
-          window.dataLayer = window.dataLayer || [];
-          window.gtag = function(){window.dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', googleAdsId);
-          gtag('config', googleAnalyticsId);
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+        <script is:inline define:vars={{ googleAdsId, googleAnalyticsId }}>
+          gtag("js", new Date());
+          gtag("config", googleAnalyticsId);
+          gtag("config", googleAdsId);
         </script>
       </>
     )}
   </head>
   <body>
     <slot />
+    <CookieBanner lang={lang} />
   </body>
 </html>
 

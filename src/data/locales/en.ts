@@ -50,6 +50,11 @@ const en: LocaleSchema = {
         action: 'View in English',
         dismiss: 'Dismiss',
     },
+    cookies: {
+        message: 'We use cookies to measure traffic and improve the site. Nothing runs until you decide.',
+        accept: 'Accept',
+        reject: 'Decline',
+    },
     footer: {
         eyebrow: 'software studio · cartagena de indias',
         claim: 'Shall we set sail?',

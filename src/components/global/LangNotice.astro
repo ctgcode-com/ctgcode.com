@@ -97,24 +97,36 @@ const others = (Object.keys(locales) as (keyof typeof locales)[]).filter(
         );
       };
 
-      // Revelar (doble rAF para que la transición de entrada corra).
-      card.hidden = false;
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => card.setAttribute("data-open", "")),
-      );
+      const reveal = () => {
+        // Revelar (doble rAF para que la transición de entrada corra).
+        card.hidden = false;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => card.setAttribute("data-open", "")),
+        );
 
-      card
-        .querySelector<HTMLButtonElement>("[data-ln-dismiss]")
-        ?.addEventListener("click", close);
+        card
+          .querySelector<HTMLButtonElement>("[data-ln-dismiss]")
+          ?.addEventListener("click", close);
 
-      // Al cambiar de idioma no hace falta volver a avisar.
-      card
-        .querySelector<HTMLAnchorElement>("[data-ln-go]")
-        ?.addEventListener("click", dismiss);
+        // Al cambiar de idioma no hace falta volver a avisar.
+        card
+          .querySelector<HTMLAnchorElement>("[data-ln-go]")
+          ?.addEventListener("click", dismiss);
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !card.hidden) close();
-      });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !card.hidden) close();
+        });
+      };
+
+      // No solapar dos avisos: si el consentimiento de cookies sigue pendiente,
+      // espera a que se resuelva; si ya está decidido, muestra de inmediato.
+      if (localStorage.getItem("ctg-cookie-consent")) {
+        reveal();
+      } else {
+        document.addEventListener("ctg-consent-resolved", reveal, {
+          once: true,
+        });
+      }
     }
   }
 </script>

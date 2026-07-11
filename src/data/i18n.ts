@@ -39,6 +39,11 @@ export type LocaleSchema = {
         action: string;
         dismiss: string;
     };
+    cookies: {
+        message: string;
+        accept: string;
+        reject: string;
+    };
     footer: {
         eyebrow: string;
         claim: string;
