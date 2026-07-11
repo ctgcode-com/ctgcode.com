@@ -22,6 +22,9 @@ El proyecto se organiza bajo una arquitectura estática y modular, con Astro com
 
 ```text
 ctgcode.com/
+├── .github/                       # Automatización de GitHub (CI/CD).
+│   └── workflows/                 # Workflows de GitHub Actions.
+│       └── deploy.yml             # Despliegue continuo del sitio a GitHub Pages.
 ├── .vscode/                       # Configuración local de VS Code para el proyecto: extensiones recomendadas y lanzamiento del servidor.
 │   ├── extensions.json            # Recomendaciones de extensiones para trabajar con Astro y el flujo del proyecto.
 │   └── launch.json                # Configuración de depuración para iniciar el servidor de desarrollo.

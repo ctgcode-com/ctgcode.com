@@ -192,3 +192,17 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - **`src/data/locales/{es,en}.ts`**: el `hero` adopta el eslogan oficial de la marca — «Construyendo el futuro digital desde el Caribe» (título) y una descripción alineada («Desarrollo de software a la medida y soluciones web de alto rendimiento desde Cartagena para el mundo»). El `<title>` SEO de la home pasa a reflejar el eslogan.
 - **`src/components/pages/Home.astro`**: monta el `Footer` al pie de la página.
 - **`README.md`**: eslogan oficial en la introducción.
+
+## [0.9.0] - 2026-07-11
+
+### Añadido
+
+- **`.github/workflows/deploy.yml`**: workflow de despliegue continuo a GitHub Pages (build de Astro y publicación automática en cada push a `main`).
+
+### Cambiado
+
+- **`astro.config.mjs`**: `output: "static"` explícito para el build de GitHub Pages.
+
+### Corregido
+
+- **CI**: dependencia `libasound` ajustada para compatibilidad con la imagen reciente de Ubuntu en el runner de despliegue.
