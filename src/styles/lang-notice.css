@@ -1,0 +1,149 @@
+/* ===========================================================================
+   LANG NOTICE   (estilos de components/global/LangNotice.astro)
+
+   Aviso discreto: "esta página también está en tu idioma". Aparece abajo a la
+   izquierda solo si el idioma del navegador difiere del de la página y existe
+   esa versión. Sin redirección automática: se cambia solo si el usuario pulsa.
+   =========================================================================== */
+
+.lang-notice {
+  position: fixed;
+  left: var(--content-padding);
+  bottom: var(--content-padding);
+  z-index: var(--z-toast);
+  width: min(24rem, calc(100vw - var(--content-padding) * 2));
+  pointer-events: none; /* solo la tarjeta visible captura eventos */
+}
+
+.ln-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--color-surface-raised) 92%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  /* Estado cerrado: fuera de vista, abajo. */
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity var(--dur-base) var(--ease-tide),
+    transform var(--dur-base) var(--ease-expo);
+}
+
+.ln-card[data-open] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Filo de atardecer arriba: el detalle de identidad */
+.ln-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.ln-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: var(--border-thick);
+  background: var(--gradient-sunset);
+}
+
+/* Icono de idioma: un pequeño globo con meridiano cálido */
+.ln-icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+}
+
+.ln-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ln-msg {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+}
+
+/* La acción: voz mono, fría (soporte) con línea de sonda que se alarga */
+.ln-action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-accent);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.ln-action::after {
+  content: "→";
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.ln-action:hover,
+.ln-action:focus-visible {
+  color: var(--color-link-hover);
+}
+
+.ln-action:hover::after,
+.ln-action:focus-visible::after {
+  transform: translateX(3px);
+}
+
+/* Cerrar */
+.ln-close {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-subtle);
+  font-size: var(--text-md);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-soft),
+    background var(--dur-fast) var(--ease-soft);
+}
+
+.ln-close:hover,
+.ln-close:focus-visible {
+  color: var(--color-heading);
+  background: color-mix(in oklab, var(--color-text) 10%, transparent);
+}
+
+/* En pantallas muy angostas, apila el mensaje y las acciones */
+@media (max-width: 26rem) {
+  .ln-card {
+    flex-wrap: wrap;
+  }
+
+  .ln-msg {
+    flex-basis: calc(100% - 3rem);
+  }
+
+  .ln-action {
+    margin-left: calc(1.5rem + var(--space-sm));
+  }
+}

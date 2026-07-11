@@ -217,3 +217,21 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Corregido
 
 - **Responsive del hero**: se saca el hero de `u-grid` y se acota con su propio contenedor, de modo que la ventana de código ya no desborda en móvil (su scroll horizontal queda contenido dentro de la ventana). El titular en gradiente deja de recortar los descendentes (la «g» de «digital»).
+
+## [0.11.0] - 2026-07-11
+
+### Cambiado
+
+- **Ruteo por idioma sin redirección (SEO)**: el español (idioma por defecto) pasa a vivir en la raíz `/` como contenido real e indexable, y los idiomas adicionales bajo `/<lang>` (por ahora `/en`). Se elimina la página de enrutamiento con redirección automática, que impedía a Google rastrear el contenido real del sitio.
+- **`src/layouts/Layout.astro`**: el idioma llega por prop (no por `Astro.params`), lo que da URLs canónicas correctas por idioma; se añaden alternativas `hreflang` (`es-CO`, `en`, `x-default`) y `og:locale` dinámico para SEO multiidioma. `theme-color` actualizado a `#0a1c2b` (el fondo real del sitio).
+- **`Navbar` y `Footer`**: los enlaces y el intercambio de idioma se reconstruyen con el nuevo helper de rutas.
+- **`src/data/i18n.ts`**: nuevo helper `localizedPath(lang, subpath)` como fuente única de rutas localizadas.
+
+### Añadido
+
+- **`src/components/global/LangNotice.astro`** y **`src/styles/lang-notice.css`**: aviso discreto que, solo si el idioma del navegador difiere del de la página y existe esa versión, invita a cambiar de idioma —en el idioma de destino—. No redirige de forma automática: solo cambia si el usuario pulsa, y recuerda el descarte.
+- **`src/data/locales/{es,en}.ts`**: sección `langNotice`.
+
+### Eliminado
+
+- **`src/components/pages/Router.astro`** y **`src/styles/router.css`**: la página de enrutamiento por redirección, ya innecesaria. También la ruta `src/pages/es/` (el español ahora es la raíz) y la sección `router` del esquema i18n.

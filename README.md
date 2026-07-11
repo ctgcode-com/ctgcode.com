@@ -48,11 +48,11 @@ ctgcode.com/
 │   ├── components/                # Componentes reutilizables del sitio.
 │   │   ├── global/                # Componentes globales y de alcance transversal.
 │   │   │   ├── Footer.astro       # Cierre del sitio «el fondo del mar»: invitación, mapa, colofón y marca hundida.
+│   │   │   ├── LangNotice.astro   # Aviso de idioma disponible (cambio manual, sin redirección automática).
 │   │   │   └── Navbar.astro       # Cabecera responsiva: marca, navegación, switch de idioma, CTA y menú móvil.
 │   │   ├── pages/                 # Componentes de composición de páginas completas.
 │   │   │   ├── Home.astro         # Composición de la home (única fuente de la verdad), parametrizada por idioma.
-│   │   │   ├── NotFound.astro     # Página 404 «el náufrago».
-│   │   │   └── Router.astro       # Página de entrada «la carta de navegación» (detección de idioma).
+│   │   │   └── NotFound.astro     # Página 404 «el náufrago».
 │   │   └── ui/                    # Componentes de interfaz reutilizables.
 │   │       └── CTA.astro          # Botón de acción de marca («el faro del atardecer»).
 │   ├── content.config.ts          # Definición de colecciones de contenido y su validación con Astro Content Collections.
@@ -66,11 +66,9 @@ ctgcode.com/
 │   │   └── Layout.astro           # Layout principal con SEO, metadata OG y carga de estilos globales.
 │   ├── pages/                     # Páginas y rutas del sitio.
 │   │   ├── 404.astro              # Página 404 (delega en el componente NotFound).
-│   │   ├── index.astro            # Entrada que detecta el idioma y redirige (delega en Router).
-│   │   ├── en/                    # Carpeta para las páginas en inglés.
-│   │   │   └── index.astro        # Ruta en inglés (delega en el componente Home).
-│   │   └── es/                    # Carpeta para las páginas en español.
-│   │       └── index.astro        # Ruta en español (delega en el componente Home).
+│   │   ├── index.astro            # Home en español (idioma por defecto en la raíz; delega en Home).
+│   │   └── en/                    # Idiomas adicionales bajo /<lang>.
+│   │       └── index.astro        # Home en inglés (delega en el componente Home).
 │   └── styles/                    # Sistema de diseño y estilos de componentes.
 │       ├── global.css             # Punto de entrada (barrel) que orquesta el sistema de diseño.
 │       ├── tokens.css             # Tokens del sistema: paleta, color, spacing, tipografía, movimiento…
@@ -83,9 +81,9 @@ ctgcode.com/
 │       ├── cta.css                # Estilos del CTA de marca (components/ui/CTA.astro).
 │       ├── footer.css             # Estilos del footer (components/global/Footer.astro).
 │       ├── home.css               # Estilos de la home (components/pages/Home.astro).
+│       ├── lang-notice.css        # Estilos del aviso de idioma (components/global/LangNotice.astro).
 │       ├── navbar.css             # Estilos de la navbar (components/global/Navbar.astro).
-│       ├── not-found.css          # Estilos de la 404 (components/pages/NotFound.astro).
-│       └── router.css             # Estilos de la entrada (components/pages/Router.astro).
+│       └── not-found.css          # Estilos de la 404 (components/pages/NotFound.astro).
 ├── .gitignore                     # Reglas de Git para ignorar artefactos generados y archivos locales no deseados.
 ├── astro.config.mjs               # Configuración principal de Astro y sus integraciones.
 ├── bun.lock                       # Lockfile de Bun para reproducibilidad de dependencias.

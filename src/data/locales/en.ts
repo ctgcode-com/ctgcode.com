@@ -45,12 +45,10 @@ const en: LocaleSchema = {
         cta: 'Back to harbor',
         coords: 'safe harbor → 10.4236° N, 75.5518° W · Cartagena de Indias',
     },
-    router: {
-        eyebrow: 'entry log · ctgcode.com',
-        title: 'Two shores, one sunset',
-        lead: 'We are charting your course to harbor. If the wind takes its time, pick your shore:',
-        detecting: '$ charting course…',
-        ready: '$ course set → ',
+    langNotice: {
+        message: 'This page is also available in English.',
+        action: 'View in English',
+        dismiss: 'Dismiss',
     },
     footer: {
         eyebrow: 'software studio · cartagena de indias',

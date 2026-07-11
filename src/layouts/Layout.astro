@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../data/site';
+import { locales, localizedPath } from '../data/i18n';
 import '../styles/global.css';
 
 import '@fontsource-variable/plus-jakarta-sans/index.css';
@@ -10,17 +11,27 @@ interface Props {
   title: string;
   description: string;
   pageName: string;
+  lang?: keyof typeof locales;
 }
 
-const { title, description, pageName } = Astro.props;
+// El idioma llega por prop (no por params): así funciona igual en la raíz (es)
+// que en /en, sin depender de un segmento dinámico de ruta.
+const { title, description, pageName, lang = 'es' } = Astro.props;
 
-const { lang = 'es' } = Astro.params;
-
-const googleAdsId = 'AW-18316357590'; 
+const googleAdsId = 'AW-18316357590';
 
 const siteUrl = siteConfig.url;
-const canonicalUrl = `${siteUrl}/${lang}/${pageName === 'home' ? '' : pageName}`;
+const subpath = pageName === 'home' ? '' : pageName;
+const canonicalUrl = `${siteUrl}${localizedPath(lang, subpath)}`;
 const ogImageUrl = `${siteUrl}/images/og/${lang}/${pageName}.png`;
+
+// hreflang: cada idioma es una URL real; se lo decimos a Google explícitamente.
+const langCodes = Object.keys(locales) as (keyof typeof locales)[];
+const alternates = langCodes.map((l) => ({
+  hreflang: l === 'es' ? 'es-CO' : l,
+  href: `${siteUrl}${localizedPath(l, subpath)}`,
+}));
+const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
 ---
 
 <!doctype html>
@@ -34,6 +45,12 @@ const ogImageUrl = `${siteUrl}/images/og/${lang}/${pageName}.png`;
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalUrl} />
 
+    <!-- Alternativas por idioma (hreflang) para SEO multiidioma -->
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${siteUrl}${localizedPath('es', subpath)}`} />
+
     <!-- 2. SEO General y Rastreo -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -42,7 +59,7 @@ const ogImageUrl = `${siteUrl}/images/og/${lang}/${pageName}.png`;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- 3. UX / UI Metadatos -->
-    <meta name="theme-color" content="#123A5A" /> 
+    <meta name="theme-color" content="#0a1c2b" />
 
     <!-- 4. Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -50,7 +67,7 @@ const ogImageUrl = `${siteUrl}/images/og/${lang}/${pageName}.png`;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale" content={ogLocale} />
 
     <!-- 5. Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />

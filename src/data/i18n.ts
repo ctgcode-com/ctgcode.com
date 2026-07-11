@@ -34,12 +34,10 @@ export type LocaleSchema = {
         cta: string;
         coords: string;
     };
-    router: {
-        eyebrow: string;
-        title: string;
-        lead: string;
-        detecting: string;
-        ready: string;
+    langNotice: {
+        message: string;
+        action: string;
+        dismiss: string;
     };
     footer: {
         eyebrow: string;
@@ -59,3 +57,20 @@ export const languages = {
 export const defaultLang = 'es';
 
 export const locales = { es, en } as const;
+
+/**
+ * Construye una ruta localizada. El idioma por defecto (es) vive en la raíz;
+ * los demás bajo /<lang>. Sin redirecciones: cada idioma es una URL real.
+ *   localizedPath('es')            -> '/'
+ *   localizedPath('en')            -> '/en/'
+ *   localizedPath('es', '#contact') -> '/#contact'
+ *   localizedPath('en', '#contact') -> '/en/#contact'
+ */
+export function localizedPath(
+    lang: keyof typeof locales,
+    subpath = '',
+): string {
+    const base = lang === defaultLang ? '' : `/${lang}`;
+    const clean = subpath.replace(/^\//, '');
+    return `${base}/${clean}`;
+}

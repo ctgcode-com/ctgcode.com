@@ -1,5 +1,7 @@
 ---
-import Router from "../components/pages/Router.astro";
+// Raíz del sitio = español (idioma por defecto). Sin redirección: es contenido
+// real e indexable. Los demás idiomas viven bajo /<lang> (p. ej. /en).
+import Home from "../components/pages/Home.astro";
 ---
 
-<Router />
+<Home lang="es" />

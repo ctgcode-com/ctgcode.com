@@ -9,7 +9,7 @@
  *
  * Estilos en styles/footer.css.
  */
-import { locales, languages, type LocaleSchema } from "../../data/i18n";
+import { locales, languages, localizedPath, type LocaleSchema } from "../../data/i18n";
 import CTA from "../ui/CTA.astro";
 import "../../styles/footer.css";
 
@@ -21,7 +21,7 @@ const { lang } = Astro.props;
 const t: LocaleSchema = locales[lang];
 
 const otherLang = lang === "es" ? "en" : "es";
-const home = `/${lang}/`;
+const home = localizedPath(lang);
 const year = new Date().getFullYear();
 
 // La sonda: continúa la numeración de la navbar (01/02/03) con el idioma (04).
@@ -84,7 +84,7 @@ const navItems = [
         <li>
           <a
             class="ft-link"
-            href={`/${otherLang}/`}
+            href={localizedPath(otherLang)}
             hreflang={otherLang}
             lang={otherLang}
           >

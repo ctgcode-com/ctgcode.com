@@ -45,12 +45,10 @@ const es: LocaleSchema = {
         cta: 'Volver a puerto',
         coords: 'puerto seguro → 10.4236° N, 75.5518° W · Cartagena de Indias',
     },
-    router: {
-        eyebrow: 'bitácora de entrada · ctgcode.com',
-        title: 'Dos orillas, un mismo atardecer',
-        lead: 'Estamos fijando tu rumbo para llevarte a puerto. Si el viento tarda, elige tu orilla:',
-        detecting: '$ detectando rumbo…',
-        ready: '$ rumbo fijado → ',
+    langNotice: {
+        message: 'Esta página también está disponible en español.',
+        action: 'Ver en español',
+        dismiss: 'Cerrar aviso',
     },
     footer: {
         eyebrow: 'estudio de software · cartagena de indias',
