@@ -19,6 +19,7 @@ interface Props {
 const { title, description, pageName, lang = 'es' } = Astro.props;
 
 const googleAdsId = 'AW-18316357590';
+const googleAnalyticsId = 'G-VJ80VBL1L4';
 
 const siteUrl = siteConfig.url;
 const subpath = pageName === 'home' ? '' : pageName;
@@ -76,15 +77,16 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- Conexión con Google Ads (Google Tag) -->
-    {googleAdsId && (
+    <!-- Conexión con Google Ads y Google Analytics (Google Tag) -->
+    {googleAdsId && googleAnalyticsId && (
       <>
         <script is:inline type="text/partytown" async src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}></script>
-        <script is:inline type="text/partytown" define:vars={{ googleAdsId }}>
+        <script is:inline type="text/partytown" define:vars={{ googleAdsId, googleAnalyticsId }}>
           window.dataLayer = window.dataLayer || [];
           window.gtag = function(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', googleAdsId);
+          gtag('config', googleAnalyticsId);
         </script>
       </>
     )}
