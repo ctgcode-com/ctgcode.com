@@ -206,3 +206,14 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Corregido
 
 - **CI**: dependencia `libasound` ajustada para compatibilidad con la imagen reciente de Ubuntu en el runner de despliegue.
+
+## [0.10.0] - 2026-07-11
+
+### Añadido
+
+- **Hero de la home «la mesa de trabajo a la hora dorada»** (`src/components/pages/Home.astro` + `src/styles/home.css`): la primera cara del sitio, con composición asimétrica sobre una rejilla de 12 columnas. Titular fragmentado en tres voces y tres sangrías (mono → display en gradiente → remate con cursor que respira) y una ventana de código desfasada en diagonal donde un snippet TypeScript se escribe en vivo (resaltado de sintaxis hecho en build, sin JS de librerías) y, al terminar, «compila»: el sol tras la ventana se enciende, la luz de estado vira a turquesa y la salida reporta `200 OK`. Decoradores de mesa de trabajo — sello circular giratorio, stickers de código pegados torcidos, coordenadas de Cartagena al margen y línea de horizonte —, microinteracciones con propósito y entrada escalonada; todo respeta `prefers-reduced-motion`.
+- **`src/data/i18n.ts`** y **`src/data/locales/{es,en}.ts`**: el `hero` crece con el snippet de código, el título segmentado, los estados de compilación, la salida del build y los chips.
+
+### Corregido
+
+- **Responsive del hero**: se saca el hero de `u-grid` y se acota con su propio contenedor, de modo que la ventana de código ya no desborda en móvil (su scroll horizontal queda contenido dentro de la ventana). El titular en gradiente deja de recortar los descendentes (la «g» de «digital»).

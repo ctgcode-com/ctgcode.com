@@ -5,6 +5,9 @@
  * Los archivos de ruta (pages/es/index.astro, pages/en/index.astro) solo
  * eligen el idioma; toda la estructura, textos (vía locales) y estilos viven
  * aquí una sola vez.
+ *
+ * HERO — "compilar el atardecer": un snippet se escribe en vivo en la ventana
+ * de código y, al terminar, el sol tras ella se enciende (data-compiled).
  */
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../global/Navbar.astro";
@@ -20,20 +23,149 @@ interface Props {
 const { lang } = Astro.props;
 const t = locales[lang];
 const title = `CTG Code — ${t.hero.title}`;
+
+/**
+ * Mini-resaltador de sintaxis (build-time, cero JS en cliente).
+ * El código "atardece": keywords coral, strings ámbar, números turquesa.
+ */
+type Token = { t: "kw" | "cls" | "fn" | "str" | "num" | "com" | "pl"; v: string };
+
+const SPLIT =
+  /("[^"]*"|\/\/.*$|\.\w+(?=\()|-?\d+\.\d+|-?\d+|\b(?:import|from|const|new|export|true|false)\b|\bCTGCode\b)/;
+
+function tokenize(line: string): Token[] {
+  return line
+    .split(SPLIT)
+    .filter((s) => s !== undefined && s !== "")
+    .map((s): Token => {
+      if (s.startsWith('"')) return { t: "str", v: s };
+      if (s.startsWith("//")) return { t: "com", v: s };
+      if (s.startsWith(".")) return { t: "fn", v: s };
+      if (/^-?\d/.test(s)) return { t: "num", v: s };
+      if (s === "CTGCode") return { t: "cls", v: s };
+      if (/^(import|from|const|new|export|true|false)$/.test(s))
+        return { t: "kw", v: s };
+      return { t: "pl", v: s };
+    });
+}
+
+const codeLines = t.hero.code.map((line) => tokenize(line));
 ---
 
 <Layout title={title} description={t.hero.description} pageName="home">
   <Navbar lang={lang} />
 
   <main>
-    <section class="hero section u-grid" data-tone="night">
-      <div class="hero-body">
-        <p class="eyebrow">{t.hero.eyebrow}</p>
-        <h1>{t.hero.title}</h1>
-        <p class="hero-lead">{t.hero.description}</p>
-        <div class="cluster">
-          <CTA href="#contact">{t.nav.cta}</CTA>
+    <section class="hero" data-tone="night">
+      <div class="hero-stage">
+        <!-- El mensaje: titular fragmentado en tres voces -->
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
+          <h1 class="hero-title">
+            <span class="hero-t1">{t.hero.titlePre}</span>
+            <span class="hero-t2 text-sunset">{t.hero.titleMark}</span>
+            <span class="hero-t3"
+              >{t.hero.titlePost}<span
+                class="hero-title-caret"
+                aria-hidden="true">_</span
+              ></span
+            >
+          </h1>
+          <p class="hero-lead">{t.hero.description}</p>
+
+          <div class="hero-actions">
+            <CTA href="#contact">{t.nav.cta}</CTA>
+            <a class="hero-more" href="#services">{t.hero.secondary}</a>
+          </div>
         </div>
+
+        <!-- Sticker suelto sobre la mesa -->
+        <span class="hero-chip hero-chip--a" aria-hidden="true"
+          >{t.hero.chipA}</span
+        >
+
+        <!-- La fragua: el código que compila el atardecer (decorativo) -->
+        <div class="hero-forge" aria-hidden="true">
+          <span class="hero-sun">
+            <svg viewBox="46 46 108 108" xmlns="http://www.w3.org/2000/svg">
+              <g fill="currentColor">
+                <path d="M100 50 L107 66 L93 66 Z" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(45 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(90 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(135 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(180 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(225 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(270 100 100)" />
+                <path d="M100 50 L107 66 L93 66 Z" transform="rotate(315 100 100)" />
+              </g>
+              <circle cx="100" cy="100" r="22" fill="none" stroke="currentColor" stroke-width="8" />
+            </svg>
+          </span>
+
+          <div class="hero-window">
+            <div class="hero-window-head">
+              <span><span class="hero-braces">&#123; &#125;</span> {t.hero.file}</span>
+              <span class="hero-status">
+                <span class="hero-dot"></span>
+                <span class="hero-status-building">{t.hero.statusBuilding}</span>
+                <span class="hero-status-ready">{t.hero.statusReady}</span>
+              </span>
+            </div>
+
+            <pre class="hero-code" data-hero-code><code>{codeLines.map((tokens) => (
+              <span class="hero-line">{tokens.map((tok) => (
+                <span class={`tk-${tok.t}`}>{tok.v}</span>
+              ))}</span>
+            ))}</code></pre>
+
+            <span class="hero-output">{t.hero.output}</span>
+          </div>
+
+          <!-- Sticker pegado al marco de la ventana -->
+          <span class="hero-chip hero-chip--b">{t.hero.chipB}</span>
+        </div>
+
+        <!-- El sello del estudio: gira sin prisa, se detiene a saludar -->
+        <div class="hero-stamp" aria-hidden="true">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <path
+                id="hero-stamp-arc"
+                d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"
+              ></path>
+            </defs>
+            <circle
+              class="hero-stamp-ring"
+              cx="50"
+              cy="50"
+              r="46"
+              fill="none"
+              stroke-width="1"></circle>
+            <text class="hero-stamp-text">
+              <textPath href="#hero-stamp-arc">
+                CTG CODE · CARTAGENA · 10.42° N · 75.55° W ·
+              </textPath>
+            </text>
+            <circle
+              class="hero-stamp-sun"
+              cx="50"
+              cy="50"
+              r="9"
+              fill="none"
+              stroke-width="3.5"></circle>
+            <circle class="hero-stamp-core" cx="50" cy="50" r="2.4"></circle>
+          </svg>
+        </div>
+
+        <p class="hero-scroll">
+          {t.hero.scroll}
+          <span class="hero-scroll-arrow" aria-hidden="true">↓</span>
+        </p>
+
+        <!-- Coordenadas al margen, como en una carta náutica -->
+        <span class="hero-coords" aria-hidden="true"
+          >10.4236° N — 75.5518° W</span
+        >
       </div>
     </section>
 
@@ -54,3 +186,61 @@ const title = `CTG Code — ${t.hero.title}`;
 
   <Footer lang={lang} />
 </Layout>
+
+<script>
+  /**
+   * El código se escribe en vivo, con ritmo humano (pausas al final de línea),
+   * y al terminar la sección "compila": el sol se enciende, la luz de estado
+   * vira a turquesa y la salida reporta 200 OK. Con prefers-reduced-motion no
+   * se teclea nada: el hero aparece ya compilado.
+   */
+  const hero = document.querySelector<HTMLElement>(".hero");
+  const code = hero?.querySelector<HTMLElement>("[data-hero-code] code");
+
+  if (hero && code) {
+    const compile = () => hero.setAttribute("data-compiled", "");
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      compile();
+    } else {
+      // Recolecta los nodos de texto del código y vacíalos para teclearlos.
+      const walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
+      const nodes: Text[] = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode as Text);
+      const texts = nodes.map((n) => n.nodeValue ?? "");
+      nodes.forEach((n) => (n.nodeValue = ""));
+
+      const caret = document.createElement("span");
+      caret.className = "hero-caret";
+      caret.setAttribute("aria-hidden", "true");
+
+      let i = 0;
+      let j = 0;
+
+      const step = () => {
+        if (i >= nodes.length) {
+          caret.remove();
+          compile();
+          return;
+        }
+
+        const node = nodes[i];
+        const text = texts[i];
+        j++;
+        node.nodeValue = text.slice(0, j);
+        node.parentNode?.insertBefore(caret, node.nextSibling);
+
+        let delay = 12 + Math.random() * 26;
+        if (j >= text.length) {
+          // Pausa breve al cerrar cada tramo: el ritmo de quien piensa.
+          if (text.length > 1) delay += 90;
+          i++;
+          j = 0;
+        }
+        setTimeout(step, delay);
+      };
+
+      setTimeout(step, 600);
+    }
+  }
+</script>

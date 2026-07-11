@@ -13,7 +13,19 @@ export type LocaleSchema = {
     hero: {
         eyebrow: string;
         title: string;
+        titlePre: string;
+        titleMark: string;
+        titlePost: string;
         description: string;
+        file: string;
+        code: string[];
+        statusBuilding: string;
+        statusReady: string;
+        output: string;
+        secondary: string;
+        scroll: string;
+        chipA: string;
+        chipB: string;
     };
     notFound: {
         status: string;

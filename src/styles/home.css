@@ -1,17 +1,705 @@
 /* ===========================================================================
    HOME   (estilos de components/pages/Home.astro)
+
+   HERO — "la mesa de trabajo a la hora dorada".
+   Nada de dos cajas correctas: un titular fragmentado en tres voces y tres
+   sangrías, la ventana de código cruzada en diagonal (su cristal esmerilado
+   pasa por encima del titular), y artefactos esparcidos como sobre la mesa
+   del estudio: un sello giratorio, stickers de código pegados torcidos y las
+   coordenadas al margen, en vertical. El snippet se escribe en vivo y, al
+   compilar (data-compiled), el sol tras la ventana se enciende.
    =========================================================================== */
 
-.hero-body {
-  padding-block: var(--space-xl);
+.hero {
+  position: relative;
+  overflow: hidden;
+  /* Padding horizontal propio: el hero ya NO vive en u-grid (ese track "wide"
+     desbordaba en móvil por la <pre>). Se acota con .hero-stage. */
+  padding-inline: var(--content-padding);
+  padding-block: var(--space-xl) var(--space-lg);
+  /* Hora dorada contenida: rescoldo cálido tras la fragua y mar respirando
+     abajo a la izquierda. */
+  background-image:
+    radial-gradient(
+      42% 38% at 76% 34%,
+      color-mix(in oklab, var(--palette-coral) 10%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      50% 42% at 10% 108%,
+      color-mix(in oklab, var(--palette-caribe) 16%, transparent),
+      transparent 74%
+    );
+}
+
+/* La línea de horizonte, lejana, cruzando toda la escena */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 72%;
+  height: 1px;
+  background: var(--gradient-sunset);
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+/* ---- El lienzo: 12 columnas para colocar piezas, no para encajarlas ------- */
+.hero-stage {
+  position: relative;
+  z-index: 1;
+  /* Acotado al viewport (nunca desborda) y centrado; en desktop se vuelve la
+     rejilla de 12 columnas. */
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+
+@media (min-width: 60rem) {
+  .hero-stage {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .hero-copy {
+    grid-column: 1 / 9;
+    grid-row: 1;
+    z-index: 1;
+  }
+
+  /* La fragua entra desfasada: más abajo y pisando las columnas del titular.
+     Su cristal (backdrop blur) pasa por encima de la cola del titular. */
+  .hero-forge {
+    grid-column: 7 / 13;
+    grid-row: 1;
+    z-index: 2;
+    margin-top: clamp(5rem, 12vw, 8.5rem);
+  }
+
+  .hero-stamp {
+    grid-column: 5 / 7;
+    grid-row: 2;
+    z-index: 2;
+    justify-self: center;
+    margin-top: calc(var(--space-lg) * -1);
+  }
+
+  .hero-scroll {
+    grid-column: 1 / 5;
+    grid-row: 2;
+    align-self: end;
+    margin-top: var(--space-xl);
+  }
+
+  .hero-coords {
+    grid-column: 12 / 13;
+    grid-row: 2;
+    justify-self: end;
+    margin-top: var(--space-md);
+  }
+}
+
+/* Mobile-first: en móvil la mesa se ordena — columna única, sin piezas
+   flotantes. Los decoradores (sello, sticker suelto, coordenadas) nacen
+   ocultos y solo existen a partir de 60rem (ver el media query de arriba). */
+
+.hero-copy {
+  min-width: 0;
+}
+
+/* ---- El titular: tres líneas, tres voces, tres sangrías ------------------- */
+.hero-title {
+  margin-top: var(--space-sm);
+}
+
+/* 01 · la voz mono que anuncia */
+.hero-t1 {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-md);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* 02 · el protagonista: enorme, con el atardecer completo dentro */
+.hero-t2 {
+  display: block;
+  margin-top: var(--space-3xs);
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+  /* El clip del gradiente solo pinta dentro de la caja: sin este colchón,
+     los descendentes (la «g» de digital) quedan cortados. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+/* 03 · el remate, sangrado a propósito, con cursor de terminal */
+.hero-t3 {
+  display: block;
+  margin-top: var(--space-2xs);
+  margin-left: clamp(0.75rem, 6vw, 2rem);
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xl);
+  color: var(--color-heading);
+}
+
+.hero-title-caret {
+  color: var(--palette-amber);
+  /* Respira en vez de apagarse: nunca desaparece del todo (legibilidad) */
+  animation: hero-caret-breathe 1.3s var(--ease-soft) infinite;
+}
+
+@keyframes hero-caret-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes hero-blink {
+  to {
+    visibility: hidden;
+  }
 }
 
 .hero-lead {
   margin-top: var(--space-md);
+  max-width: var(--measure-narrow);
   font-size: var(--text-md);
   color: var(--color-text-muted);
 }
 
-.hero-body .cluster {
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--space-md);
   margin-top: var(--space-lg);
+}
+
+/* Acción secundaria: voz mono con línea de sonda que se alarga */
+.hero-more {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.hero-more::before {
+  content: "";
+  align-self: center;
+  width: 1.25ch;
+  height: 1px;
+  background: color-mix(in oklab, var(--palette-sand) 25%, transparent);
+  transition:
+    width var(--dur-base) var(--ease-tide),
+    background var(--dur-fast) var(--ease-soft);
+}
+
+.hero-more:hover,
+.hero-more:focus-visible {
+  color: var(--color-heading);
+}
+
+.hero-more:hover::before,
+.hero-more:focus-visible::before {
+  width: 3ch;
+  background: var(--palette-amber);
+}
+
+/* ---- Stickers de código: pegados torcidos, se enderezan al mirarlos -------- */
+.hero-chip {
+  display: inline-block;
+  padding: var(--space-3xs) var(--space-xs);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-brand-soft);
+  rotate: var(--chip-rot, 2.5deg);
+  transition:
+    rotate var(--dur-base) var(--ease-expo),
+    translate var(--dur-base) var(--ease-expo),
+    border-color var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur-base) var(--ease-tide);
+}
+
+.hero-chip:hover {
+  rotate: 0deg;
+  translate: 0 -2px;
+  border-color: var(--color-border-warm);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-chip--a {
+  --chip-rot: 2.5deg;
+  display: none; /* solo en escritorio (mobile-first) */
+  position: absolute;
+  top: 0.5rem;
+  right: 4%;
+  z-index: 3;
+}
+
+.hero-chip--b {
+  --chip-rot: -3deg;
+  position: absolute;
+  bottom: -0.85rem;
+  left: 1.1rem;
+  z-index: 3;
+}
+
+/* ---- La fragua: sol + ventana de código ------------------------------------ */
+.hero-forge {
+  position: relative;
+  min-width: 0;
+}
+
+/* El sol tras la ventana: tenue mientras compila, encendido al terminar */
+.hero-sun {
+  position: absolute;
+  top: -2rem;
+  left: -1.25rem;
+  width: clamp(4.5rem, 16vw, 6.5rem);
+  z-index: 0;
+  pointer-events: none;
+  color: var(--palette-amber);
+  opacity: 0.35;
+  scale: 0.92;
+  filter: drop-shadow(
+    0 0 30px color-mix(in oklab, var(--palette-coral) 55%, transparent)
+  );
+  transition:
+    opacity var(--dur-slower) var(--ease-tide),
+    scale var(--dur-slower) var(--ease-expo);
+}
+
+.hero[data-compiled] .hero-sun {
+  opacity: 1;
+  scale: 1;
+}
+
+.hero-sun svg {
+  width: 100%;
+  height: auto;
+  animation: hero-spin 90s linear infinite;
+}
+
+@keyframes hero-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* La ventana: colocada a mano (girada), se endereza cuando la miras */
+.hero-window {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--color-surface-sunk) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+  rotate: -1.4deg;
+  transition: rotate var(--dur-base) var(--ease-expo);
+}
+
+.hero-forge:hover .hero-window {
+  rotate: 0deg;
+}
+
+/* Filo de atardecer en la base de la ventana */
+.hero-window::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--border-thick);
+  background: var(--gradient-cta);
+}
+
+.hero-window-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-sm);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.hero-braces {
+  color: var(--palette-amber);
+}
+
+/* Una sola luz de estado, con significado: ámbar latiendo mientras compila,
+   turquesa fija cuando está en línea. (Nada de semáforos de tres puntos.) */
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.hero-dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--radius-pill);
+  background: var(--palette-amber);
+  animation: hero-dot 1.4s var(--ease-soft) infinite;
+}
+
+@keyframes hero-dot {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.hero[data-compiled] .hero-dot {
+  background: var(--palette-turquesa);
+  animation: none;
+}
+
+.hero-status-ready {
+  display: none;
+}
+
+.hero[data-compiled] .hero-status-building {
+  display: none;
+}
+
+.hero[data-compiled] .hero-status-ready {
+  display: inline;
+}
+
+/* ---- El código -------------------------------------------------------------- */
+.hero-code {
+  margin: 0;
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  border: none;
+  background: none;
+  /* Código un punto más pequeño en móvil → menos scroll horizontal. */
+  font-size: clamp(0.66rem, 2.9vw, var(--text-xs));
+  line-height: 1.75;
+  white-space: pre;
+  /* La consola scrollea DENTRO de la ventana; nunca desborda la página. */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  counter-reset: line;
+}
+
+/* Numeración de líneas: la voz 01/02/03 también en el editor */
+.hero-line {
+  display: block;
+  counter-increment: line;
+}
+
+.hero-line::before {
+  content: counter(line, decimal-leading-zero);
+  display: inline-block;
+  width: 2.2ch;
+  margin-right: var(--space-xs);
+  text-align: right;
+  color: color-mix(in oklab, var(--palette-sand) 22%, transparent);
+  user-select: none;
+}
+
+/* El código atardece: keywords coral, strings ámbar, números turquesa */
+.tk-kw {
+  color: var(--palette-coral);
+}
+
+.tk-cls {
+  color: var(--palette-sand);
+  font-weight: var(--weight-semibold);
+}
+
+.tk-fn {
+  color: var(--palette-sand);
+}
+
+.tk-str {
+  color: var(--palette-amber);
+}
+
+.tk-num {
+  color: var(--palette-turquesa);
+}
+
+.tk-com {
+  color: var(--color-text-subtle);
+  font-style: italic;
+}
+
+.tk-pl {
+  color: var(--color-text-muted);
+}
+
+/* El cursor que escribe */
+.hero-caret {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.05em;
+  vertical-align: text-bottom;
+  background: var(--palette-amber);
+  animation: hero-blink 1s steps(2, start) infinite;
+}
+
+/* La salida del build: aparece al compilar */
+.hero-output {
+  display: block;
+  padding: var(--space-2xs) var(--space-sm) var(--space-sm);
+  border-top: var(--border-thin) dashed var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--dur-slow) var(--ease-tide),
+    transform var(--dur-slow) var(--ease-expo);
+}
+
+.hero[data-compiled] .hero-output {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- El sello del estudio: gira sin prisa; se detiene a saludar ------------- */
+.hero-stamp {
+  display: none; /* solo en escritorio (mobile-first) */
+  width: clamp(6.5rem, 9vw, 8.5rem);
+  aspect-ratio: 1;
+  transition: scale var(--dur-base) var(--ease-expo);
+}
+
+.hero-stamp:hover {
+  scale: 1.06;
+}
+
+.hero-stamp svg {
+  width: 100%;
+  height: auto;
+  animation: hero-spin 26s linear infinite;
+}
+
+.hero-stamp:hover svg {
+  animation-play-state: paused;
+}
+
+.hero-stamp-text {
+  fill: color-mix(in oklab, var(--palette-sand) 60%, transparent);
+  font-family: var(--font-mono);
+  font-size: 7.2px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.hero-stamp-ring {
+  stroke: color-mix(in oklab, var(--palette-sand) 18%, transparent);
+}
+
+.hero-stamp-sun {
+  stroke: var(--palette-amber);
+}
+
+.hero-stamp-core {
+  fill: var(--palette-coral);
+}
+
+/* ---- Coordenadas al margen, en vertical ------------------------------------- */
+.hero-coords {
+  display: none; /* solo en escritorio (mobile-first) */
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  color: color-mix(in oklab, var(--palette-sand) 34%, transparent);
+  user-select: none;
+}
+
+/* ---- Invitación a seguir bajando (el atardecer continúa) ------------------- */
+.hero-scroll {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.hero-scroll-arrow {
+  animation: hero-bob 2.2s var(--ease-soft) infinite;
+}
+
+@keyframes hero-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ---- Entrada escalonada: la mesa se sirve pieza a pieza ---------------------
+   Solo con movimiento permitido: la regla global de reduced-motion no anula
+   los delays, así que estas animaciones viven en su propio media query. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-eyebrow,
+  .hero-t1,
+  .hero-t2,
+  .hero-t3,
+  .hero-lead,
+  .hero-actions,
+  .hero-forge,
+  .hero-stamp,
+  .hero-scroll {
+    animation-name: hero-rise;
+    animation-duration: 0.7s;
+    animation-timing-function: var(--ease-tide);
+    animation-fill-mode: backwards;
+  }
+
+  .hero-eyebrow {
+    animation-delay: 0.05s;
+  }
+  .hero-t1 {
+    animation-delay: 0.14s;
+  }
+  .hero-t2 {
+    animation-delay: 0.24s;
+  }
+  .hero-t3 {
+    animation-delay: 0.36s;
+  }
+  .hero-lead {
+    animation-delay: 0.46s;
+  }
+  .hero-actions {
+    animation-delay: 0.56s;
+  }
+  .hero-forge {
+    animation-delay: 0.32s;
+  }
+  .hero-stamp {
+    animation-delay: 0.75s;
+  }
+  .hero-scroll {
+    animation-delay: 0.9s;
+  }
+
+  /* Los stickers caen después, con su pequeño rebote */
+  .hero-chip--a,
+  .hero-chip--b {
+    animation: hero-pop 0.5s var(--ease-expo) backwards;
+  }
+  .hero-chip--a {
+    animation-delay: 0.9s;
+  }
+  .hero-chip--b {
+    animation-delay: 1.05s;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+@keyframes hero-pop {
+  from {
+    opacity: 0;
+    scale: 0.85;
+    translate: 0 6px;
+  }
+}
+
+@media (max-width: 59.99rem) {
+  .hero .hero-stage.bleed-wide {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+}
+
+/* ---- Escritorio (≥60rem): la mesa se desordena a propósito ------------------
+   Va al FINAL del archivo a propósito: estas reglas deben ganarle en cascada
+   a las bases mobile-first de arriba. */
+@media (min-width: 60rem) {
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  /* Los decoradores existen solo aquí */
+  .hero-stamp {
+    display: block;
+  }
+
+  .hero-chip--a {
+    display: inline-block;
+  }
+
+  .hero-coords {
+    display: block;
+  }
+
+  /* «Construyendo» arranca un paso ANTES que el resto: sangría inversa,
+     el escalón tipográfico se descuelga del margen. */
+  .hero-t1 {
+    margin-left: clamp(-2rem, -2.5vw, -0.75rem);
+  }
+
+  /* El protagonista crece y el remate se sangra más hondo */
+  .hero-t2 {
+    font-size: var(--text-4xl);
+  }
+
+  .hero-t3 {
+    margin-left: clamp(1rem, 12%, 7rem);
+  }
+
+  /* El sol recupera su tamaño de escritorio */
+  .hero-sun {
+    top: -2.75rem;
+    left: -2.25rem;
+    width: clamp(6rem, 12vw, 10rem);
+  }
 }
