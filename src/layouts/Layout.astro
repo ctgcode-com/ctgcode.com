@@ -113,7 +113,7 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
          necesita un orden garantizado que Partytown no asegura. -->
     {googleAdsId && googleAnalyticsId && (
       <>
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}></script>
         <script is:inline define:vars={{ googleAdsId, googleAnalyticsId }}>
           gtag("js", new Date());
           gtag("config", googleAnalyticsId);
