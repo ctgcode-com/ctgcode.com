@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../global/Navbar.astro";
+import { locales } from "../../data/i18n";
+
+interface Props {
+  lang: keyof typeof locales;
+}
+
+const { lang } = Astro.props;
+const t = locales[lang];
+const title = `CTG Code — ${t.hero.title}`;
+---
+
+<Layout
+  title={title}
+  description={t.hero.description}
+  pageName="privacy"
+  lang={lang}
+>
+  <Navbar lang={lang} />
+</Layout>

@@ -51,6 +51,28 @@ export type LocaleSchema = {
         surface: string;
         colophon: string;
         rights: string;
+        nav: string;
+        legal: string;
+        channels: string;
+        privacy: string;
+        privacySlug: string;
+        terms: string;
+        termsSlug: string;
+        email: string;
+        form: {
+            name: string;
+            namePlaceholder: string;
+            email: string;
+            emailPlaceholder: string;
+            message: string;
+            messagePlaceholder: string;
+            cta: string;
+        };
+        success: string;
+        messageSent: string;
+        error: string;
+        messageError: string;
+        formReset: string;
     };
 };
 

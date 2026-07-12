@@ -274,3 +274,12 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Corregido
 
 - **SEO · dominio de producción**: `siteConfig.url` pasa de `http://localhost:4321` a `https://ctgcode.com`. Las URLs **canónicas**, los `hreflang` y los `og:url` dejan de apuntar a `localhost` y usan el dominio real; así casan con el `sitemap-index.xml` y el `robots.txt` ya generados.
+
+## [0.16.0] - 2026-07-12
+
+### Cambiado
+
+- **El footer absorbe el contacto y se convierte en el cierre de venta** (`Footer.astro` + `footer.css`): bajo «¿Zarpamos?» vive ahora el **formulario de contacto** (nombre, correo y «tu idea»), cuyo submit es el propio CTA «el faro del atardecer». Los campos son pozos en el lecho marino que se encienden en ámbar al enfocarlos, con etiquetas en la voz mono (`// nombre`). Al lado, el **directorio** en columnas: navegación (la sonda `01–04`), canales de atención (WhatsApp Business, Instagram, Facebook, LinkedIn y correo, con códigos `wa/ig/fb/in/@`) e información legal (Política de privacidad y Términos y condiciones, con rutas localizadas por idioma).
+- **El ancla `#contact` vive ahora en el footer**: los CTA de la navbar y del hero aterrizan directamente en el formulario, en cualquier página que use el footer.
+- **`src/components/pages/Home.astro`**: se elimina la sección independiente de contacto (absorbida por el footer).
+- **`src/data/i18n.ts`** y **`src/data/locales/{es,en}.ts`**: el `footer` crece con el formulario (etiquetas y placeholders), los encabezados de grupo y los textos/slugs legales.

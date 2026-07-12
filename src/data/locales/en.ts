@@ -62,6 +62,28 @@ const en: LocaleSchema = {
         surface: 'back to the surface',
         colophon: '$ handcrafted by the sea · 10.4236° N, 75.5518° W',
         rights: 'all rights reserved',
+        nav: 'navigation',
+        legal: 'legal',
+        channels: 'channels',
+        privacy: 'Privacy policy',
+        privacySlug: 'privacy',
+        terms: 'Terms & conditions',
+        termsSlug: 'terms',
+        email: 'Email',
+        form: {
+            name: 'name',
+            namePlaceholder: 'What should we call you?',
+            email: 'email',
+            emailPlaceholder: 'you@email.com',
+            message: 'your idea',
+            messagePlaceholder: 'A website, an app, an integration…',
+            cta: 'Send',
+        },
+        success: 'Course set!',
+        messageSent: 'We have received your idea. We will get back to you as soon as possible.',
+        error: 'Something went wrong',
+        messageError: 'Sorry, there was an error sending your message. Please try again later or contact us directly through our channels.',
+        formReset: 'Send another message',
     }
 };
 

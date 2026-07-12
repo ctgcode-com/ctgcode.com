@@ -62,6 +62,28 @@ const es: LocaleSchema = {
         surface: 'volver a la superficie',
         colophon: '$ hecho a mano frente al mar · 10.4236° N, 75.5518° W',
         rights: 'todos los derechos reservados',
+        nav: 'navegación',
+        legal: 'legal',
+        channels: 'canales',
+        privacy: 'Política de privacidad',
+        privacySlug: 'privacidad',
+        terms: 'Términos y condiciones',
+        termsSlug: 'terminos',
+        email: 'Correo',
+        form: {
+            name: 'nombre',
+            namePlaceholder: '¿Cómo te llamamos?',
+            email: 'correo',
+            emailPlaceholder: 'tu@correo.com',
+            message: 'tu idea',
+            messagePlaceholder: 'Una web, una app, una integración…',
+            cta: 'Enviar',
+        },
+        success: '¡Rumbo fijado!',
+        messageSent: 'Hemos recibido tu idea. Nos pondremos en contacto contigo tan pronto como nos sea posible.',
+        error: 'Algo salió mal',
+        messageError: 'Lo sentimos, hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde o contáctanos directamente a través de nuestros canales.',
+        formReset: 'Enviar otro mensaje',
     }
 };
 

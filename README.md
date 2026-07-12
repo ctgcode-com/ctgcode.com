@@ -49,7 +49,7 @@ ctgcode.com/
 │   ├── components/                # Componentes reutilizables del sitio.
 │   │   ├── global/                # Componentes globales y de alcance transversal.
 │   │   │   ├── CookieBanner.astro # Consentimiento de cookies (Google Consent Mode v2), denegado por defecto.
-│   │   │   ├── Footer.astro       # Cierre del sitio «el fondo del mar»: invitación, mapa, colofón y marca hundida.
+│   │   │   ├── Footer.astro       # Cierre de venta «el fondo del mar»: formulario de contacto, directorio (navegación, canales, legal), colofón y marca hundida.
 │   │   │   ├── LangNotice.astro   # Aviso de idioma disponible (cambio manual, sin redirección automática).
 │   │   │   └── Navbar.astro       # Cabecera responsiva: marca, navegación, switch de idioma, CTA y menú móvil.
 │   │   ├── pages/                 # Componentes de composición de páginas completas.

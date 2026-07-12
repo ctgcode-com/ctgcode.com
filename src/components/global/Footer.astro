@@ -1,15 +1,23 @@
 ---
 /**
- * Footer — el cierre de CTG Code: "el fondo del mar".
+ * Footer — el cierre de CTG Code: "el fondo del mar" y el cierre de venta.
  *
  * Si la navbar es el cielo, esto es el lecho marino: lo más hondo de la página
- * (tono "abyss"). El sol del logo se hunde tras el filo superior, la navegación
- * son marcas de profundidad, un botón de luz fría invita a volver a la
- * superficie y, al fondo, la marca yace medio hundida disolviéndose.
+ * (tono "abyss"). El sol del logo se hunde tras el filo superior y, bajo la
+ * pregunta «¿Zarpamos?», vive el formulario de contacto (el CTA es su submit):
+ * en cualquier página con footer, el usuario puede convencerse y escribirnos.
+ * Al lado, el directorio: navegación (marcas de profundidad), legal y canales.
+ * Un botón de luz fría vuelve a la superficie y la marca yace medio hundida.
  *
+ * El ancla #contact vive aquí: los CTA de navbar/hero aterrizan en el
  * Estilos en styles/footer.css.
  */
-import { locales, languages, localizedPath, type LocaleSchema } from "../../data/i18n";
+import {
+  locales,
+  languages,
+  localizedPath,
+  type LocaleSchema,
+} from "../../data/i18n";
 import CTA from "../ui/CTA.astro";
 import "../../styles/footer.css";
 
@@ -30,75 +38,232 @@ const navItems = [
   { index: "02", label: t.nav.services, href: `${home}#services` },
   { index: "03", label: t.nav.contact, href: `${home}#contact` },
 ];
+
+// Canales de atención. TODO(fase funcional): enlaces reales (wa.me, perfiles
+// sociales y mailto) cuando se configuren las cuentas.
+const channelItems = [
+  { code: "wa", label: "WhatsApp", href: "https://wa.me/573052532602" },
+  {
+    code: "ig",
+    label: "Instagram",
+    href: "https://www.instagram.com/ctgcode/",
+  },
+  { code: "fb", label: "Facebook", href: "https://www.facebook.com/ctgcode" },
+  {
+    code: "in",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/ctgcode/",
+  },
+  {
+    code: "@",
+    label: t.footer.email,
+    href: "mailto:&#99;&#111;&#110;&#116;&#97;&#99;&#116;&#111;&#64;&#99;&#116;&#103;&#99;&#111;&#100;&#101;&#46;&#99;&#111;&#109;",
+  },
+];
+
+// Información legal (las páginas se crearán junto con el formulario funcional).
+const legalItems = [
+  { label: t.footer.privacy, href: localizedPath(lang, t.footer.privacySlug) },
+  { label: t.footer.terms, href: localizedPath(lang, t.footer.termsSlug) },
+];
 ---
 
-<footer class="site-footer" data-tone="abyss">
+<footer class="site-footer" id="contact" data-tone="abyss">
   <!-- El sol, poniéndose tras el horizonte del footer -->
   <div class="ft-sun" aria-hidden="true">
     <svg viewBox="46 46 108 108" xmlns="http://www.w3.org/2000/svg">
       <g fill="currentColor">
-        <path d="M100 50 L107 66 L93 66 Z" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(45 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(90 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(135 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(180 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(225 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(270 100 100)" />
-        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(315 100 100)" />
+        <path d="M100 50 L107 66 L93 66 Z"></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(45 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(90 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(135 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(180 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(225 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(270 100 100)"
+        ></path>
+        <path d="M100 50 L107 66 L93 66 Z" transform="rotate(315 100 100)"
+        ></path>
       </g>
-      <circle cx="100" cy="100" r="22" fill="none" stroke="currentColor" stroke-width="8" />
+      <circle
+        cx="100"
+        cy="100"
+        r="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="8"></circle>
     </svg>
   </div>
 
   <span class="ft-edge" aria-hidden="true"></span>
 
   <div class="ft-inner">
-    <!-- La invitación final -->
+    <!-- La invitación final + el formulario (el cierre de venta) -->
     <section class="ft-call">
       <p class="eyebrow">{t.footer.eyebrow}</p>
-      <p class="ft-claim">{t.footer.claim}</p>
-      <p class="ft-lead">{t.footer.lead}</p>
-      <div class="ft-action">
-        <CTA href={`${home}#contact`}>{t.nav.cta}</CTA>
+
+      <!-- Encabezado por defecto -->
+      <div id="ft-header-default" class="ft-fade">
+        <p class="ft-claim">{t.footer.claim}</p>
+        <p class="ft-lead">{t.footer.lead}</p>
       </div>
+
+      <!-- Encabezado de éxito (oculto por defecto) -->
+      <div id="ft-header-success" class="ft-fade is-fading ft-hidden">
+        <p class="ft-claim">{t.footer.success}</p>
+        <p class="ft-lead">{t.footer.messageSent}</p>
+
+        <!-- El botón para reiniciar ahora vive justo debajo del texto -->
+        <button type="button" id="form-reset" class="ft-surface ft-form-reset">
+          <span class="ft-arrow" aria-hidden="true">↺</span>
+          {t.footer.formReset}
+        </button>
+      </div>
+
+      <!-- Encabezado de error (oculto por defecto) -->
+      <div id="ft-header-error" class="ft-fade is-fading ft-hidden">
+        <p class="ft-claim">{t.footer.error}</p>
+        <p class="ft-lead">{t.footer.messageError}</p>
+
+        <!-- El botón para reiniciar desde el estado de error -->
+        <button
+          type="button"
+          id="form-reset-error"
+          class="ft-surface
+          ft-form-reset"
+        >
+          <span class="ft-arrow" aria-hidden="true">↺</span>
+          {t.footer.formReset}
+        </button>
+      </div>
+
+      <form
+        class="ft-form"
+        data-contact-form
+        action="https://formspree.io/f/xnjeaorj"
+        method="post"
+      >
+        <div class="ft-form-row">
+          <label class="ft-field">
+            <span class="ft-label">{t.footer.form.name}</span>
+            <input
+              class="ft-input"
+              type="text"
+              name="name"
+              autocomplete="name"
+              placeholder={t.footer.form.namePlaceholder}
+              required
+            />
+          </label>
+
+          <label class="ft-field">
+            <span class="ft-label">{t.footer.form.email}</span>
+            <input
+              class="ft-input"
+              type="email"
+              name="email"
+              autocomplete="email"
+              placeholder={t.footer.form.emailPlaceholder}
+              required
+            />
+          </label>
+        </div>
+
+        <label class="ft-field">
+          <span class="ft-label">{t.footer.form.message}</span>
+          <textarea
+            class="ft-input ft-textarea"
+            name="message"
+            rows="4"
+            placeholder={t.footer.form.messagePlaceholder}
+            required></textarea>
+        </label>
+
+        <div class="ft-form-actions">
+          <CTA type="submit">{t.footer.form.cta}</CTA>
+        </div>
+      </form>
     </section>
 
-    <!-- La sonda: navegación como marcas de profundidad -->
-    <nav
-      class="ft-nav"
-      aria-label={lang === "es" ? "Mapa del sitio" : "Site map"}
-    >
-      <ul role="list">
-        {
-          navItems.map((item) => (
-            <li>
-              <a class="ft-link" href={item.href}>
-                <span class="ft-index" aria-hidden="true">
-                  {item.index}
-                </span>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-        <li>
-          <a
-            class="ft-link"
-            href={localizedPath(otherLang)}
-            hreflang={otherLang}
-            lang={otherLang}
-          >
-            <span class="ft-index" aria-hidden="true">04</span>
-            {languages[otherLang]}
-          </a>
-        </li>
-      </ul>
+    <!-- El directorio: la sonda, los canales y lo legal -->
+    <div class="ft-directory">
+      <nav
+        class="ft-group"
+        aria-label={lang === "es" ? "Mapa del sitio" : "Site map"}
+      >
+        <p class="ft-heading">{t.footer.nav}</p>
+        <ul role="list">
+          {
+            navItems.map((item) => (
+              <li>
+                <a class="ft-link" href={item.href}>
+                  <span class="ft-index" aria-hidden="true">
+                    {item.index}
+                  </span>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a
+              class="ft-link"
+              href={localizedPath(otherLang)}
+              hreflang={otherLang}
+              lang={otherLang}
+            >
+              <span class="ft-index" aria-hidden="true">04</span>
+              {languages[otherLang]}
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="ft-group ft-group--channels">
+        <p class="ft-heading">{t.footer.channels}</p>
+        <ul role="list">
+          {
+            channelItems.map((item) => (
+              <li>
+                <a class="ft-link" href={item.href}>
+                  <span class="ft-index" aria-hidden="true">
+                    {item.code}
+                  </span>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="ft-group">
+        <p class="ft-heading">{t.footer.legal}</p>
+        <ul role="list">
+          {
+            legalItems.map((item) => (
+              <li>
+                <a class="ft-link" href={item.href}>
+                  <span class="ft-index" aria-hidden="true">
+                    §
+                  </span>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
 
       <button class="ft-surface" type="button">
         <span class="ft-arrow" aria-hidden="true">↑</span>
         {t.footer.surface}
       </button>
-    </nav>
+    </div>
   </div>
 
   <!-- Colofón: la voz de terminal despidiéndose -->
@@ -112,7 +277,9 @@ const navItems = [
 </footer>
 
 <script>
-  const surface = document.querySelector<HTMLButtonElement>(".ft-surface");
+  const surface = document.querySelector<HTMLButtonElement>(
+    ".ft-directory .ft-surface",
+  );
 
   surface?.addEventListener("click", () => {
     // Vuelta a la superficie honrando prefers-reduced-motion (el scroll
@@ -123,4 +290,87 @@ const navItems = [
       : "smooth";
     window.scrollTo({ top: 0, behavior });
   });
+
+  // Se evita el submit nativo (recargaría la página con los datos en la URL).
+  // Capturamos los elementos del DOM
+  // Manejo del Formulario y Estados
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const headerDefault = document.getElementById("ft-header-default");
+  const headerSuccess = document.getElementById("ft-header-success");
+  const headerError = document.getElementById("ft-header-error");
+
+  const resetBtnSuccess = document.getElementById("form-reset");
+  const resetBtnError = document.getElementById("form-reset-error");
+
+  // Función genérica para mostrar un estado (éxito o error)
+  const showFeedback = (feedbackBlock: HTMLElement | null) => {
+    form?.classList.add("is-fading");
+    headerDefault?.classList.add("is-fading");
+
+    setTimeout(() => {
+      form?.classList.add("ft-hidden");
+      headerDefault?.classList.add("ft-hidden");
+
+      feedbackBlock?.classList.remove("ft-hidden");
+      feedbackBlock?.getBoundingClientRect(); // Forzar animación (Reflow)
+
+      feedbackBlock?.classList.remove("is-fading");
+    }, 300);
+  };
+
+  // Función genérica para volver al formulario
+  const resetForm = (activeFeedbackBlock: HTMLElement | null) => {
+    activeFeedbackBlock?.classList.add("is-fading");
+
+    setTimeout(() => {
+      activeFeedbackBlock?.classList.add("ft-hidden");
+
+      form?.classList.remove("ft-hidden");
+      headerDefault?.classList.remove("ft-hidden");
+
+      form?.getBoundingClientRect(); // Forzar animación (Reflow)
+
+      form?.classList.remove("is-fading");
+      headerDefault?.classList.remove("is-fading");
+    }, 300);
+  };
+
+  // Evento de envío del formulario
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : "Enviar";
+
+    if (submitBtn) submitBtn.innerHTML = "Enviando...";
+
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        form.reset();
+
+        (window as any).gtag("event", "generate_lead", {
+          event_category: "form",
+          event_label: "contact_form_success",
+        });
+
+        showFeedback(headerSuccess); // Mostramos bloque de éxito
+      } else {
+        showFeedback(headerError); // Mostramos bloque de error si Formspree rechaza
+      }
+    } catch (error) {
+      showFeedback(headerError); // Mostramos bloque de error si falla la red (sin internet)
+    } finally {
+      // Restauramos el texto original del botón por si el usuario vuelve
+      if (submitBtn) submitBtn.innerHTML = originalText;
+    }
+  });
+
+  // Eventos para los botones de "Enviar otro mensaje"
+  resetBtnSuccess?.addEventListener("click", () => resetForm(headerSuccess));
+  resetBtnError?.addEventListener("click", () => resetForm(headerError));
 </script>

@@ -59,9 +59,10 @@
 
 @media (min-width: 60rem) {
   .ft-inner {
-    /* Asimetría 7/5: la invitación manda, la sonda acompaña al fondo */
+    /* Asimetría 7/5: la invitación + el formulario mandan; el directorio
+       acompaña alineado arriba */
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    align-items: end;
+    align-items: start;
   }
 }
 
@@ -82,16 +83,123 @@
   color: var(--color-text-muted);
 }
 
-.ft-action {
+/* ---- El formulario: el cierre de venta -------------------------------------
+   Vive bajo «¿Zarpamos?» y su submit es el propio CTA. Los campos son pozos
+   en el lecho marino que se encienden en ámbar al enfocarlos. */
+.ft-form {
   margin-top: var(--space-lg);
+  max-width: 36rem;
+  display: grid;
+  gap: var(--space-sm);
 }
 
-/* ---- La sonda: navegación como marcas de profundidad ----------------------- */
-.ft-nav ul {
+/* nombre + correo lado a lado cuando caben; se apilan solos en angosto */
+.ft-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--space-sm);
+}
+
+.ft-field {
+  display: grid;
+  gap: var(--space-3xs);
+  min-width: 0;
+}
+
+/* Etiquetas: comentarios de código, la voz mono del estudio */
+.ft-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ft-label::before {
+  content: "// ";
+  color: color-mix(in oklab, var(--palette-sand) 30%, transparent);
+}
+
+.ft-input {
+  width: 100%;
+  padding: var(--space-2xs) var(--space-xs);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--color-surface-sunk) 72%, transparent);
+  color: var(--color-text);
+  transition:
+    border-color var(--dur-fast) var(--ease-soft),
+    background var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur-base) var(--ease-tide);
+}
+
+.ft-input::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.ft-input:hover {
+  border-color: var(--color-border-strong);
+}
+
+/* Foco: el campo se enciende en ámbar (sustituye al outline global) */
+.ft-input:focus-visible {
+  outline: none;
+  border-color: var(--palette-amber);
+  background: color-mix(in oklab, var(--color-surface-sunk) 92%, transparent);
+  box-shadow: 0 10px 30px -14px
+    color-mix(in oklab, var(--palette-coral) 65%, transparent);
+}
+
+.ft-textarea {
+  resize: none;
+  min-height: 6.5rem;
+}
+
+.ft-form-actions {
+  margin-top: var(--space-2xs);
+}
+
+/* ---- El directorio: la sonda, los canales y lo legal ------------------------
+   En angosto una sola columna; desde 30rem, dos: navegación y legal apiladas
+   a la izquierda, los canales (la columna alta) a la derecha. */
+.ft-directory {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg) var(--space-md);
+  align-content: start;
+}
+
+@media (min-width: 30rem) {
+  .ft-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ft-group--channels {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+}
+
+.ft-group ul {
   display: flex;
   flex-direction: column;
   gap: var(--space-2xs);
   margin: 0;
+}
+
+/* Encabezados de grupo: comentarios de código */
+.ft-heading {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ft-heading::before {
+  content: "// ";
+  color: color-mix(in oklab, var(--palette-sand) 30%, transparent);
 }
 
 .ft-link {
@@ -106,6 +214,7 @@
   text-transform: uppercase;
   color: var(--color-text-muted);
   transition: color var(--dur-fast) var(--ease-soft);
+  white-space: nowrap;
 }
 
 /* La línea de la sonda: se alarga y calienta hacia el enlace al pasar */
@@ -147,7 +256,9 @@
    Aquí abajo la única luz propia es fría: bioluminiscencia (turquesa como
    soporte, nunca como marca). La flecha sube como una burbuja. */
 .ft-surface {
-  margin-top: var(--space-md);
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: var(--space-2xs);
   display: inline-flex;
   align-items: center;
   gap: var(--space-2xs);
@@ -224,4 +335,22 @@
   user-select: none;
   mask-image: linear-gradient(180deg, #000 18%, transparent 96%);
   -webkit-mask-image: linear-gradient(180deg, #000 18%, transparent 96%);
+}
+
+/* ---- Utilidad para transiciones de estado del formulario ---- */
+.ft-fade {
+  transition: opacity var(--dur-base) var(--ease-soft);
+}
+
+.ft-fade.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ft-hidden {
+  display: none !important;
+}
+
+.ft-form-reset {
+  margin-top: var(--space-md);
 }
