@@ -258,3 +258,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Eliminado
 
 - **`@astrojs/partytown`**: quedó sin uso al diferir `gtag.js`; se retira la integración de `astro.config.mjs` y la dependencia (menos peso muerto).
+
+## [0.14.0] - 2026-07-11
+
+### Corregido
+
+- **Accesibilidad · contraste (AA)**:
+  - El `eyebrow` sobre secciones claras (`[data-tone="sand"]`) usaba ámbar sobre crema (ilegible); ahora vira a un ocaso oscuro mediante el nuevo token `--color-eyebrow`.
+  - El selector de idioma de la navbar sube de `--color-text-subtle` a `--color-text-muted`.
+  - Los índices numerados (`01/02…`) de navbar y footer suben su opacidad de 0.55 a 0.75.
+- **Accesibilidad · árbol para agentes**: el aviso de idioma dejaba `role="status"` sobre un `<aside>` (rol no apropiado para ese elemento); pasa a `<div role="status">`.

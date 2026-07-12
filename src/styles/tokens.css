@@ -110,6 +110,9 @@
   --color-brand: var(--palette-coral);
   --color-brand-strong: var(--palette-ocaso);
   --color-brand-soft: var(--palette-amber);
+  /* Eyebrow: ámbar sobre fondos oscuros; se oscurece en tonos claros (sand)
+     para cumplir contraste AA. */
+  --color-eyebrow: var(--color-brand-soft);
   --color-on-brand: var(--palette-ink); /* texto sobre superficies de marca */
 
   /* Acento / soporte — FRÍO. Enlaces y estados, no protagonismo. */

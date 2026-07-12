@@ -34,4 +34,6 @@
   --color-link-hover: var(--palette-ocaso);
   --color-surface: #fffdf8;
   --color-surface-sunk: var(--palette-stone);
+  /* Ámbar sobre crema no cumple AA; en sand el eyebrow vira a ocaso oscuro. */
+  --color-eyebrow: color-mix(in oklab, var(--palette-ocaso) 65%, var(--palette-ink));
 }

@@ -28,7 +28,7 @@ const others = (Object.keys(locales) as (keyof typeof locales)[]).filter(
     others.map((l) => {
       const n: LocaleSchema["langNotice"] = locales[l].langNotice;
       return (
-        <aside
+        <div
           class="ln-card"
           data-ln-for={l}
           role="status"
@@ -64,7 +64,7 @@ const others = (Object.keys(locales) as (keyof typeof locales)[]).filter(
           >
             <span aria-hidden="true">&times;</span>
           </button>
-        </aside>
+        </div>
       );
     })
   }

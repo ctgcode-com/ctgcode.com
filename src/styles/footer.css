@@ -134,7 +134,7 @@
 .ft-index {
   font-size: var(--text-2xs);
   color: var(--color-brand-soft);
-  opacity: 0.55;
+  opacity: 0.75;
   transition: opacity var(--dur-fast) var(--ease-soft);
 }
 
