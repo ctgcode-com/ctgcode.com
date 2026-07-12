@@ -85,6 +85,15 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
+    <!-- Política de Seguridad de Contenido (CSP) para mitigar XSS y Clickjacking -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com blob:;
+      connect-src 'self' https://www.google-analytics.com https://stats.g.doubleclick.net https://www.google.com https://www.google.co.id;
+      img-src 'self' data: https://www.google-analytics.com https://www.google.com https://www.google.co.id https://www.google.com.co https://googleads.g.doubleclick.net https://www.googleadservices.com;
+      font-src 'self' data:;
+    " />
+
     <!-- Google Consent Mode v2 — SIEMPRE primero, antes de cargar gtag.js.
          Por defecto TODO denegado: no se activan cookies de analítica ni de
          anuncios hasta que el usuario acepte en el banner. Si ya aceptó en una
@@ -132,8 +141,7 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
           gtagLoaded = true;
           var s = document.createElement("script");
           s.async = true;
-          s.src =
-            "https://www.googletagmanager.com/gtag/js?id=" + googleAnalyticsId;
+          s.src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`;
           document.head.appendChild(s);
         }
 
