@@ -21,8 +21,8 @@ interface Props {
 // que en /en, sin depender de un segmento dinámico de ruta.
 const { title, description, pageName, lang = 'es' } = Astro.props;
 
+const googleAnalyticsId = 'G-7XZMZNVW3L';
 const googleAdsId = 'AW-18316357590';
-const googleAnalyticsId = 'G-VJ80VBL1L4';
 
 const siteUrl = siteConfig.url;
 const subpath = pageName === 'home' ? '' : pageName;
@@ -86,13 +86,58 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
     <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Política de Seguridad de Contenido (CSP) para mitigar XSS y Clickjacking -->
-    <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com blob:;
-      connect-src 'self' https://www.google-analytics.com https://stats.g.doubleclick.net https://www.google.com https://www.google.co.id https://formspree.io;
-      img-src 'self' data: https://www.google-analytics.com https://www.google.com https://www.google.co.id https://www.google.com.co https://googleads.g.doubleclick.net https://www.googleadservices.com;
-      font-src 'self' data:;
-    " />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+
+        script-src
+          'self'
+          'unsafe-inline'
+          blob:
+          https://www.googletagmanager.com
+          https://googleads.g.doubleclick.net;
+
+        connect-src
+          'self'
+          https://www.googletagmanager.com
+          https://www.google-analytics.com
+          https://region1.google-analytics.com
+          https://region2.google-analytics.com
+          https://analytics.google.com
+          https://stats.g.doubleclick.net
+          https://googleads.g.doubleclick.net
+          https://ad.doubleclick.net
+          https://www.googleadservices.com
+          https://www.google.com
+          https://pagead2.googlesyndication.com
+          https://formspree.io;
+
+        img-src
+          'self'
+          data:
+          https://www.googletagmanager.com
+          https://www.google-analytics.com
+          https://stats.g.doubleclick.net
+          https://googleads.g.doubleclick.net
+          https://www.googleadservices.com
+          https://www.google.com
+          https://www.google.com.co
+          https://pagead2.googlesyndication.com;
+
+        style-src
+          'self'
+          'unsafe-inline';
+
+        font-src
+          'self'
+          data:;
+
+        frame-src
+          'self'
+          https://www.google.com;
+      "
+    />
 
     <!-- Google Consent Mode v2 — SIEMPRE primero, antes de cargar gtag.js.
          Por defecto TODO denegado: no se activan cookies de analítica ni de
@@ -129,17 +174,23 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
          navegador esté ocioso o a la primera interacción. Los comandos
          (js/config) se encolan de inmediato y gtag.js los procesa al cargar,
          respetando el consentimiento por defecto (denegado). -->
-    {googleAdsId && googleAnalyticsId && (
-      <script is:inline define:vars={{ googleAdsId, googleAnalyticsId }}>
+    {googleAnalyticsId && googleAdsId && (
+      <script is:inline define:vars={{ googleAnalyticsId, googleAdsId }}>
         gtag("js", new Date());
+
+        // Google Analytics
         gtag("config", googleAnalyticsId);
+
+        // Google Ads
         gtag("config", googleAdsId);
 
-        var gtagLoaded = false;
+        let gtagLoaded = false;
+
         function loadGtag() {
           if (gtagLoaded) return;
           gtagLoaded = true;
-          var s = document.createElement("script");
+
+          const s = document.createElement("script");
           s.async = true;
           s.src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`;
           document.head.appendChild(s);
@@ -150,8 +201,12 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
         } else {
           setTimeout(loadGtag, 3000);
         }
-        ["scroll", "pointerdown", "keydown", "touchstart"].forEach(function (ev) {
-          window.addEventListener(ev, loadGtag, { once: true, passive: true });
+
+        ["scroll", "pointerdown", "keydown", "touchstart"].forEach((ev) => {
+          window.addEventListener(ev, loadGtag, {
+            once: true,
+            passive: true,
+          });
         });
       </script>
     )}

@@ -354,8 +354,9 @@ const legalItems = [
         form.reset();
 
         (window as any).gtag("event", "generate_lead", {
-          event_category: "form",
-          event_label: "contact_form_success",
+          form_name: "contact",
+          page_location: window.location.href,
+          page_title: document.title,
         });
 
         showFeedback(headerSuccess); // Mostramos bloque de éxito
