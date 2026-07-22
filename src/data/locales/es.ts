@@ -105,7 +105,7 @@ const es: LocaleSchema = {
                 'Sitio corporativo para una gestora ambiental que recoge aceite de cocina usado y trampa grasa en restaurantes, hoteles y establecimientos gastronómicos. Construido con Astro y renderizado estático: sin capas de más, con el peso puesto en que abra rápido desde el móvil de un jefe de cocina.',
             url: 'https://recograscolombia.com/',
             urlLabel: 'recograscolombia.com',
-            stack: ['Astro', 'SSG', 'Tailwind', 'CSS propio'],
+            stack: ['Astro', 'Tailwind', 'CSS propio'],
             metrics: [
                 { label: 'Rendimiento (escritorio)', value: '100' },
                 { label: 'Rendimiento (móvil)', value: '98' },
@@ -169,7 +169,7 @@ const es: LocaleSchema = {
                     body: 'Cada equipo que entra al taller arrastra su historial: qué se le hizo, quién lo hizo y cuándo. Mantenimiento preventivo con su calendario y correctivo con su diagnóstico, en la misma línea de tiempo.',
                 },
             ],
-            stack: ['python', 'fastapi', 'postgresql', 'astro', 'typescript'],
+            stack: ['python', 'fastapi', 'rust', 'postgresql', 'astro', 'typescript'],
             note: 'Todavía no publicamos capturas ni demo: cuando Helio abra su puerta, se enlazará desde aquí.',
         },
         templates: {

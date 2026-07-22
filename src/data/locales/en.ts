@@ -105,7 +105,7 @@ const en: LocaleSchema = {
                 'Corporate site for an environmental operator that collects used cooking oil and grease-trap waste from restaurants, hotels and food businesses. Built with Astro and statically rendered: no extra layers, all the weight put on opening fast from a head chef’s phone.',
             url: 'https://recograscolombia.com/',
             urlLabel: 'recograscolombia.com',
-            stack: ['Astro', 'SSG', 'Tailwind', 'Hand-written CSS'],
+            stack: ['Astro', 'Tailwind', 'Hand-written CSS'],
             metrics: [
                 { label: 'Performance (desktop)', value: '100' },
                 { label: 'Performance (mobile)', value: '98' },
@@ -169,7 +169,7 @@ const en: LocaleSchema = {
                     body: 'Every unit that enters the shop carries its own history: what was done, by whom and when. Preventive maintenance with its schedule and corrective work with its diagnosis, on the same timeline.',
                 },
             ],
-            stack: ['python', 'fastapi', 'postgresql', 'astro', 'typescript'],
+            stack: ['python', 'fastapi', 'rust', 'postgresql', 'astro', 'typescript'],
             note: 'No public screenshots or demo yet: once Helio opens its doors, it will be linked from here.',
         },
         templates: {

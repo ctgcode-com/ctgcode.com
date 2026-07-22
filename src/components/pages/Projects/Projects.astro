@@ -68,7 +68,11 @@ const TEMPLATE_SHOTS: Record<string, Shot> = {
     webp: tplLocalWebp,
     png: tplLocalPng,
   },
-  "local-business": { avif: tplLocalAvif, webp: tplLocalWebp, png: tplLocalPng },
+  "local-business": {
+    avif: tplLocalAvif,
+    webp: tplLocalWebp,
+    png: tplLocalPng,
+  },
   "startups-productos": {
     avif: tplStartupAvif,
     webp: tplStartupWebp,
@@ -87,6 +91,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = locales[lang].projectsPage;
+const t2 = locales[lang].projects;
 const pj = locales[lang].projects;
 const nav = locales[lang].nav;
 const featured = pj.featured;
@@ -208,7 +213,11 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
     </section>
 
     <!-- ══ 01 · ENTREGADO ════════════════════════════════════════════════ -->
-    <section id={idShipped} class="bt-shipped" aria-labelledby="bt-shipped-title">
+    <section
+      id={idShipped}
+      class="bt-shipped"
+      aria-labelledby="bt-shipped-title"
+    >
       <div class="bt-shipped-wrap">
         <!-- Texto a babor: cabecera + ficha del proyecto, en una columna. -->
         <div class="bt-shipped-text" data-reveal style="--i:0">
@@ -236,17 +245,57 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
 
             <StackList items={featured.stack} />
 
-            <dl class="bt-metrics">
-              {
-                featured.metrics.map((m) => (
-                  <div class="bt-metric">
-                    <dt class="bt-metric-label">{m.label}</dt>
-                    <dd class="bt-metric-value">{m.value}</dd>
-                  </div>
-                ))
-              }
-            </dl>
-            <p class="bt-source">{pj.metricsSource}</p>
+            <!-- Contenedor para alinear métricas y reseña lado a lado -->
+            <div class="bt-metrics-and-quote">
+              <div class="bt-metrics-col">
+                <dl class="bt-metrics">
+                  {
+                    featured.metrics.map((m) => (
+                      <div class="bt-metric">
+                        <dt class="bt-metric-label">{m.label}</dt>
+                        <dd class="bt-metric-value">{m.value}</dd>
+                      </div>
+                    ))
+                  }
+                </dl>
+                <p class="bt-source">{pj.metricsSource}</p>
+              </div>
+
+              <figure class="pj-quote">
+                <p class="pj-quote-label">{t2.testimonial.label}</p>
+                <blockquote
+                  class="pj-quote-text"
+                  cite={t2.testimonial.sourceUrl || undefined}
+                >
+                  {t2.testimonial.quote}
+                </blockquote>
+
+                <figcaption class="pj-quote-by">
+                  <span class="pj-quote-author">{t2.testimonial.author}</span>
+                  <span class="pj-quote-source">
+                    {
+                      t2.testimonial.sourceUrl ? (
+                        <a
+                          href={t2.testimonial.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer nofollow"
+                        >
+                          {t2.testimonial.source}
+                        </a>
+                      ) : (
+                        t2.testimonial.source
+                      )
+                    }
+                  </span>
+                </figcaption>
+
+                {
+                  t2.testimonial.note && (
+                    <p class="pj-quote-note">{t2.testimonial.note}</p>
+                  )
+                }
+              </figure>
+            </div>
 
             <a
               class="bt-visit"
@@ -292,33 +341,66 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                solo) bajo una línea de escaneo. Es lo honesto para algo «en
                construcción» —aún no hay captura—. En móvil estorba: se oculta. -->
           <div class="bt-blueprint" aria-hidden="true">
-          <span class="bt-blueprint-tag">wireframe · v0</span>
-          <svg viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect class="bp-draw" x="8" y="8" width="404" height="284" rx="12" />
-            <line class="bp-draw" x1="8" y1="44" x2="412" y2="44" />
-            <circle class="bp-dot" cx="28" cy="26" r="4" />
-            <circle class="bp-dot" cx="44" cy="26" r="4" />
-            <circle class="bp-dot" cx="60" cy="26" r="4" />
-            <line class="bp-draw" x1="120" y1="44" x2="120" y2="292" />
-            <rect class="bp-soft" x="24" y="64" width="72" height="9" rx="4" />
-            <rect class="bp-soft" x="24" y="88" width="60" height="9" rx="4" />
-            <rect class="bp-soft" x="24" y="112" width="80" height="9" rx="4" />
-            <rect class="bp-soft" x="24" y="136" width="54" height="9" rx="4" />
-            <rect class="bp-soft" x="140" y="64" width="130" height="12" rx="5" />
-            <rect class="bp-draw" x="140" y="96" width="120" height="60" rx="8" />
-            <rect class="bp-draw" x="272" y="96" width="120" height="60" rx="8" />
-            <polyline
-              class="bp-draw bp-chart"
-              points="152,140 176,120 200,132 224,108 248,124"
-            />
-            <rect class="bp-soft" x="284" y="112" width="46" height="20" rx="4" />
-            <rect class="bp-soft" x="284" y="138" width="80" height="8" rx="4" />
-            <line class="bp-draw" x1="140" y1="180" x2="392" y2="180" />
-            <line class="bp-draw" x1="140" y1="208" x2="392" y2="208" />
-            <line class="bp-draw" x1="140" y1="236" x2="392" y2="236" />
-            <line class="bp-draw" x1="140" y1="264" x2="392" y2="264" />
-            <rect class="bp-scan" x="8" y="44" width="404" height="40" />
-          </svg>
+            <span class="bt-blueprint-tag">wireframe · v0</span>
+            <svg
+              viewBox="0 0 420 300"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect class="bp-draw" x="8" y="8" width="404" height="284" rx="12"
+              ></rect>
+              <line class="bp-draw" x1="8" y1="44" x2="412" y2="44"></line>
+              <circle class="bp-dot" cx="28" cy="26" r="4"></circle>
+              <circle class="bp-dot" cx="44" cy="26" r="4"></circle>
+              <circle class="bp-dot" cx="60" cy="26" r="4"></circle>
+              <line class="bp-draw" x1="120" y1="44" x2="120" y2="292"></line>
+              <rect class="bp-soft" x="24" y="64" width="72" height="9" rx="4"
+              ></rect>
+              <rect class="bp-soft" x="24" y="88" width="60" height="9" rx="4"
+              ></rect>
+              <rect class="bp-soft" x="24" y="112" width="80" height="9" rx="4"
+              ></rect>
+              <rect class="bp-soft" x="24" y="136" width="54" height="9" rx="4"
+              ></rect>
+              <rect
+                class="bp-soft"
+                x="140"
+                y="64"
+                width="130"
+                height="12"
+                rx="5"></rect>
+              <rect
+                class="bp-draw"
+                x="140"
+                y="96"
+                width="120"
+                height="60"
+                rx="8"></rect>
+              <rect
+                class="bp-draw"
+                x="272"
+                y="96"
+                width="120"
+                height="60"
+                rx="8"></rect>
+              <polyline
+                class="bp-draw bp-chart"
+                points="152,140 176,120 200,132 224,108 248,124"></polyline>
+              <rect
+                class="bp-soft"
+                x="284"
+                y="112"
+                width="46"
+                height="20"
+                rx="4"></rect>
+              <rect class="bp-soft" x="284" y="138" width="80" height="8" rx="4"
+              ></rect>
+              <line class="bp-draw" x1="140" y1="180" x2="392" y2="180"></line>
+              <line class="bp-draw" x1="140" y1="208" x2="392" y2="208"></line>
+              <line class="bp-draw" x1="140" y1="236" x2="392" y2="236"></line>
+              <line class="bp-draw" x1="140" y1="264" x2="392" y2="264"></line>
+              <rect class="bp-scan" x="8" y="44" width="404" height="40"></rect>
+            </svg>
           </div>
 
           <div class="bt-helio-lead">
@@ -397,7 +479,12 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
             t.templates.items.map((item, i) => {
               const shot = TEMPLATE_SHOTS[item.slug];
               return (
-                <li class="bt-tpl" id={item.slug} data-reveal style={`--i:${i}`}>
+                <li
+                  class="bt-tpl"
+                  id={item.slug}
+                  data-reveal
+                  style={`--i:${i}`}
+                >
                   {shot ? (
                     <figure class="bt-frame bt-frame--shot">
                       <picture>
@@ -465,31 +552,51 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
            salida, con los pulsos por los cables). Va al fondo, tenue, para no
            robarle el ancho al texto; se oculta en móvil. -->
       <div class="bt-flow" aria-hidden="true">
-        <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path class="bt-flow-wire" d="M56 48 C 150 48 120 120 196 120" />
-          <path class="bt-flow-wire" d="M56 120 H 196" />
-          <path class="bt-flow-wire" d="M56 192 C 150 192 120 120 196 120" />
-          <path class="bt-flow-wire" d="M244 120 H 288" />
+        <svg
+          viewBox="0 0 300 240"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path class="bt-flow-wire" d="M56 48 C 150 48 120 120 196 120"></path>
+          <path class="bt-flow-wire" d="M56 120 H 196"></path>
+          <path class="bt-flow-wire" d="M56 192 C 150 192 120 120 196 120"
+          ></path>
+          <path class="bt-flow-wire" d="M244 120 H 288"></path>
           <circle class="bt-flow-pulse" r="3.5">
-            <animateMotion dur="2.4s" repeatCount="indefinite"
-              path="M56 48 C 150 48 120 120 196 120" />
+            <animateMotion
+              dur="2.4s"
+              repeatCount="indefinite"
+              path="M56 48 C 150 48 120 120 196 120"></animateMotion>
           </circle>
           <circle class="bt-flow-pulse" r="3.5">
-            <animateMotion dur="2.4s" begin="0.5s" repeatCount="indefinite"
-              path="M56 120 H 196" />
+            <animateMotion
+              dur="2.4s"
+              begin="0.5s"
+              repeatCount="indefinite"
+              path="M56 120 H 196"></animateMotion>
           </circle>
           <circle class="bt-flow-pulse" r="3.5">
-            <animateMotion dur="2.4s" begin="1s" repeatCount="indefinite"
-              path="M56 192 C 150 192 120 120 196 120" />
+            <animateMotion
+              dur="2.4s"
+              begin="1s"
+              repeatCount="indefinite"
+              path="M56 192 C 150 192 120 120 196 120"></animateMotion>
           </circle>
-          <circle class="bt-flow-node" cx="40" cy="48" r="14" />
-          <circle class="bt-flow-node" cx="40" cy="120" r="14" />
-          <circle class="bt-flow-node" cx="40" cy="192" r="14" />
-          <rect class="bt-flow-hub" x="196" y="98" width="48" height="44" rx="10" />
-          <path class="bt-flow-gear"
-            d="M220 108 v6 M220 126 v6 M210 120 h6 M224 120 h6" />
-          <circle class="bt-flow-gear" cx="220" cy="120" r="5" />
-          <circle class="bt-flow-out" cx="288" cy="120" r="6" />
+          <circle class="bt-flow-node" cx="40" cy="48" r="14"></circle>
+          <circle class="bt-flow-node" cx="40" cy="120" r="14"></circle>
+          <circle class="bt-flow-node" cx="40" cy="192" r="14"></circle>
+          <rect
+            class="bt-flow-hub"
+            x="196"
+            y="98"
+            width="48"
+            height="44"
+            rx="10"></rect>
+          <path
+            class="bt-flow-gear"
+            d="M220 108 v6 M220 126 v6 M210 120 h6 M224 120 h6"></path>
+          <circle class="bt-flow-gear" cx="220" cy="120" r="5"></circle>
+          <circle class="bt-flow-out" cx="288" cy="120" r="6"></circle>
         </svg>
       </div>
 
@@ -511,7 +618,12 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
         <ul class="bt-auto-list" role="list">
           {
             t.automations.items.map((item, i) => (
-              <li class="bt-auto-item" id={item.slug} data-reveal style={`--i:${i}`}>
+              <li
+                class="bt-auto-item"
+                id={item.slug}
+                data-reveal
+                style={`--i:${i}`}
+              >
                 <p class="bt-auto-code" aria-hidden="true">
                   {item.code}
                 </p>
@@ -554,10 +666,18 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
              babor y el texto con el CTA a estribor. El CTA NO va al Home: el
              formulario vive en el footer de ESTA página (#contact), así que baja
              hasta él (scroll suave, ya global) y la flecha lo anuncia. -->
-        <aside class="bt-closing" data-reveal aria-labelledby="bt-closing-title">
+        <aside
+          class="bt-closing"
+          data-reveal
+          aria-labelledby="bt-closing-title"
+        >
           <div class="bt-closing-mark" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle class="bt-closing-ring" cx="60" cy="60" r="50" />
+            <svg
+              viewBox="0 0 120 120"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle class="bt-closing-ring" cx="60" cy="60" r="50"></circle>
               <g class="bt-closing-ticks">
                 {
                   Array.from({ length: 24 }).map((_, i) => (
@@ -571,8 +691,9 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                   ))
                 }
               </g>
-              <path class="bt-closing-needle" d="M60 26 L70 78 L60 70 L50 78 Z" />
-              <circle class="bt-closing-hub" cx="60" cy="60" r="3.5" />
+              <path class="bt-closing-needle" d="M60 26 L70 78 L60 70 L50 78 Z"
+              ></path>
+              <circle class="bt-closing-hub" cx="60" cy="60" r="3.5"></circle>
             </svg>
             <span class="bt-closing-coords">10.4236° N · 75.5518° W</span>
           </div>

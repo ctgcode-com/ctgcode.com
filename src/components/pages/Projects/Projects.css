@@ -45,7 +45,7 @@ main.log {
 .log-sky {
   position: absolute;
   inset: 0 0 auto 0;
-  height: min(60rem, 92vh);
+  height: clamp(80rem, 120vh, 110rem);
   background: linear-gradient(
     to bottom,
     color-mix(in oklab, var(--palette-indigo) 78%, var(--palette-night)) 0%,
@@ -53,6 +53,119 @@ main.log {
     color-mix(in oklab, var(--palette-violet) 20%, transparent) 74%,
     transparent 100%
   );
+  overflow: visible !important;
+}
+
+.bt-metrics-and-quote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.bt-metrics-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.pj-quote {
+  position: relative;
+  margin: 0;
+  padding: var(--space-md);
+  padding-left: var(--space-lg);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--palette-night) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: var(--shadow-lg);
+}
+
+/* El filo del atardecer, en el canto izquierdo */
+.pj-quote::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-md);
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-cta);
+}
+
+.pj-quote-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+}
+
+/* Cuerpo contenido a propósito: el panel se superpone a la captura, así que
+   cuanto menos alto sea, menos tapa. */
+.pj-quote-text {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+/* Las comillas las pone el diseño, no el texto: así la cita del locale queda
+   limpia y reutilizable. */
+.pj-quote-text::before {
+  content: "«";
+}
+
+.pj-quote-text::after {
+  content: "»";
+}
+
+.pj-quote-by {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2xs) var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.pj-quote-author {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+}
+
+/* La procedencia: si hay enlace a la ficha se vuelve enlace; si no, texto. */
+.pj-quote-source,
+.pj-quote-source a {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.pj-quote-source a {
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  border-bottom: var(--border-thin) solid
+    color-mix(in oklab, var(--palette-amber) 40%, transparent);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.pj-quote-source a:hover,
+.pj-quote-source a:focus-visible {
+  color: var(--palette-amber);
+}
+
+/* Aviso de traducción (solo en el idioma no original) */
+.pj-quote-note {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-style: italic;
+  color: var(--color-text-subtle);
 }
 
 /* La rejilla de la carta: finísima, se desvanece a los lados */
@@ -71,7 +184,11 @@ main.log {
       transparent 1px
     );
   background-size: 3.5rem 3.5rem;
-  -webkit-mask-image: radial-gradient(120% 80% at 50% 30%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(
+    120% 80% at 50% 30%,
+    #000 40%,
+    transparent 100%
+  );
   mask-image: radial-gradient(120% 80% at 50% 30%, #000 40%, transparent 100%);
   opacity: 0.6;
 }
@@ -188,19 +305,21 @@ main.log {
   margin-top: var(--space-sm);
   font-size: clamp(1.9rem, 1.1rem + 3.2vw, 3.25rem);
   line-height: var(--leading-tight);
-  max-width: 20ch;
+  max-width: 100%;
+  text-wrap: balance;
 }
 
 /* Titular que puede correrse a lo ancho (secciones sin columna a un lado) */
 .bt-head-title--wide {
-  max-width: 26ch;
+  max-width: 100%;
+  text-wrap: balance;
 }
 
 /* La entradilla usa el ancho disponible y solo hace wrap si hace falta; se le
    deja una medida generosa para no volverse una línea interminable. */
 .bt-head-lead {
   margin-top: var(--space-md);
-  max-width: 74ch;
+  max-width: 100%;
   font-size: var(--text-md);
   color: var(--color-text-muted);
 }
@@ -456,7 +575,6 @@ main.log {
   );
 }
 
-
 .bt-open-wrap {
   position: relative;
   z-index: 2;
@@ -531,6 +649,20 @@ main.log {
 .bt-manifest-link:focus-visible .bt-manifest-rule {
   width: var(--space-xl);
   background: var(--palette-amber);
+}
+
+@media (min-width: 48rem) {
+  .bt-metrics-and-quote {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: var(--space-lg);
+  }
+
+  /* Ajuste de margen superior de la reseña para alinearse perfectamente */
+  .bt-metrics-and-quote .pj-quote {
+    margin-top: 0;
+  }
 }
 
 @media (min-width: 60rem) {
@@ -671,7 +803,8 @@ main.log {
 
 .bt-entry-body {
   margin-top: var(--space-sm);
-  max-width: 54ch;
+  max-width: 100%;
+  text-wrap: pretty;
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
   color: var(--color-text-muted);
@@ -682,7 +815,7 @@ main.log {
    tarjetas en fila del Home—, y además nunca se desborda: si la columna se
    estrecha, el renglón se estrecha con ella. */
 .bt-metrics {
-  margin: var(--space-lg) 0 0;
+  margin: 0;
   max-width: 32rem;
   border-top: var(--border-thin) solid var(--color-border);
 }
@@ -836,7 +969,7 @@ main.log {
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-normal);
   color: var(--color-text-muted);
-  max-width: 30ch;
+  max-width: 100%;
 }
 
 .bt-helio-name + .bt-status {
@@ -967,6 +1100,8 @@ main.log {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
   color: var(--color-text-muted);
+  max-width: 100%;
+  text-wrap: pretty;
 }
 
 /* ---- La imagen de la plantilla (su HERO) -----------------------------------
@@ -1124,7 +1259,8 @@ main.log {
 
 .bt-auto-body {
   margin-top: var(--space-sm);
-  max-width: 58ch;
+  max-width: 100%;
+  text-wrap: pretty;
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
   color: var(--color-text-muted);
@@ -1490,7 +1626,9 @@ main.log {
 /* Los pulsos: chispas cálidas que recorren los cables (SMIL en el .astro) */
 .bt-flow-pulse {
   fill: var(--palette-amber);
-  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--palette-amber) 70%, transparent));
+  filter: drop-shadow(
+    0 0 4px color-mix(in oklab, var(--palette-amber) 70%, transparent)
+  );
 }
 
 /* La sección aloja la marca de agua: necesita ser el contexto de posición */
