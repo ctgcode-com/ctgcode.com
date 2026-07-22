@@ -1,0 +1,1559 @@
+/* ===========================================================================
+   PROJECTS · LA BITÁCORA   (co-ubicado con pages/Projects/Projects.astro)
+
+   El atardecer (sol, olas, cirros, la rosa que gira) es la escena del HOME:
+   aquí NO se repite. Lo único heredado de las escenas es el cielo estrellado
+   de la PORTADA —la bitácora se abre bajo las estrellas—; el resto de la
+   página vive sobre la NOCHE lisa (tono night) y se ordena por COMPOSICIÓN:
+
+     · Numeración de asientos y voz mono de estudio (la misma del sitio).
+     · Acentos cálidos (ámbar/coral) sobre el frío de la noche: la identidad
+       sigue viva sin necesidad de pintar el cielo.
+     · Asimetría en zigzag: cada asiento se apoya en un borde distinto
+       (izquierda 01 → derecha 02 → izquierda 03 → derecha 04), para que el
+       ojo baje sin caer en columna.
+
+   Prefijo `bt-` (bitácora) para no chocar con `pj-`, que es la SECCIÓN de
+   proyectos del Home (sections/Projects).
+   =========================================================================== */
+
+main.log {
+  position: relative;
+  background-color: var(--color-bg);
+  overflow: clip; /* recorta las líneas de rumbo que se salen del papel */
+}
+
+/* ===========================================================================
+   TEXTURA DE FONDO — la carta náutica en frío (NO el atardecer del Home)
+   Una capa única bajo toda la página: rejilla de carta, dos abanicos de
+   líneas de rumbo desde puntos opuestos y tres lavados fríos que respiran.
+   Fija (attachment por transform del scroll no; se deja estática y a toda la
+   altura del main). Todo en azules/violetas: el papel, no el cielo.
+   =========================================================================== */
+.log-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* El cielo de la bóveda: tiñe la franja alta con el índigo/violeta del cosmos
+   del Home y se disuelve en la noche antes de acabar la portada. Es la costura
+   continua: la portada (transparente) lo deja ver y el primer asiento sigue
+   sobre la misma noche, sin línea de corte. */
+.log-sky {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: min(60rem, 92vh);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--palette-indigo) 78%, var(--palette-night)) 0%,
+    color-mix(in oklab, var(--palette-indigo) 42%, var(--palette-night)) 42%,
+    color-mix(in oklab, var(--palette-violet) 20%, transparent) 74%,
+    transparent 100%
+  );
+}
+
+/* La rejilla de la carta: finísima, se desvanece a los lados */
+.log-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--palette-foam) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--palette-foam) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3.5rem 3.5rem;
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 30%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(120% 80% at 50% 30%, #000 40%, transparent 100%);
+  opacity: 0.6;
+}
+
+/* Los abanicos de rumbo: líneas larguísimas desde dos rosas invisibles */
+.log-rhumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.log-rhumb-lines line {
+  stroke: color-mix(in oklab, var(--palette-caribe) 30%, transparent);
+  stroke-width: 1;
+}
+
+.log-rhumb-lines--b line {
+  stroke: color-mix(in oklab, var(--palette-violet) 34%, transparent);
+}
+
+/* Lavados fríos: manchas suaves que dan hondura y matan el negro plano.
+   Colocadas a propósito bajo las columnas que quedaban vacías (babor de
+   Helio, babor de automatizaciones). */
+.log-wash {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.log-wash--a {
+  top: 4%;
+  left: -6%;
+  width: 42vw;
+  height: 42vw;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-violet) 60%, transparent),
+    transparent 70%
+  );
+  animation: log-drift-a 26s var(--ease-soft) infinite alternate;
+}
+
+.log-wash--b {
+  top: 40%;
+  right: -10%;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-deep) 72%, transparent),
+    transparent 70%
+  );
+  animation: log-drift-b 32s var(--ease-soft) infinite alternate;
+}
+
+.log-wash--c {
+  bottom: 8%;
+  left: 8%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-caribe) 46%, transparent),
+    transparent 70%
+  );
+  animation: log-drift-c 30s var(--ease-soft) infinite alternate;
+}
+
+@keyframes log-drift-a {
+  to {
+    transform: translate(6%, 4%) scale(1.12);
+  }
+}
+@keyframes log-drift-b {
+  to {
+    transform: translate(-5%, -3%) scale(1.1);
+  }
+}
+@keyframes log-drift-c {
+  to {
+    transform: translate(4%, -5%) scale(1.14);
+  }
+}
+
+/* Todo el contenido va POR ENCIMA del papel */
+.log > section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   PIEZAS COMPARTIDAS entre asientos
+--------------------------------------------------------------------------- */
+
+/* Cada asiento abre igual: número, barra y rótulo — como un renglón fechado */
+.bt-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.bt-idx {
+  color: var(--palette-amber);
+}
+
+.bt-sep {
+  color: var(--color-text-subtle);
+}
+
+.bt-head-title {
+  margin-top: var(--space-sm);
+  font-size: clamp(1.9rem, 1.1rem + 3.2vw, 3.25rem);
+  line-height: var(--leading-tight);
+  max-width: 20ch;
+}
+
+/* Titular que puede correrse a lo ancho (secciones sin columna a un lado) */
+.bt-head-title--wide {
+  max-width: 26ch;
+}
+
+/* La entradilla usa el ancho disponible y solo hace wrap si hace falta; se le
+   deja una medida generosa para no volverse una línea interminable. */
+.bt-head-lead {
+  margin-top: var(--space-md);
+  max-width: 74ch;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+/* El estado de la pieza: un punto que dice si respira o si está en el banco */
+.bt-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+
+.bt-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 0.25rem color-mix(in oklab, currentColor 22%, transparent);
+}
+
+/* En línea: turquesa, el frío de lo que ya funciona solo */
+.bt-status--live {
+  color: var(--color-accent);
+}
+
+/* En construcción: ámbar que late — la fragua sigue encendida */
+.bt-status--wip {
+  color: var(--palette-amber);
+}
+
+.bt-status--wip .bt-status-dot {
+  animation: bt-pulse 2.6s var(--ease-soft) infinite;
+}
+
+@keyframes bt-pulse {
+  50% {
+    box-shadow: 0 0 0 0.55rem color-mix(in oklab, currentColor 6%, transparent);
+  }
+}
+
+/* Rótulo de lista corta ("pensada para", "incluye") */
+.bt-mini-label {
+  margin-top: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.bt-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+}
+
+/* Etiquetas (stack, público) */
+.bt-tags {
+  margin-top: var(--space-2xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+}
+
+.bt-tag {
+  padding: var(--space-3xs) var(--space-xs);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+/* ---- Stack en LOGOTIPOS (mismo tratamiento que la sección de servicios del
+   Home): placas cuadradas con el logo y un rótulo mono que asoma al pasar. Lo
+   que no tiene logo (una técnica como «SSG») cae a una placa de texto, de la
+   misma altura, para que la fila no se rompa. */
+.bt-stack {
+  margin-top: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+}
+
+.bt-tech {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.4rem;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--palette-sand) 90%, transparent);
+  transition:
+    transform var(--dur-base) var(--ease-expo),
+    box-shadow var(--dur-base) var(--ease-tide);
+}
+
+.bt-tech img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.bt-tech:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  z-index: 4;
+}
+
+/* Placa de texto para lo que no tiene logo: misma altura, ancho al contenido */
+.bt-tech--label {
+  width: auto;
+  padding-inline: var(--space-sm);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-tech--label:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--color-border-strong);
+}
+
+/* El rótulo del logo: voz mono sobre superficie de noche, asoma al pasar */
+.bt-tech-name {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  z-index: 5;
+  padding: 0.2rem 0.5rem;
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-sunk);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-soft),
+    transform var(--dur-fast) var(--ease-soft);
+}
+
+.bt-tech:hover .bt-tech-name {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Enlace a la demo. Mientras no exista, el MISMO renglón se vuelve un aviso
+   apagado: el hueco se ve, pero no invita a pulsar nada que no lleve a sitio. */
+.bt-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-md);
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.bt-demo:hover,
+.bt-demo:focus-visible {
+  color: var(--color-heading);
+}
+
+.bt-demo-arrow {
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.bt-demo:hover .bt-demo-arrow {
+  transform: translate(2px, -2px);
+}
+
+.bt-demo--soon {
+  color: var(--color-text-subtle);
+}
+
+/* El guion antepuesto lo pone el diseño: marca que es un estado, no un botón */
+.bt-demo--soon::before {
+  content: "—";
+  opacity: 0.6;
+}
+
+/* Aviso al pie de un asiento (por qué todavía no hay más que enseñar) */
+.bt-note {
+  max-width: 48ch;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-normal);
+  color: var(--color-text-subtle);
+}
+
+/* Ancho de columna compartido por los asientos sobre la noche */
+.bt-shipped-wrap,
+.bt-helio-wrap,
+.bt-templates-wrap,
+.bt-auto-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: min(116rem, 100%);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* ===========================================================================
+   PORTADA — la bóveda: el cuaderno se abre bajo las estrellas (cosmos)
+   =========================================================================== */
+.bt-open {
+  position: relative;
+  overflow-x: clip;
+  overflow-y: visible;
+  z-index: 2;
+  padding-inline: var(--content-padding);
+  padding-block: var(--space-2xl) var(--space-xl);
+}
+
+/* Un aliento violeta a babor: la bóveda no es plana. Es cielo estrellado, no
+   atardecer — el mismo recurso atmosférico que el cosmos del Home. */
+.bt-open::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    44% 42% at 22% 34%,
+    color-mix(in oklab, var(--palette-violet) 20%, transparent),
+    transparent 74%
+  );
+}
+
+
+.bt-open-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: min(116rem, 100%);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.bt-open-title {
+  margin-top: var(--space-sm);
+  text-wrap: balance;
+}
+
+.bt-open-lead {
+  margin-top: var(--space-md);
+  max-width: 52ch;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+/* ---- El manifiesto: el índice del cuaderno ---------------------------------
+   Renglones numerados con la barra que se estira al pasar: la anotación se
+   subraya sola cuando la miras. */
+.bt-manifest-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.bt-manifest-item {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.bt-manifest-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-xs);
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.bt-manifest-idx {
+  color: var(--palette-amber);
+}
+
+/* La barra: nace corta y se estira hacia el rótulo */
+.bt-manifest-rule {
+  width: var(--space-md);
+  height: 1px;
+  background: var(--color-border-strong);
+  transition:
+    width var(--dur-base) var(--ease-expo),
+    background-color var(--dur-base) var(--ease-soft);
+}
+
+.bt-manifest-link:hover,
+.bt-manifest-link:focus-visible {
+  color: var(--color-heading);
+}
+
+.bt-manifest-link:hover .bt-manifest-rule,
+.bt-manifest-link:focus-visible .bt-manifest-rule {
+  width: var(--space-xl);
+  background: var(--palette-amber);
+}
+
+@media (min-width: 60rem) {
+  .bt-open-wrap {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .bt-open-copy {
+    grid-column: 1 / 8;
+  }
+
+  /* El índice NO acompaña al titular de igual a igual: cuelga a estribor y
+     BAJA, como una nota al margen escrita después. */
+  .bt-manifest {
+    grid-column: 9 / 13;
+    margin-top: clamp(4rem, 11vw, 9rem);
+  }
+
+  /* La entradilla entra sangrada: el bloque de texto no es un rectángulo. */
+  .bt-open-lead {
+    margin-inline-start: clamp(1rem, 3vw, 3rem);
+  }
+}
+
+/* ===========================================================================
+   ASIENTOS SOBRE LA NOCHE — separación por filete, no por color de fondo
+   Sin gradientes que encadenar, la costura entre asientos la hace un filete
+   tenue a lo ancho (salvo la portada y el primero, que abren la página).
+   =========================================================================== */
+.bt-shipped,
+.bt-helio,
+.bt-templates,
+.bt-auto {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+.bt-helio::before,
+.bt-templates::before,
+.bt-auto::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--content-padding);
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ===========================================================================
+   01 · ENTREGADO
+   La captura sale a sangre por ESTRIBOR; el texto se queda a babor.
+   =========================================================================== */
+.bt-shipped {
+  overflow-x: clip;
+}
+
+.bt-shipped-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.bt-shipped-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ---- La captura: un recorte del sitio, no el sitio entero -------------------
+   El PNG es una captura de página COMPLETA (larguísima). Se recorta a su PRIMER
+   PLIEGUE con un alto fijo (aspect-ratio) + object-fit y se funde por abajo: se
+   lee «esto sigue», que es la verdad, en vez de mostrar la página entera. */
+.bt-shot {
+  display: flex;
+  flex-direction: column-reverse; /* la barra de URL, encima de la captura */
+  margin: 0;
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-sunk);
+  box-shadow: var(--shadow-lg);
+}
+
+.bt-shot picture {
+  display: block;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+}
+
+.bt-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* La barra: la URL en voz mono, con el semáforo de la ventana del hero */
+.bt-shot-url {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  background: color-mix(in oklab, var(--palette-night) 70%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-shot-url::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--palette-turquesa);
+}
+
+/* ---- El asiento del proyecto ------------------------------------------------ */
+.bt-entry-name {
+  margin-top: var(--space-sm);
+  font-size: var(--text-2xl);
+}
+
+.bt-entry-tagline {
+  margin-top: var(--space-3xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+}
+
+.bt-entry-body {
+  margin-top: var(--space-sm);
+  max-width: 54ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* Las cifras, ASENTADAS: un renglón por medida, con la guía de puntos que
+   lleva del rótulo al número. Es el registro de una bitácora —y no las cuatro
+   tarjetas en fila del Home—, y además nunca se desborda: si la columna se
+   estrecha, el renglón se estrecha con ella. */
+.bt-metrics {
+  margin: var(--space-lg) 0 0;
+  max-width: 32rem;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.bt-metric {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding-block: var(--space-2xs);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+/* El rótulo se queda con el hueco sobrante y lo rellena con la guía */
+.bt-metric-label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-metric-label::after {
+  content: "";
+  flex: 1;
+  transform: translateY(-0.25em);
+  border-bottom: var(--border-thin) dotted var(--color-border-strong);
+}
+
+.bt-metric-value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-lg);
+  line-height: 1;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-source {
+  margin-top: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-visit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-lg);
+  padding: var(--space-2xs) var(--space-md);
+  border: var(--border-thin) solid var(--color-border-warm);
+  border-radius: var(--radius-pill);
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+  transition:
+    color var(--dur-fast) var(--ease-soft),
+    border-color var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur-base) var(--ease-soft);
+}
+
+.bt-visit:hover,
+.bt-visit:focus-visible {
+  color: var(--color-heading);
+  border-color: var(--palette-amber);
+  box-shadow: var(--glow-amber);
+}
+
+.bt-visit-arrow {
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.bt-visit:hover .bt-visit-arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (min-width: 64rem) {
+  /* Texto a babor, captura a estribor, ambas centradas verticalmente: la
+     captura es un recorte de alto FIJO (su primer pliegue), así que si el texto
+     pesa más, la imagen queda centrada a su lado en vez de estirarse. */
+  .bt-shipped-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  /* Sale del contenedor por estribor: el sitio del cliente se ASOMA al borde
+     de la página en vez de posar centrado dentro de una caja. */
+  .bt-shot {
+    margin-inline-end: calc(var(--content-padding) * -1);
+    border-inline-end: 0;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .bt-shot picture {
+    aspect-ratio: 16 / 12;
+  }
+}
+
+@media (min-width: 90rem) {
+  /* En pantallas anchas la captura se asoma de verdad (más allá del padding) */
+  .bt-shot {
+    margin-inline-end: min(-6vw, -3rem);
+  }
+}
+
+/* ===========================================================================
+   02 · HELIO — el producto propio (en construcción)
+   Arriba: presentación (cabecera + argumento) a babor y el PLANO a estribor,
+   a la par de altura. Debajo: los tres módulos a lo ancho. En móvil el plano
+   se oculta y todo cae en una columna.
+   =========================================================================== */
+.bt-helio-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.bt-helio-lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* El nombre del producto manda; la línea de qué es va debajo, más callada */
+.bt-helio-name {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  font-size: clamp(2.6rem, 1.6rem + 4.6vw, 5rem);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+}
+
+.bt-helio-tagline {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text-muted);
+  max-width: 30ch;
+}
+
+.bt-helio-name + .bt-status {
+  margin-top: var(--space-md);
+}
+
+/* El texto de Helio ocupa TODO el ancho de su columna (sin max-width que
+   fuerce wrap antes de tiempo). */
+.bt-helio-summary {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* El alcance, marcado con el filo cálido a la izquierda */
+.bt-helio-scope {
+  position: relative;
+  margin-top: var(--space-md);
+  padding-inline-start: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-helio-scope::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.15em;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-cta);
+}
+
+/* ---- Los módulos: tres renglones de asiento -------------------------------- */
+.bt-modules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.bt-module {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--color-surface) 70%, transparent);
+  transition:
+    border-color var(--dur-base) var(--ease-soft),
+    transform var(--dur-base) var(--ease-expo);
+}
+
+.bt-module:hover {
+  border-color: var(--color-border-warm);
+  transform: translateX(4px);
+}
+
+.bt-module-idx {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+  padding-top: 0.25em;
+}
+
+.bt-module-name {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+}
+
+.bt-module-body {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 64rem) {
+  /* Presentación en dos columnas: el PLANO a babor (5) y el texto a estribor
+     (7), a la par de altura. */
+  .bt-helio-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  /* Los módulos, a lo ancho: tres columnas iguales */
+  .bt-modules {
+    flex-direction: row;
+  }
+
+  .bt-module {
+    flex: 1;
+    align-items: start;
+  }
+}
+
+/* ===========================================================================
+   03 · PLANTILLAS
+   Filas INTERCALADAS: imagen a un lado, ficha al otro. Empieza y termina con la
+   imagen a babor; la de en medio la cruza a estribor.
+   =========================================================================== */
+.bt-tpl-grid {
+  margin: var(--space-xl) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.bt-tpl-name {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-lg);
+}
+
+.bt-tpl-body {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* ---- La imagen de la plantilla (su HERO) -----------------------------------
+   Las imágenes miden 1905×770 (alguna 771). El marco fija su relación y recorta
+   con overflow: ese píxel de más queda fuera. Sin fundido: ya es solo el hero,
+   no una página larga. */
+.bt-frame {
+  position: relative;
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-sunk);
+}
+
+.bt-frame--shot {
+  margin: 0;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 1905 / 770;
+}
+
+.bt-frame--shot picture,
+.bt-frame--shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* ---- Marco vacío (respaldo si un slug quedara sin captura) ------------------ */
+.bt-frame:not(.bt-frame--shot) {
+  aspect-ratio: 1905 / 770;
+  border-style: dashed;
+  background: color-mix(in oklab, var(--palette-night) 55%, transparent);
+}
+
+.bt-frame-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--palette-sand) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--palette-sand) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 2.5rem 2.5rem;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent);
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent);
+}
+
+.bt-frame-label {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+.bt-frame-corner {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-color: var(--color-border-warm);
+  border-style: solid;
+  border-width: 0;
+}
+
+.bt-frame-corner--tl {
+  inset-block-start: var(--space-sm);
+  inset-inline-start: var(--space-sm);
+  border-top-width: var(--border-thin);
+  border-inline-start-width: var(--border-thin);
+}
+
+.bt-frame-corner--br {
+  inset-block-end: var(--space-sm);
+  inset-inline-end: var(--space-sm);
+  border-bottom-width: var(--border-thin);
+  border-inline-end-width: var(--border-thin);
+}
+
+.bt-tpl-copy {
+  margin-top: var(--space-md);
+}
+
+@media (min-width: 64rem) {
+  /* Cada plantilla es una fila de dos columnas, imagen y ficha a la par. */
+  .bt-tpl {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .bt-tpl-copy {
+    margin-top: 0;
+  }
+
+  /* Intercalado: las IMPARES (1.ª y 3.ª) llevan la imagen a babor; la PAR (2.ª)
+     la cruza a estribor invirtiendo el orden de la fila. Empieza y termina con
+     la imagen a la izquierda. */
+  .bt-tpl:nth-child(even) .bt-frame {
+    order: 2;
+  }
+
+  .bt-tpl:nth-child(even) .bt-tpl-copy {
+    order: 1;
+  }
+}
+
+/* ===========================================================================
+   04 · AUTOMATIZACIONES + CIERRE
+   Sin captura que enseñar: cada pieza se identifica por su clave y el asiento
+   se lee como el renglón de un inventario. Los renglones NO están alineados
+   entre sí: cada uno entra por un sitio distinto.
+   =========================================================================== */
+.bt-auto-list {
+  margin: var(--space-xl) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.bt-auto-item {
+  padding-top: var(--space-lg);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+/* La clave de la pieza: grande, en mono y apagada — un troquel en el margen */
+.bt-auto-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wider);
+  color: color-mix(in oklab, var(--palette-amber) 55%, transparent);
+}
+
+.bt-auto-name {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-lg);
+}
+
+.bt-auto-body {
+  margin-top: var(--space-sm);
+  max-width: 58ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* Lo que incluye: lista con la marca cálida en vez de viñeta */
+.bt-checks {
+  margin-top: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.bt-check {
+  position: relative;
+  padding-inline-start: var(--space-md);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-muted);
+}
+
+.bt-check::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: var(--space-2xs);
+  height: 1px;
+  background: var(--palette-amber);
+}
+
+@media (min-width: 64rem) {
+  /* Cada renglón: la clave, el cuerpo (a todo el ancho que le sobra) y lo que
+     incluye. Alineados entre sí —nada de sangrías que descuadren la lectura. */
+  .bt-auto-item {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 20rem);
+    column-gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .bt-auto-code {
+    padding-top: 0.35em;
+  }
+
+  .bt-auto-name {
+    margin-top: 0;
+  }
+
+  .bt-auto-meta .bt-mini-label {
+    margin-top: 0;
+  }
+}
+
+/* ---- El cierre del cuaderno ------------------------------------------------
+   La marca de rumbo (aguja + coordenadas) a babor y el texto con el CTA a
+   estribor. */
+.bt-closing {
+  position: relative;
+  margin-top: var(--space-3xl);
+  padding: var(--space-xl);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* La marca de rumbo: una aguja que apunta adelante y las coordenadas */
+.bt-closing-mark {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.bt-closing-mark svg {
+  width: clamp(4.5rem, 14vw, 6rem);
+  height: auto;
+  flex-shrink: 0;
+}
+
+.bt-closing-ring {
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+}
+
+.bt-closing-ticks line {
+  stroke: color-mix(in oklab, var(--palette-foam) 40%, transparent);
+  stroke-width: 1;
+}
+
+/* La aguja apunta al norte y late despacio (el rumbo «siguiente») */
+.bt-closing-needle {
+  fill: var(--palette-amber);
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  animation: bt-needle 6s var(--ease-soft) infinite;
+}
+
+.bt-closing-hub {
+  fill: var(--color-heading);
+}
+
+@keyframes bt-needle {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+.bt-closing-coords {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.bt-closing-title {
+  margin-top: var(--space-sm);
+  font-size: var(--text-xl);
+}
+
+.bt-closing-body {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-lg);
+  max-width: 56ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* La flecha del CTA: anuncia que el formulario está ABAJO (misma página) */
+.bt-closing-cta-arrow {
+  margin-inline-start: var(--space-2xs);
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.bt-closing-cta:hover .bt-closing-cta-arrow,
+.bt-closing-cta:focus-visible .bt-closing-cta-arrow {
+  transform: translateY(3px);
+}
+
+@media (min-width: 64rem) {
+  .bt-closing {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    align-items: center;
+    gap: var(--space-2xl);
+    padding: var(--space-2xl);
+  }
+
+  /* La marca se apila en vertical y se centra en su columna */
+  .bt-closing-mark {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-sm);
+  }
+}
+
+/* ===========================================================================
+   MIGAS DE PAN — la posición en el sitio, en voz mono, bajo las estrellas
+   =========================================================================== */
+.bt-crumbs {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: min(116rem, 100%);
+  margin-inline: auto;
+  margin-bottom: var(--space-lg);
+}
+
+.bt-crumbs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* El separador «/» lo pone el diseño entre migas */
+.bt-crumb + .bt-crumb::before {
+  content: "/";
+  margin-inline-end: var(--space-2xs);
+  color: var(--color-text-subtle);
+}
+
+.bt-crumb-link {
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.bt-crumb-link:hover,
+.bt-crumb-link:focus-visible {
+  color: var(--palette-amber);
+}
+
+.bt-crumb-here {
+  color: var(--color-text-subtle);
+}
+
+/* ===========================================================================
+   BLUEPRINT (Helio) — el plano del producto, dibujándose bajo una línea de
+   escaneo. Hace de visual de la columna derecha. En móvil ocupa alto de más
+   sin aportar, así que se OCULTA (el texto va a lo suyo).
+   =========================================================================== */
+.bt-blueprint {
+  position: relative;
+  display: none;
+}
+
+.bt-blueprint svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+@media (min-width: 64rem) {
+  .bt-blueprint {
+    display: block;
+    align-self: center;
+  }
+}
+
+.bt-blueprint-tag {
+  display: inline-block;
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--palette-caribe) 80%, var(--palette-foam));
+}
+
+/* Trazos del plano: azul de cianotipo, finos */
+.bp-draw {
+  stroke: color-mix(in oklab, var(--palette-caribe) 62%, var(--palette-foam));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bp-soft {
+  fill: color-mix(in oklab, var(--palette-caribe) 30%, transparent);
+}
+
+.bp-dot {
+  fill: color-mix(in oklab, var(--palette-caribe) 60%, var(--palette-foam));
+}
+
+.bp-chart {
+  stroke: var(--palette-amber);
+  stroke-width: 2;
+}
+
+/* El trazo se PINTA solo, en bucle: el plano se dibuja una y otra vez */
+.bt-blueprint .bp-draw {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: bp-draw 5s var(--ease-tide) infinite;
+}
+
+@keyframes bp-draw {
+  0% {
+    stroke-dashoffset: 1400;
+  }
+  45%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* La línea de escaneo baja por la ventana */
+.bp-scan {
+  fill: color-mix(in oklab, var(--palette-caribe) 22%, transparent);
+  transform-box: view-box;
+  animation: bp-scan 5s var(--ease-soft) infinite;
+}
+
+@keyframes bp-scan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(208px);
+    opacity: 0.9;
+  }
+  55%,
+  100% {
+    transform: translateY(208px);
+    opacity: 0;
+  }
+}
+
+/* ===========================================================================
+   DIAGRAMA DE FLUJO (automatizaciones) — tres disparadores → un núcleo → la
+   salida, con los pulsos viajando por los cables. Llena la izquierda de la
+   cabecera.
+   =========================================================================== */
+/* Marca de agua: flota al fondo de la esquina superior de estribor, tenue,
+   sin robarle ancho al texto. Oculta en móvil (ver más abajo). */
+.bt-flow {
+  position: absolute;
+  top: var(--space-xl);
+  right: var(--content-padding);
+  z-index: 0;
+  width: min(26rem, 34vw);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.bt-flow svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bt-flow-wire {
+  stroke: color-mix(in oklab, var(--palette-caribe) 40%, transparent);
+  stroke-width: 1.5;
+}
+
+.bt-flow-node {
+  fill: none;
+  stroke: color-mix(in oklab, var(--palette-foam) 55%, transparent);
+  stroke-width: 1.5;
+}
+
+.bt-flow-hub {
+  fill: color-mix(in oklab, var(--palette-night) 60%, transparent);
+  stroke: var(--color-border-warm);
+  stroke-width: 1.5;
+}
+
+.bt-flow-gear {
+  stroke: var(--palette-amber);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.bt-flow-out {
+  fill: none;
+  stroke: var(--palette-turquesa);
+  stroke-width: 2;
+}
+
+/* Los pulsos: chispas cálidas que recorren los cables (SMIL en el .astro) */
+.bt-flow-pulse {
+  fill: var(--palette-amber);
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--palette-amber) 70%, transparent));
+}
+
+/* La sección aloja la marca de agua: necesita ser el contexto de posición */
+.bt-auto {
+  overflow: clip;
+}
+
+/* En móvil el diagrama estorba: fuera */
+@media (max-width: 63.99rem) {
+  .bt-flow {
+    display: none;
+  }
+}
+
+/* ===========================================================================
+   REVELADO AL SCROLL — solo cuando el JS «arma» la página (data-armed).
+   Sin JS o con reduce-motion: todo visible desde el inicio.
+   =========================================================================== */
+.log[data-armed] [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity var(--dur-slow) var(--ease-tide),
+    transform var(--dur-slow) var(--ease-tide);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+.log[data-armed] [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------------
+   MOVIMIENTO REDUCIDO — apaga los bucles decorativos (el resto lo cubre
+   motion.css con !important; aquí se para lo que conviene dejar quieto del
+   todo, no solo acelerado).
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .log-wash,
+  .bp-scan {
+    animation: none;
+  }
+
+  .bt-blueprint .bp-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .bp-scan {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   MOVIMIENTO REDUCIDO — el latido del estado y los desplazamientos se apagan
+   (el resto del sistema ya lo cubre motion.css).
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .bt-status--wip .bt-status-dot {
+    animation: none;
+  }
+
+  .bt-module:hover {
+    transform: none;
+  }
+}

@@ -391,3 +391,35 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - La apertura del acordeón se anima con `::details-content` e `interpolate-size: allow-keywords` **acotado al bloque de FAQ**, sin tocar la raíz del documento; donde no hay soporte, la respuesta aparece de golpe.
 - Sobre el `FAQPage`: desde 2023 Google reserva el resultado enriquecido de FAQ a sitios gubernamentales y de salud, así que **no va a pintar el acordeón en la SERP** de un estudio de software. Se declara igual porque cumple el otro propósito del grafo: dar a los motores generativos respuestas atribuibles sobre plazos, costos, stack, soporte y cobertura en vez de dejar que las improvisen.
 - El enlace al catálogo apunta a `/servicios/` · `/services/`, que todavía no existen (mismo estado que `/proyectos/`). Los slugs ya viven en los locales, así que crear la página no obligará a tocar el componente.
+
+## [0.22.0] - 2026-07-21
+
+### Añadido
+
+- **Página de proyectos — «la bitácora»** (`src/components/pages/Projects/`, rutas `/proyectos/` · `/en/projects/`): el cuaderno abierto entero, asiento por asiento, con lo que hay a bordo. No clona el Home: **el atardecer (sol, olas, cirros, la rosa que gira) es la escena del Home y aquí no se repite**; solo se hereda el cielo estrellado de la portada. El resto vive sobre la noche y se ordena por composición: numeración de asientos, voz mono, acentos cálidos y asimetría en zigzag.
+- **Cuatro asientos, cada uno en su punto**: lo **entregado** (Recogras, con la captura recortada a su primer pliegue); **Helio**, el producto propio en construcción, cuyo visual es el **plano (wireframe) de su panel dibujándose** bajo una línea de escaneo —lo honesto cuando aún no hay captura—; las **tres plantillas web**, en filas intercaladas (imagen a un lado, ficha al otro, empezando y terminando con la imagen a babor); y las **tres automatizaciones**, con un **diagrama de flujo** (disparadores → núcleo → salida) por el que viajan los pulsos.
+- **Textura de fondo: la carta náutica en frío** (`.log-backdrop`): rejilla de carta, dos abanicos de líneas de rumbo desde puntos opuestos, lavados fríos que respiran y un cielo que tiñe la franja alta y se disuelve en la noche —la costura portada → primer asiento es un solo lienzo, sin corte.
+- **Migas de pan**, visibles (`Inicio / Proyectos`) y en el grafo JSON-LD (`BreadcrumbList`), en ambos idiomas; más un nodo `ItemList` (`src/data/schema.ts`) que enumera el inventario de la bitácora en el orden en que se lee.
+- **`StackList`** (`src/components/pages/Projects/StackList.astro`): el stack de una pieza con la regla **todo íconos o todo texto**, nunca mezclado —si toda la lista tiene logo se pintan las placas (como en Servicios del Home); si alguna no lo tiene, la lista entera cae a texto.
+- **Enlace «Proyectos»** en la navbar y en el footer (numeración `01…04`, idioma al `05`), con su etiqueta en `nav.projects` de ambos locales.
+- **Imágenes de las tres plantillas** (`src/assets/plantilla_web_*`): servicios profesionales, negocios locales y startups, en la cadena AVIF → WebP → PNG.
+- **Builder de la imagen OG de la página** (`scripts/builders/projects-og.ts`), registrado en `run-builders.ts`.
+- **Micro-interacciones**: revelado escalonado al entrar en viewport, el wireframe que se dibuja solo, los pulsos del diagrama de flujo y la aguja del cierre que oscila —todo se apaga con `prefers-reduced-motion`.
+
+### Cambiado
+
+- **`Navbar.astro`** recibe `pageName` y con él **traduce el slug** en el conmutador de idioma; suma «Proyectos» a la navegación numerada.
+- **`Footer.astro`** suma «Proyectos» al mapa del sitio y corre el idioma al índice `05`.
+- **`src/data/i18n.ts`** y **`locales/{es,en}.ts`**: esquema `projectsPage` en ambos idiomas, `nav.projects` y el slug localizado (`/proyectos/` · `/projects/`) resuelto por `pageSlug`.
+- **El nombre de la miga en el grafo** se limpia de la coletilla de marca: `«Proyectos — CTG Code»` → `«Proyectos»`.
+
+### Corregido
+
+- **El conmutador de idioma llevaba a rutas inexistentes**: desde `/privacidad/` saltaba a `/en/privacidad/` (404) porque no traducía el slug —la ruta real es `/en/privacy/`. Ahora la navbar resuelve el slug por `pageName`, así que cada idioma cae en su URL real.
+
+### Técnico
+
+- El CTA del cierre baja al `#contact` **de la misma página** (el footer vive en toda página) con scroll suave, en vez de navegar al Home y bajar allí —eso no tenía sentido; una flecha `↓` lo anuncia.
+- Las capturas de plantilla miden `1905×770` (alguna `771`): el marco fija la relación `1905/770` y recorta con `overflow`, así el píxel de más queda fuera. La de Recogras es una página larga (`1905×7368`), que se recorta a su primer pliegue con `aspect-ratio` + máscara de fundido: se lee «esto sigue» en vez de mostrar la página entera.
+- Un `grid-column` sin acotar (`.bt-head--right` del bloque de Helio) se filtraba a la cabecera de automatizaciones y le rompía la rejilla en 12 columnas fantasma; las colocaciones de rejilla quedan **acotadas a su sección**.
+- La página se compone con el patrón del sistema (ruta delgada → componente en `components/pages/Projects/` → hoja co-ubicada); textos en los locales bajo `LocaleSchema`; ninguna escena de `backdrop/` del descenso salvo `Starfield` en la portada.

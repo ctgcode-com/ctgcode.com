@@ -1,0 +1,85 @@
+---
+/**
+ * StackList — el stack de una pieza, en la voz visual del Home.
+ *
+ * Regla: TODO íconos o TODO texto, nunca mezclado. Si cada tecnología de la
+ * lista tiene logotipo en el registro, se pintan las placas (idéntico a la
+ * sección de servicios del Home); si alguna no lo tiene (p. ej. una técnica
+ * como «SSG», que no es una marca con logo), la lista entera cae a etiquetas
+ * de texto. Así una fila nunca queda con un logo suelto junto a palabras.
+ */
+import astroUrl from "../../../assets/astro.svg?url";
+import cssUrl from "../../../assets/css.svg?url";
+import fastapiUrl from "../../../assets/fastapi.svg?url";
+import htmxUrl from "../../../assets/htmx.svg?url";
+import javascriptUrl from "../../../assets/javascript.svg?url";
+import jinjaUrl from "../../../assets/jinja.svg?url";
+import postgresqlUrl from "../../../assets/postgresql.svg?url";
+import pythonUrl from "../../../assets/python.svg?url";
+import restApiUrl from "../../../assets/rest-api.svg?url";
+import rustUrl from "../../../assets/rust.svg?url";
+import typescriptUrl from "../../../assets/typescript.svg?url";
+
+const TECH: Record<string, { src: string; name: string }> = {
+  astro: { src: astroUrl, name: "Astro" },
+  css: { src: cssUrl, name: "CSS" },
+  fastapi: { src: fastapiUrl, name: "FastAPI" },
+  htmx: { src: htmxUrl, name: "htmx" },
+  javascript: { src: javascriptUrl, name: "JavaScript" },
+  jinja: { src: jinjaUrl, name: "Jinja" },
+  postgresql: { src: postgresqlUrl, name: "PostgreSQL" },
+  python: { src: pythonUrl, name: "Python" },
+  "rest-api": { src: restApiUrl, name: "REST API" },
+  rust: { src: rustUrl, name: "Rust" },
+  typescript: { src: typescriptUrl, name: "TypeScript" },
+};
+
+/** Nombres para humanos → clave del registro (Helio ya trae claves). */
+const techAlias: Record<string, string> = {
+  "css propio": "css",
+  "hand-written css": "css",
+  "rest api": "rest-api",
+};
+const techKey = (raw: string): string => {
+  const k = raw.toLowerCase().trim();
+  return techAlias[k] ?? k;
+};
+
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+const allIcons = items.every((raw) => TECH[techKey(raw)]);
+---
+
+{
+  allIcons ? (
+    <ul class="bt-stack" role="list">
+      {items.map((raw) => {
+        const tech = TECH[techKey(raw)];
+        return (
+          <li class="bt-tech">
+            <img
+              src={tech.src}
+              alt={tech.name}
+              width="24"
+              height="24"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="bt-tech-name" aria-hidden="true">
+              {tech.name}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <ul class="bt-tags" role="list">
+      {items.map((raw) => (
+        <li class="bt-tag">{raw}</li>
+      ))}
+    </ul>
+  )
+}

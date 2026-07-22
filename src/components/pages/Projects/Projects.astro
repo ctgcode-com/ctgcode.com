@@ -1,0 +1,647 @@
+---
+/**
+ * Projects (PÁGINA) — «la bitácora».
+ *
+ * El Home enseña UNA cosa: el trabajo entregado. Esta página abre el cuaderno
+ * entero y anota, asiento por asiento, en qué punto está cada pieza: lo que
+ * ya navega solo (Recogras), lo que se está construyendo en casa (Helio), lo
+ * que está listo para adaptar (plantillas) y lo que se monta sobre lo que el
+ * cliente ya tiene (automatizaciones).
+ *
+ * NO clona el Home. El atardecer (sol, olas, cirros, la rosa que gira) es la
+ * escena del Home: aquí NO se repite. Lo único que se hereda de las escenas es
+ * el cielo estrellado de la portada —la bitácora se abre bajo las estrellas—;
+ * el resto de la página vive sobre la noche lisa y se ordena por composición:
+ * numeración de asientos, voz mono, acentos cálidos y una asimetría en zigzag
+ * (izquierda → derecha → izquierda → derecha) para que el ojo baje sin columna.
+ *
+ * Las plantillas muestran su captura real (página completa, recortada al primer
+ * pliegue); Helio y las automatizaciones no llevan imagen a propósito: todavía
+ * no hay nada honesto que enseñar.
+ */
+import Layout from "../../../layouts/Layout.astro";
+import Navbar from "../../global/Navbar/Navbar.astro";
+import Footer from "../../global/Footer/Footer.astro";
+import LangNotice from "../../global/LangNotice/LangNotice.astro";
+import CTA from "../../ui/CTA/CTA.astro";
+import Starfield from "../../backdrop/Starfield/Starfield.astro";
+import StackList from "./StackList.astro";
+import { locales, localizedPath } from "../../../data/i18n";
+import "./Projects.css";
+
+/* La captura del sitio del cliente, en la cadena de respaldo del proyecto
+   (AVIF → WebP → PNG). Ya vienen optimizadas: se emiten tal cual. */
+import deskAvif from "../../../assets/recograscolombia_escritorio.avif";
+import deskWebp from "../../../assets/recograscolombia_escritorio.webp";
+import deskPng from "../../../assets/recograscolombia_escritorio.png";
+
+/* Capturas de página completa de las tres plantillas, en la misma cadena de
+   respaldo. Se indexan por el `slug` de cada plantilla (ver locales): así el
+   .astro no necesita saber el orden, solo pedir la captura de un slug. */
+import tplServAvif from "../../../assets/plantilla_web_servicios_profesionales.avif";
+import tplServWebp from "../../../assets/plantilla_web_servicios_profesionales.webp";
+import tplServPng from "../../../assets/plantilla_web_servicios_profesionales.png";
+import tplLocalAvif from "../../../assets/plantilla_web_negocio_local.avif";
+import tplLocalWebp from "../../../assets/plantilla_web_negocio_local.webp";
+import tplLocalPng from "../../../assets/plantilla_web_negocio_local.png";
+import tplStartupAvif from "../../../assets/plantilla_web_startup.avif";
+import tplStartupWebp from "../../../assets/plantilla_web_startup.webp";
+import tplStartupPng from "../../../assets/plantilla_web_startup.png";
+
+type Shot = { avif: ImageMetadata; webp: ImageMetadata; png: ImageMetadata };
+
+/* slug → captura. Los slugs viven en los locales (data/{es,en}.ts); si alguno
+   no tiene captura aquí, la ficha se pinta sin imagen sin romperse. */
+const TEMPLATE_SHOTS: Record<string, Shot> = {
+  "servicios-profesionales": {
+    avif: tplServAvif,
+    webp: tplServWebp,
+    png: tplServPng,
+  },
+  "professional-services": {
+    avif: tplServAvif,
+    webp: tplServWebp,
+    png: tplServPng,
+  },
+  "negocios-locales": {
+    avif: tplLocalAvif,
+    webp: tplLocalWebp,
+    png: tplLocalPng,
+  },
+  "local-business": { avif: tplLocalAvif, webp: tplLocalWebp, png: tplLocalPng },
+  "startups-productos": {
+    avif: tplStartupAvif,
+    webp: tplStartupWebp,
+    png: tplStartupPng,
+  },
+  "startups-products": {
+    avif: tplStartupAvif,
+    webp: tplStartupWebp,
+    png: tplStartupPng,
+  },
+};
+
+interface Props {
+  lang: keyof typeof locales;
+}
+
+const { lang } = Astro.props;
+const t = locales[lang].projectsPage;
+const pj = locales[lang].projects;
+const nav = locales[lang].nav;
+const featured = pj.featured;
+const L = t.labels;
+
+/* Los ids de sección SALEN del índice: así el ancla y su entrada en el
+   manifiesto no pueden desincronizarse al traducir. */
+const ids = t.manifest.map((m) => m.href.replace(/^#/, ""));
+const [idShipped, idHelio, idTemplates, idAutomations] = ids;
+---
+
+<Layout
+  title={`${t.metaTitle} — CTG Code`}
+  description={t.metaDescription}
+  pageName="projects"
+  lang={lang}
+>
+  <Navbar lang={lang} pageName="projects" />
+
+  <main class="log">
+    <!-- Textura de fondo de toda la bitácora: carta náutica en frío (rejilla,
+         líneas de rumbo y lavados fríos que respiran). NO es el atardecer del
+         Home —nada de sol ni olas—: es el papel sobre el que se anota, y evita
+         que la noche quede como un plano negro liso. -->
+    <div class="log-backdrop" aria-hidden="true">
+      <!-- El cielo de la bóveda: un degradado que tiñe la franja alta (índigo/
+           violeta, como el cosmos del Home) y se disuelve en la noche. Es lo
+           que hace continua la costura portada → primer asiento. -->
+      <div class="log-sky"></div>
+      <div class="log-grid"></div>
+      <svg
+        class="log-rhumb"
+        viewBox="0 0 1200 1600"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g class="log-rhumb-lines">
+          {
+            Array.from({ length: 16 }).map((_, i) => (
+              <line
+                x1="1010"
+                y1="240"
+                x2={1010 + 1600 * Math.cos((i * Math.PI) / 8)}
+                y2={240 + 1600 * Math.sin((i * Math.PI) / 8)}
+              />
+            ))
+          }
+        </g>
+        <g class="log-rhumb-lines log-rhumb-lines--b">
+          {
+            Array.from({ length: 16 }).map((_, i) => (
+              <line
+                x1="150"
+                y1="1120"
+                x2={150 + 1600 * Math.cos((i * Math.PI) / 8 + Math.PI / 16)}
+                y2={1120 + 1600 * Math.sin((i * Math.PI) / 8 + Math.PI / 16)}
+              />
+            ))
+          }
+        </g>
+      </svg>
+      <div class="log-wash log-wash--a"></div>
+      <div class="log-wash log-wash--b"></div>
+      <div class="log-wash log-wash--c"></div>
+    </div>
+
+    <!-- ══ ENCABEZADO — la portada del cuaderno, bajo la bóveda ══════════ -->
+    <!-- Sin data-tone: la portada es TRANSPARENTE y comparte el fondo de la
+         página (el cielo lo pinta .log-sky en el backdrop). Así no hay costura
+         entre la bóveda y el primer asiento: es un solo lienzo continuo. -->
+    <section class="bt-open" aria-labelledby="bt-title">
+      <Starfield />
+
+      <nav
+        class="bt-crumbs"
+        aria-label={lang === "es" ? "Migas de pan" : "Breadcrumb"}
+      >
+        <ol class="bt-crumbs-list" role="list">
+          <li class="bt-crumb">
+            <a class="bt-crumb-link" href={localizedPath(lang)}>{nav.home}</a>
+          </li>
+          <li class="bt-crumb" aria-current="page">
+            <span class="bt-crumb-here">{t.metaTitle}</span>
+          </li>
+        </ol>
+      </nav>
+
+      <div class="bt-open-wrap">
+        <header class="bt-open-copy">
+          <p class="eyebrow bt-open-eyebrow">{t.eyebrow}</p>
+          <h1 id="bt-title" class="bt-open-title">{t.title}</h1>
+          <p class="bt-open-lead">{t.lead}</p>
+        </header>
+
+        <!-- El manifiesto: el índice del cuaderno, en voz mono. Cuelga a
+             estribor y BAJO la línea del titular — no lo acompaña de igual
+             a igual. -->
+        <nav
+          class="bt-manifest"
+          aria-label={lang === "es" ? "Índice de la página" : "Page index"}
+        >
+          <ol class="bt-manifest-list" role="list">
+            {
+              t.manifest.map((entry) => (
+                <li class="bt-manifest-item">
+                  <a class="bt-manifest-link" href={entry.href}>
+                    <span class="bt-manifest-idx" aria-hidden="true">
+                      {entry.idx}
+                    </span>
+                    <span class="bt-manifest-rule" aria-hidden="true" />
+                    <span class="bt-manifest-label">{entry.label}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ══ 01 · ENTREGADO ════════════════════════════════════════════════ -->
+    <section id={idShipped} class="bt-shipped" aria-labelledby="bt-shipped-title">
+      <div class="bt-shipped-wrap">
+        <!-- Texto a babor: cabecera + ficha del proyecto, en una columna. -->
+        <div class="bt-shipped-text" data-reveal style="--i:0">
+          <header class="bt-head bt-head--left">
+            <p class="eyebrow bt-eyebrow">
+              <span class="bt-idx">{t.delivered.idx}</span>
+              <span class="bt-sep">/</span>
+              {t.delivered.eyebrow}
+            </p>
+            <h2 id="bt-shipped-title" class="bt-head-title">
+              {t.delivered.title}
+            </h2>
+            <p class="bt-head-lead">{t.delivered.lead}</p>
+          </header>
+
+          <article class="bt-entry">
+            <p class="bt-status bt-status--live">
+              <span class="bt-status-dot" aria-hidden="true"></span>
+              {t.delivered.status}
+            </p>
+
+            <h3 class="bt-entry-name">{featured.client}</h3>
+            <p class="bt-entry-tagline">{featured.tagline}</p>
+            <p class="bt-entry-body">{featured.summary}</p>
+
+            <StackList items={featured.stack} />
+
+            <dl class="bt-metrics">
+              {
+                featured.metrics.map((m) => (
+                  <div class="bt-metric">
+                    <dt class="bt-metric-label">{m.label}</dt>
+                    <dd class="bt-metric-value">{m.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <p class="bt-source">{pj.metricsSource}</p>
+
+            <a
+              class="bt-visit"
+              href={featured.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {pj.visit}
+              <span class="bt-visit-arrow" aria-hidden="true">↗</span>
+            </a>
+          </article>
+        </div>
+
+        <!-- La captura a estribor, recortada a su PRIMER PLIEGUE (el sitio del
+             cliente es una página larga): se ancla arriba y se funde por abajo.
+             Va centrada con el texto y se asoma al borde de la página. -->
+        <figure class="bt-shot" data-reveal style="--i:1">
+          <picture>
+            <source srcset={deskAvif.src} type="image/avif" />
+            <source srcset={deskWebp.src} type="image/webp" />
+            <img
+              src={deskPng.src}
+              width={deskPng.width}
+              height={deskPng.height}
+              alt={`${featured.client} — ${featured.tagline}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+          <figcaption class="bt-shot-url">{featured.urlLabel}</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ══ 02 · HELIO — el producto propio, en construcción ══════════════ -->
+    <section id={idHelio} class="bt-helio" aria-labelledby="bt-helio-title">
+      <div class="bt-helio-wrap">
+        <!-- Arriba, dos columnas: el PLANO del producto a babor (es su visual)
+             y la presentación a estribor. El texto va a la derecha porque está
+             justificado a la izquierda: arranca pegado al plano. -->
+        <div class="bt-helio-intro">
+          <!-- El PLANO del producto: su panel dibujándose (el trazo se pinta
+               solo) bajo una línea de escaneo. Es lo honesto para algo «en
+               construcción» —aún no hay captura—. En móvil estorba: se oculta. -->
+          <div class="bt-blueprint" aria-hidden="true">
+          <span class="bt-blueprint-tag">wireframe · v0</span>
+          <svg viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="bp-draw" x="8" y="8" width="404" height="284" rx="12" />
+            <line class="bp-draw" x1="8" y1="44" x2="412" y2="44" />
+            <circle class="bp-dot" cx="28" cy="26" r="4" />
+            <circle class="bp-dot" cx="44" cy="26" r="4" />
+            <circle class="bp-dot" cx="60" cy="26" r="4" />
+            <line class="bp-draw" x1="120" y1="44" x2="120" y2="292" />
+            <rect class="bp-soft" x="24" y="64" width="72" height="9" rx="4" />
+            <rect class="bp-soft" x="24" y="88" width="60" height="9" rx="4" />
+            <rect class="bp-soft" x="24" y="112" width="80" height="9" rx="4" />
+            <rect class="bp-soft" x="24" y="136" width="54" height="9" rx="4" />
+            <rect class="bp-soft" x="140" y="64" width="130" height="12" rx="5" />
+            <rect class="bp-draw" x="140" y="96" width="120" height="60" rx="8" />
+            <rect class="bp-draw" x="272" y="96" width="120" height="60" rx="8" />
+            <polyline
+              class="bp-draw bp-chart"
+              points="152,140 176,120 200,132 224,108 248,124"
+            />
+            <rect class="bp-soft" x="284" y="112" width="46" height="20" rx="4" />
+            <rect class="bp-soft" x="284" y="138" width="80" height="8" rx="4" />
+            <line class="bp-draw" x1="140" y1="180" x2="392" y2="180" />
+            <line class="bp-draw" x1="140" y1="208" x2="392" y2="208" />
+            <line class="bp-draw" x1="140" y1="236" x2="392" y2="236" />
+            <line class="bp-draw" x1="140" y1="264" x2="392" y2="264" />
+            <rect class="bp-scan" x="8" y="44" width="404" height="40" />
+          </svg>
+          </div>
+
+          <div class="bt-helio-lead">
+            <header class="bt-head bt-head--left" data-reveal style="--i:0">
+              <p class="eyebrow bt-eyebrow">
+                <span class="bt-idx">{t.helio.idx}</span>
+                <span class="bt-sep">/</span>
+                {t.helio.eyebrow}
+              </p>
+
+              <h2 id="bt-helio-title" class="bt-helio-name">
+                {t.helio.name}
+                <span class="bt-helio-tagline">{t.helio.tagline}</span>
+              </h2>
+
+              <p class="bt-status bt-status--wip">
+                <span class="bt-status-dot" aria-hidden="true"></span>
+                {t.helio.status}
+              </p>
+            </header>
+
+            <div class="bt-helio-body" data-reveal style="--i:1">
+              <p class="bt-helio-summary">{t.helio.summary}</p>
+              <p class="bt-helio-scope">{t.helio.scope}</p>
+              <StackList items={t.helio.stack} />
+            </div>
+          </div>
+        </div>
+
+        <!-- Los tres módulos: a lo ancho, debajo de la presentación. -->
+        <ol class="bt-modules" role="list">
+          {
+            t.helio.modules.map((mod, i) => (
+              <li class="bt-module" data-reveal style={`--i:${i}`}>
+                <p class="bt-module-idx" aria-hidden="true">
+                  {mod.idx}
+                </p>
+                <div class="bt-module-copy">
+                  <h3 class="bt-module-name">{mod.name}</h3>
+                  <p class="bt-module-body">{mod.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="bt-note">{t.helio.note}</p>
+      </div>
+    </section>
+
+    <!-- ══ 03 · PLANTILLAS ═══════════════════════════════════════════════ -->
+    <section
+      id={idTemplates}
+      class="bt-templates"
+      aria-labelledby="bt-templates-title"
+    >
+      <div class="bt-templates-wrap">
+        <header class="bt-head bt-head--left" data-reveal style="--i:0">
+          <p class="eyebrow bt-eyebrow">
+            <span class="bt-idx">{t.templates.idx}</span>
+            <span class="bt-sep">/</span>
+            {t.templates.eyebrow}
+          </p>
+          <h2 id="bt-templates-title" class="bt-head-title bt-head-title--wide">
+            {t.templates.title}
+          </h2>
+          <p class="bt-head-lead">{t.templates.lead}</p>
+        </header>
+
+        <!-- Filas intercaladas: la imagen (el hero de la plantilla) a un lado y
+             la ficha al otro. Empieza y termina con la imagen a BABOR; la de en
+             medio la cruza a estribor. La imagen va recortada a su alto (overflow
+             hidden se come el píxel de más de las que miden 771). -->
+        <ul class="bt-tpl-grid" role="list">
+          {
+            t.templates.items.map((item, i) => {
+              const shot = TEMPLATE_SHOTS[item.slug];
+              return (
+                <li class="bt-tpl" id={item.slug} data-reveal style={`--i:${i}`}>
+                  {shot ? (
+                    <figure class="bt-frame bt-frame--shot">
+                      <picture>
+                        <source srcset={shot.avif.src} type="image/avif" />
+                        <source srcset={shot.webp.src} type="image/webp" />
+                        <img
+                          src={shot.png.src}
+                          width={shot.png.width}
+                          height={shot.png.height}
+                          alt={item.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </picture>
+                    </figure>
+                  ) : (
+                    <div class="bt-frame" aria-hidden="true">
+                      <span class="bt-frame-grid" />
+                      <span class="bt-frame-label">{L.shotSoon}</span>
+                      <span class="bt-frame-corner bt-frame-corner--tl" />
+                      <span class="bt-frame-corner bt-frame-corner--br" />
+                    </div>
+                  )}
+
+                  <div class="bt-tpl-copy">
+                    <p class="bt-kicker">{item.kicker}</p>
+                    <h3 class="bt-tpl-name">{item.name}</h3>
+                    <p class="bt-tpl-body">{item.body}</p>
+
+                    <p class="bt-mini-label">{L.audience}</p>
+                    <ul class="bt-tags" role="list">
+                      {item.audience.map((a) => (
+                        <li class="bt-tag">{a}</li>
+                      ))}
+                    </ul>
+
+                    {item.demoUrl ? (
+                      <a
+                        class="bt-demo"
+                        href={item.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {L.demo}
+                        <span class="bt-demo-arrow" aria-hidden="true">
+                          ↗
+                        </span>
+                      </a>
+                    ) : (
+                      <p class="bt-demo bt-demo--soon">{L.demoSoon}</p>
+                    )}
+                  </div>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 04 · AUTOMATIZACIONES + CIERRE ════════════════════════════════ -->
+    <section id={idAutomations} class="bt-auto" aria-labelledby="bt-auto-title">
+      <!-- El diagrama de flujo vive como MARCA DE AGUA del asiento (una
+           automatización ES un flujo: tres disparadores → un núcleo → la
+           salida, con los pulsos por los cables). Va al fondo, tenue, para no
+           robarle el ancho al texto; se oculta en móvil. -->
+      <div class="bt-flow" aria-hidden="true">
+        <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path class="bt-flow-wire" d="M56 48 C 150 48 120 120 196 120" />
+          <path class="bt-flow-wire" d="M56 120 H 196" />
+          <path class="bt-flow-wire" d="M56 192 C 150 192 120 120 196 120" />
+          <path class="bt-flow-wire" d="M244 120 H 288" />
+          <circle class="bt-flow-pulse" r="3.5">
+            <animateMotion dur="2.4s" repeatCount="indefinite"
+              path="M56 48 C 150 48 120 120 196 120" />
+          </circle>
+          <circle class="bt-flow-pulse" r="3.5">
+            <animateMotion dur="2.4s" begin="0.5s" repeatCount="indefinite"
+              path="M56 120 H 196" />
+          </circle>
+          <circle class="bt-flow-pulse" r="3.5">
+            <animateMotion dur="2.4s" begin="1s" repeatCount="indefinite"
+              path="M56 192 C 150 192 120 120 196 120" />
+          </circle>
+          <circle class="bt-flow-node" cx="40" cy="48" r="14" />
+          <circle class="bt-flow-node" cx="40" cy="120" r="14" />
+          <circle class="bt-flow-node" cx="40" cy="192" r="14" />
+          <rect class="bt-flow-hub" x="196" y="98" width="48" height="44" rx="10" />
+          <path class="bt-flow-gear"
+            d="M220 108 v6 M220 126 v6 M210 120 h6 M224 120 h6" />
+          <circle class="bt-flow-gear" cx="220" cy="120" r="5" />
+          <circle class="bt-flow-out" cx="288" cy="120" r="6" />
+        </svg>
+      </div>
+
+      <div class="bt-auto-wrap">
+        <header class="bt-head bt-head--left" data-reveal style="--i:0">
+          <p class="eyebrow bt-eyebrow">
+            <span class="bt-idx">{t.automations.idx}</span>
+            <span class="bt-sep">/</span>
+            {t.automations.eyebrow}
+          </p>
+          <h2 id="bt-auto-title" class="bt-head-title bt-head-title--wide">
+            {t.automations.title}
+          </h2>
+          <p class="bt-head-lead">{t.automations.lead}</p>
+        </header>
+
+        <!-- Sin imagen que enseñar, la pieza se identifica por su clave (ACC,
+             RES, FAC) y el asiento se lee como el renglón de un inventario. -->
+        <ul class="bt-auto-list" role="list">
+          {
+            t.automations.items.map((item, i) => (
+              <li class="bt-auto-item" id={item.slug} data-reveal style={`--i:${i}`}>
+                <p class="bt-auto-code" aria-hidden="true">
+                  {item.code}
+                </p>
+
+                <div class="bt-auto-copy">
+                  <h3 class="bt-auto-name">{item.name}</h3>
+                  <p class="bt-auto-body">{item.body}</p>
+                </div>
+
+                <div class="bt-auto-meta">
+                  <p class="bt-mini-label">{L.includes}</p>
+                  <ul class="bt-checks" role="list">
+                    {item.includes.map((line) => (
+                      <li class="bt-check">{line}</li>
+                    ))}
+                  </ul>
+
+                  {item.demoUrl ? (
+                    <a
+                      class="bt-demo"
+                      href={item.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {L.demo}
+                      <span class="bt-demo-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  ) : (
+                    <p class="bt-demo bt-demo--soon">{L.demoSoon}</p>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- El cierre del cuaderno: la marca de rumbo (aguja + coordenadas) a
+             babor y el texto con el CTA a estribor. El CTA NO va al Home: el
+             formulario vive en el footer de ESTA página (#contact), así que baja
+             hasta él (scroll suave, ya global) y la flecha lo anuncia. -->
+        <aside class="bt-closing" data-reveal aria-labelledby="bt-closing-title">
+          <div class="bt-closing-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle class="bt-closing-ring" cx="60" cy="60" r="50" />
+              <g class="bt-closing-ticks">
+                {
+                  Array.from({ length: 24 }).map((_, i) => (
+                    <line
+                      x1="60"
+                      y1="12"
+                      x2="60"
+                      y2={i % 6 === 0 ? "20" : "16"}
+                      transform={`rotate(${i * 15} 60 60)`}
+                    />
+                  ))
+                }
+              </g>
+              <path class="bt-closing-needle" d="M60 26 L70 78 L60 70 L50 78 Z" />
+              <circle class="bt-closing-hub" cx="60" cy="60" r="3.5" />
+            </svg>
+            <span class="bt-closing-coords">10.4236° N · 75.5518° W</span>
+          </div>
+
+          <div class="bt-closing-body-wrap">
+            <p class="eyebrow bt-closing-eyebrow">{t.closing.eyebrow}</p>
+            <h2 id="bt-closing-title" class="bt-closing-title">
+              {t.closing.title}
+            </h2>
+            <p class="bt-closing-body">{t.closing.body}</p>
+            <CTA href="#contact" class="bt-closing-cta">
+              {t.closing.cta}
+              <span class="bt-closing-cta-arrow" aria-hidden="true">↓</span>
+            </CTA>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+
+  <LangNotice lang={lang} />
+</Layout>
+
+<script>
+  /**
+   * Revelado escalonado al entrar en viewport (misma mecánica que el About):
+   * el JS «arma» la página (data-armed) y cada [data-reveal] sube y aparece
+   * al cruzar el umbral, con un pequeño retardo por --i. Sin JS o con
+   * prefers-reduced-motion no se arma nada: todo se ve desde el inicio.
+   *
+   * El diagrama de flujo (SMIL) no lo alcanza la regla global de movimiento
+   * reducido, así que aquí se pausa a mano.
+   */
+  const log = document.querySelector<HTMLElement>(".log");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (log) {
+    const revealables = Array.from(
+      log.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+
+    if (!reduceMotion.matches) {
+      log.setAttribute("data-armed", "");
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-in");
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      revealables.forEach((el) => io.observe(el));
+    }
+
+    // Los pulsos SMIL del diagrama: quietos con movimiento reducido.
+    const flow = log.querySelector<SVGSVGElement>(".bt-flow svg");
+    const applyFlow = () => {
+      if (!flow) return;
+      if (reduceMotion.matches) flow.pauseAnimations();
+      else flow.unpauseAnimations();
+    };
+    applyFlow();
+    reduceMotion.addEventListener("change", applyFlow);
+  }
+</script>

@@ -10,33 +10,56 @@
  * Responsive: en <60rem la nav se colapsa en un overlay a pantalla completa
  * (con bloqueo de scroll del documento). En >=60rem se muestra la nav en línea.
  */
-import { locales, localizedPath, type LocaleSchema } from "../../../data/i18n";
+import {
+  locales,
+  localizedPath,
+  pageSlug,
+  type LocaleSchema,
+} from "../../../data/i18n";
 import CTA from "../../ui/CTA/CTA.astro";
 import logo from "../../../assets/logo.svg?raw";
 import "./Navbar.css";
 
 interface Props {
   lang: keyof typeof locales;
+  /**
+   * Identificador interno y estable de la página (el mismo que recibe el
+   * Layout). Es lo que permite al switch de idioma TRADUCIR el slug: sin él,
+   * /privacidad/ saltaba a /en/privacidad/ —una ruta que no existe—, porque
+   * la ruta en inglés es /en/privacy/.
+   */
+  pageName?: string;
 }
 
-const { lang } = Astro.props;
+const { lang, pageName } = Astro.props;
 const t: LocaleSchema = locales[lang];
 
 const otherLang = lang === "es" ? "en" : "es";
 const home = localizedPath(lang);
 
-// Switch de idioma: misma página, otra lengua. Se quita el prefijo del idioma
-// actual (es vive en la raíz) y se reconstruye con el otro.
+/* Switch de idioma: MISMA página, otra lengua. Con `pageName` se resuelve el
+   slug real en el otro idioma; sin él se cae a la ruta actual sin prefijo
+   (sirve para páginas cuyo slug no cambia de idioma). */
 const currentSubpath = Astro.url.pathname
   .replace(/^\/(en)(?=\/|$)/, "")
-  .replace(/^\/+/, "");
-const altPath = localizedPath(otherLang, currentSubpath);
+  .replace(/^\/+/, "")
+  .replace(/\/+$/, "");
+const altSubpath = pageName
+  ? pageSlug(otherLang, pageName)
+  : currentSubpath;
+const altPath = localizedPath(otherLang, altSubpath);
 
 // Enlaces de sección numerados como metadatos de estudio (voz mono).
+// Servicios y Contacto son anclas del Home; Proyectos es una página propia.
 const navItems = [
   { index: "01", label: t.nav.home, href: home },
   { index: "02", label: t.nav.services, href: `${home}#services` },
-  { index: "03", label: t.nav.contact, href: `${home}#contact` },
+  {
+    index: "03",
+    label: t.nav.projects,
+    href: localizedPath(lang, t.projects.indexSlug),
+  },
+  { index: "04", label: t.nav.contact, href: `${home}#contact` },
 ];
 ---
 

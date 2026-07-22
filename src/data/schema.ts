@@ -162,6 +162,54 @@ function faqPage(lang: keyof typeof locales, canonicalUrl: string) {
 }
 
 /**
+ * El inventario de la bitácora: lo entregado, el producto propio, las
+ * plantillas y las automatizaciones, en el MISMO orden en que se leen en la
+ * página. Se declara lo que ya está publicado ahí —nombre y descripción—, sin
+ * inventar precios ni disponibilidad que el sitio no afirma.
+ */
+function projectsItemList(
+  lang: keyof typeof locales,
+  canonicalUrl: string,
+) {
+  const t = locales[lang].projectsPage;
+  const featured = locales[lang].projects.featured;
+
+  const entries: { name: string; description: string; url?: string }[] = [
+    {
+      name: featured.client,
+      description: featured.tagline,
+      url: featured.url,
+    },
+    { name: t.helio.name, description: t.helio.tagline },
+    ...t.templates.items.map((item) => ({
+      name: item.name,
+      description: item.body,
+      url: `${canonicalUrl}#${item.slug}`,
+    })),
+    ...t.automations.items.map((item) => ({
+      name: item.name,
+      description: item.body,
+      url: `${canonicalUrl}#${item.slug}`,
+    })),
+  ];
+
+  return {
+    '@type': 'ItemList',
+    '@id': `${canonicalUrl}#projects`,
+    name: t.title,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: entries.length,
+    itemListElement: entries.map((entry, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: entry.name,
+      description: entry.description,
+      ...(entry.url ? { url: entry.url } : {}),
+    })),
+  };
+}
+
+/**
  * Tipo de página según su papel. schema.org tiene tipos específicos para los
  * documentos legales: usarlos es más preciso que un `WebPage` genérico.
  */
@@ -173,6 +221,9 @@ function webPageType(pageName: string): string {
       return 'PrivacyPolicyPage';
     case 'terms':
       return 'TermsOfServicePage';
+    // La bitácora no describe UNA cosa: enumera todo lo que hay a bordo.
+    case 'projects':
+      return 'CollectionPage';
     default:
       return 'WebPage';
   }
@@ -187,6 +238,10 @@ function breadcrumb(
 ) {
   if (pageName === 'home') return null;
 
+  // El título de la pestaña viene como «Página — CTG Code»; la miga solo
+  // quiere el nombre de la página («Proyectos»), no la coletilla de la marca.
+  const crumbName = title.split(' — ')[0];
+
   return {
     '@type': 'BreadcrumbList',
     '@id': `${canonicalUrl}#breadcrumb`,
@@ -200,7 +255,7 @@ function breadcrumb(
       {
         '@type': 'ListItem',
         position: 2,
-        name: title,
+        name: crumbName,
         item: canonicalUrl,
       },
     ],
@@ -255,6 +310,13 @@ export function buildSchema({
   // Las FAQ solo existen en la Home: declararlas en otra URL sería describir
   // un contenido que allí no está.
   if (pageName === 'home') graph.push(faqPage(lang, canonicalUrl));
+
+  // El inventario solo existe en la bitácora.
+  if (pageName === 'projects') {
+    const list = projectsItemList(lang, canonicalUrl);
+    page.mainEntity = { '@id': list['@id'] };
+    graph.push(list);
+  }
 
   // Se escapa `<` para que el JSON no pueda cerrar el <script> que lo aloja.
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })

@@ -20,6 +20,7 @@ export type LocaleSchema = {
     nav: {
         home: string;
         services: string;
+        projects: string;
         contact: string;
         cta: string;
         openMenu: string;
@@ -107,6 +108,99 @@ export type LocaleSchema = {
             urlLabel: string;
             stack: string[];
             metrics: { label: string; value: string }[];
+        };
+    };
+    /**
+     * La PÁGINA de proyectos («la bitácora»). No repite el caso destacado —lo
+     * toma de `projects`— sino que le añade el resto de lo que hay a bordo:
+     * el producto propio, las plantillas y las automatizaciones.
+     */
+    projectsPage: {
+        /** Título y descripción PROPIOS (nunca los del home: penaliza SEO). */
+        metaTitle: string;
+        metaDescription: string;
+        eyebrow: string;
+        title: string;
+        lead: string;
+        /** Índice del encabezado: cada asiento con su ancla en la página. */
+        manifest: { idx: string; label: string; href: string }[];
+        /** Rótulos compartidos por las fichas (voz mono). */
+        labels: {
+            status: string;
+            stack: string;
+            /** Enlace a la demo desplegada. */
+            demo: string;
+            /** Sustituto del enlace mientras la demo no exista. */
+            demoSoon: string;
+            /** Rótulo del hueco reservado a la captura. */
+            shotSoon: string;
+            /** Público al que apunta una plantilla. */
+            audience: string;
+            /** Lo que trae una automatización. */
+            includes: string;
+        };
+        /** 01 · Lo entregado. El proyecto en sí vive en `projects.featured`. */
+        delivered: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            status: string;
+        };
+        /** 02 · El producto propio del estudio. */
+        helio: {
+            idx: string;
+            eyebrow: string;
+            name: string;
+            tagline: string;
+            status: string;
+            summary: string;
+            /** A qué talleres apunta de entrada. */
+            scope: string;
+            modules: { idx: string; name: string; body: string }[];
+            stack: string[];
+            /** Aviso de que todavía no hay capturas públicas. */
+            note: string;
+        };
+        /** 03 · Las plantillas web. Estas SÍ reservan hueco para la captura. */
+        templates: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            items: {
+                /** Clave estable (sirve de ancla y de id de la captura). */
+                slug: string;
+                kicker: string;
+                name: string;
+                body: string;
+                audience: string[];
+                /** Vacío mientras la demo no esté desplegada. */
+                demoUrl: string;
+            }[];
+        };
+        /** 04 · Las automatizaciones. Sin capturas: son piezas de maquinaria. */
+        automations: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            items: {
+                slug: string;
+                code: string;
+                name: string;
+                body: string;
+                includes: string[];
+                /** Vacío mientras la demo no esté desplegada. */
+                demoUrl: string;
+            }[];
+        };
+        /** El cierre: la salida hacia el formulario del footer. */
+        closing: {
+            eyebrow: string;
+            title: string;
+            body: string;
+            cta: string;
         };
     };
     services: {
@@ -271,6 +365,8 @@ export function pageSlug(
             return locales[lang].footer.privacySlug;
         case 'terms':
             return locales[lang].footer.termsSlug;
+        case 'projects':
+            return locales[lang].projects.indexSlug;
         default:
             return pageName;
     }
