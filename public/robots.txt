@@ -14,6 +14,13 @@
 # --- Buscadores y cualquier otro agente ------------------------------------
 User-agent: *
 Allow: /
+# Content-Signal (contentsignals.org): separa el ACCESO (el `Allow` de arriba)
+# del USO del contenido. Declaramos preferencia de: aparecer en buscadores
+# (search=yes) y ser fuente que los asistentes leen y CITAN al responder
+# (ai-input=yes); reservamos el entrenamiento de modelos con el contenido
+# (ai-train=no). Es una señal de preferencia, no un control de acceso; para
+# ser fuente citable NO hace falta permitir el entrenamiento.
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # --- Google ----------------------------------------------------------------
 # Google-Extended no afecta al índice de Búsqueda: controla el uso del

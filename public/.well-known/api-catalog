@@ -1,0 +1,21 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://ctgcode.com/",
+      "sitemap": [
+        {
+          "href": "https://ctgcode.com/sitemap-index.xml",
+          "type": "application/xml",
+          "title": "Inventario completo de páginas del sitio (ES/EN)"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://ctgcode.com/",
+          "type": "application/ld+json",
+          "title": "Datos estructurados schema.org embebidos en cada página"
+        }
+      ]
+    }
+  ]
+}

@@ -494,3 +494,17 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - **Navegación reordenada y sin enlace de contacto** (`Navbar.astro` y `Footer.astro`). El orden y la numeración ahora siguen el recorrido real de la página: `01 Inicio · 02 Proyectos · 03 Servicios` —Proyectos va antes que Servicios, como ya lo numeran los eyebrows de cada sección—. Antes la barra listaba `02 Servicios · 03 Proyectos`, invertido respecto al scroll. En el footer, el idioma pasa de `05` a `04`.
 - **Se retira el enlace «Contacto»** de la barra y del footer: era un ancla a `#contact` (el propio footer), redundante porque el CTA «Cotiza tu proyecto» de la barra ya lleva allí y el formulario de contacto vive en ese mismo footer. El ancla `#contact` y el CTA se mantienen intactos.
 
+## [0.25.0] - 2026-07-24
+
+### Añadido
+
+- **Señales «agent-ready» (GEO/AIO) a nivel estático**, para que los asistentes descubran, lean y CITEN el sitio con ventaja:
+  - **`Content-Signal` en `robots.txt`** (grupo `User-agent: *`): declara la preferencia de uso del contenido separada del acceso — `search=yes, ai-input=yes, ai-train=no` (sí a buscadores y a ser fuente citable; se reserva el entrenamiento de modelos). Es señal de preferencia, no control de acceso.
+  - **`<link rel="api-catalog">`** en el `<head>` + **`public/.well-known/api-catalog`** (linkset JSON en formato RFC 9264): punto de descubrimiento machine-readable que apunta al `sitemap-index.xml` (`rel: sitemap`) y a los datos estructurados schema.org de cada página (`rel: describedby`).
+  - **`public/auth.md`**: documento que declara explícitamente que el sitio es público y estático, sin autenticación, API keys ni OAuth para acceder a páginas, contenido o sitemaps.
+
+### Técnico
+
+- Se descartaron por diseño tres artefactos propuestos que no aplican a un sitio estático: la MCP `server-card.json` y la A2A `agent-card.json` anuncian un servidor/agente **invocable** (con endpoint y transporte) que el sitio no expone, y `agent-skills/index.json` queda huérfano sin ese agente. Publicar metadata de servicios inexistentes es engañoso y resta credibilidad; se añadirán como cards reales solo si se llega a exponer un endpoint de agente/MCP.
+- El `<link rel="sitemap">` ya existía; NO se añadió el `rel="service-doc"` propuesto hacia el sitemap (un sitemap no es documentación de servicio). El formato del linkset se corrigió al de RFC 9264 (la relación como clave con array de destinos), en vez del objeto plano `{anchor, rel, href}` propuesto.
+
