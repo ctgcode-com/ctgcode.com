@@ -2,6 +2,7 @@ import { OGImageBuilder } from './builders/og-base';
 import { buildHomeOG } from './builders/home-og';
 import { buildLegalOG } from './builders/legal-og';
 import { buildProjectsOG } from './builders/projects-og';
+import { buildServicesOG } from './builders/services-og';
 import { buildNotFoundOG } from './builders/not-found-og';
 
 async function main() {
@@ -14,6 +15,7 @@ async function main() {
 
         await buildHomeOG(builder);
         await buildProjectsOG(builder);
+        await buildServicesOG(builder);
         await buildLegalOG(builder);
         await buildNotFoundOG(builder);
 

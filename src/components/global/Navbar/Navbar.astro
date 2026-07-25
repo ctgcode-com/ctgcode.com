@@ -53,7 +53,7 @@ const altPath = localizedPath(otherLang, altSubpath);
 // y la numeración siguen el recorrido real de la página: Proyectos aparece
 // antes que Servicios (así lo numeran también los eyebrows de sección). El
 // contacto no lleva enlace propio: lo cubren el CTA de la barra y el
-// formulario del footer. Servicios es ancla del Home; Proyectos es página propia.
+// formulario del footer. Servicios y Proyectos son páginas propias.
 const navItems = [
   { index: "01", label: t.nav.home, href: home },
   {
@@ -61,7 +61,11 @@ const navItems = [
     label: t.nav.projects,
     href: localizedPath(lang, t.projects.indexSlug),
   },
-  { index: "03", label: t.nav.services, href: `${home}#services` },
+  {
+    index: "03",
+    label: t.nav.services,
+    href: localizedPath(lang, t.services.indexSlug),
+  },
 ];
 ---
 

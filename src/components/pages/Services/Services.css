@@ -1,0 +1,765 @@
+/* ===========================================================================
+   SERVICES · la carta   (PÁGINA — co-ubicado con pages/Services/Services.astro)
+
+   El MAR, pero vivo y asimétrico. El <main> lleva tono `sea`; encima:
+     · una portada con cáusticas de luz que derivan, un ping de sonar y una luz
+       que sigue al puntero;
+     · un catálogo que baja en ZIGZAG (el código gigante cruza de lado a lado);
+     · un proceso cuya sonda se LLENA con el scroll (--progress);
+     · compromisos en placas con un brillo que las cruza al pasar el puntero.
+
+   Regla de oro anti-scroll-horizontal: `.svc` recorta en X, y cada escena
+   (portada) recorta sus propias capas. Nada decorativo desborda el viewport.
+   =========================================================================== */
+
+.svc {
+  position: relative;
+  /* La red de seguridad: cualquier bleed decorativo se recorta aquí. */
+  overflow-x: clip;
+  /* Respaldo; el mar (+ cielo del atardecer + burbujas) lo pinta <Seascape>. */
+  background-color: var(--palette-night);
+  padding-bottom: var(--space-2xl);
+}
+
+/* El contenido va POR ENCIMA del mar del Seascape. */
+.svc > section {
+  position: relative;
+}
+
+/* Envoltura común de los tramos: el ancho ESTÁNDAR del sitio (unificado). */
+.svc-wrap {
+  width: 100%;
+  max-width: var(--wrap-view);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* ===========================================================================
+   CABECERAS DE TRAMO
+   =========================================================================== */
+.svc-catalog,
+.svc-process,
+.svc-commit {
+  padding-top: clamp(var(--space-2xl), 9vw, var(--space-3xl));
+}
+
+/* Sin tope de ancho en la cabecera: el título usa el ancho de la sección y
+   solo envuelve cuando la pantalla lo exige. La medida de lectura se conserva
+   donde importa —en el lead (`.svc-head-lead`, tope propio en ch)—, no en el
+   título. */
+.svc-head {
+  max-width: none;
+}
+
+.svc-head--center {
+  max-width: 60rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.svc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.svc-eyebrow--center {
+  justify-content: center;
+}
+
+.svc-idx {
+  color: var(--palette-amber);
+}
+
+.svc-sep {
+  color: var(--color-text-subtle);
+}
+
+.svc-head-title {
+  margin-top: var(--space-sm);
+  font-size: clamp(1.85rem, 1.1rem + 3vw, 3.25rem);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  /* `balance` para un wrap equilibrado; nada de `nowrap` (rompía móvil). */
+  text-wrap: balance;
+}
+
+.svc-head-lead {
+  margin-top: var(--space-md);
+  max-width: 54ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+.svc-head--center .svc-head-lead {
+  margin-inline: auto;
+}
+
+/* Rótulo mono compartido */
+.svc-mini-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.svc-mini-label--stack {
+  margin-top: var(--space-md);
+}
+
+/* ===========================================================================
+   01 · EL CATÁLOGO — en zigzag
+   =========================================================================== */
+.svc-items {
+  margin-top: var(--space-2xl);
+  display: grid;
+  gap: clamp(var(--space-2xl), 8vw, var(--space-3xl));
+  padding: 0;
+  list-style: none;
+}
+
+.svc-item {
+  position: relative;
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 62rem) {
+  .svc-item {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    align-items: center;
+    column-gap: clamp(var(--space-lg), 4vw, var(--space-2xl));
+  }
+
+  /* ZIGZAG: los impares llevan la marca a estribor y el texto a babor. */
+  .svc-item[data-side="right"] {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  }
+
+  .svc-item[data-side="right"] .svc-item-mark {
+    order: 2;
+  }
+}
+
+/* ---- La marca gigante: el código de sonda del servicio -------------------- */
+.svc-item-mark {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  line-height: 1;
+}
+
+@media (min-width: 62rem) {
+  .svc-item[data-side="right"] .svc-item-mark {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.svc-item-num {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wider);
+  color: var(--palette-amber);
+}
+
+.svc-item-code {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-extrabold);
+  font-size: clamp(4.5rem, 3rem + 12vw, 11rem);
+  letter-spacing: var(--tracking-tighter);
+  /* En reposo: solo el CONTORNO turquesa (relleno transparente). El clip a
+     texto queda armado para que el relleno de atardecer del hover se recorte a
+     las letras; el `background-image` empieza en `none`, así nada aflora aún. */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px
+    color-mix(in oklab, var(--palette-turquesa) 45%, transparent);
+  background-image: none;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    -webkit-text-stroke-color var(--dur-slow) var(--ease-tide),
+    transform var(--dur-slow) var(--ease-expo);
+}
+
+/* Al pasar el puntero por el asiento, el código se ENCIENDE: el relleno de
+   atardecer aflora bajo el contorno y la cifra respira un punto. */
+.svc-item:hover .svc-item-code {
+  background-image: var(--gradient-sunset);
+  -webkit-text-stroke-color: color-mix(
+    in oklab,
+    var(--palette-amber) 55%,
+    transparent
+  );
+  transform: translateY(-4px);
+}
+
+/* ---- El cuerpo del servicio ----------------------------------------------- */
+.svc-item-name {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: pretty;
+}
+
+.svc-item-tagline {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  color: var(--palette-turquesa);
+  text-wrap: pretty;
+}
+
+.svc-item-desc {
+  margin-top: var(--space-md);
+  max-width: 60ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+.svc-item-cols {
+  margin-top: var(--space-lg);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 40rem) {
+  .svc-item-cols {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(var(--space-md), 4vw, var(--space-xl));
+    align-items: start;
+  }
+}
+
+/* ---- «Incluye»: lista con palomita que se dibuja al revelarse -------------- */
+.svc-checks {
+  margin-top: var(--space-sm);
+  display: grid;
+  gap: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+}
+
+.svc-check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--color-text-muted);
+}
+
+.svc-check-mark {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.1rem;
+  border-radius: var(--radius-xs);
+  border: var(--border-thin) solid
+    color-mix(in oklab, var(--palette-turquesa) 40%, transparent);
+  color: var(--palette-turquesa);
+}
+
+.svc-check-mark svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+/* ---- «Ideal para»: etiquetas ---------------------------------------------- */
+.svc-tags {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+}
+
+.svc-tag {
+  padding: 0.3rem 0.7rem;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--palette-night) 40%, transparent);
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
+/* ---- Stack: placas claras (mismo criterio que la sección) ------------------ */
+.svc-stack {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding: 0;
+  list-style: none;
+}
+
+.svc-tech {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.4rem;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--palette-sand) 90%, transparent);
+  transition:
+    transform var(--dur-base) var(--ease-expo),
+    box-shadow var(--dur-base) var(--ease-tide);
+}
+
+.svc-tech img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.svc-tech:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  z-index: 4;
+}
+
+.svc-tech-name {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  z-index: 5;
+  padding: 0.2rem 0.5rem;
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  background: color-mix(in oklab, var(--palette-night) 92%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--color-brand-soft);
+  opacity: 0;
+  translate: -50% 0.25rem;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-soft),
+    translate var(--dur-base) var(--ease-expo);
+}
+
+.svc-tech-name::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0.4rem;
+  height: 0.4rem;
+  translate: -50% -55%;
+  rotate: 45deg;
+  background: inherit;
+  border-right: var(--border-thin) solid var(--color-border-strong);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.svc-tech:hover .svc-tech-name {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* ===========================================================================
+   02 · CÓMO TRABAJAMOS — la sonda que se llena
+   =========================================================================== */
+/* `.svc .svc-steps` (no solo `.svc-steps`) A PROPÓSITO: el reset global trae
+   `ol[role="list"] { padding: 0 }` con especificidad (0,1,1), que le ganaba a
+   una sola clase y colapsaba la canaleta a 0 (la línea caía sobre el texto).
+   Con dos clases (0,2,0) esta regla vuelve a mandar. */
+.svc .svc-steps {
+  --progress: 0; /* 0→1; lo mueve el script al bajar (ver reduce-motion) */
+  position: relative;
+  margin-top: var(--space-2xl);
+  margin-inline: auto;
+  max-width: 52rem;
+  /* Canaleta izquierda de 3rem para la sonda; el texto arranca tras ella, así
+     el hilo (a 1.25rem del borde) queda SIEMPRE a la izquierda del texto. */
+  padding: 0 0 0 3rem;
+  list-style: none;
+}
+
+/* El hilo de la sonda: track tenue de fondo, en la canaleta izquierda... */
+.svc-steps::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 1.25rem;
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+}
+
+/* ...y el tramo YA recorrido, pintado encima según --progress. Se escala en
+   vertical (no `height: %`, que no resuelve contra un contenedor de alto
+   automático): crece desde arriba, como la plomada bajando. */
+.svc-steps::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 1.25rem;
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    to bottom,
+    var(--palette-turquesa),
+    var(--palette-amber)
+  );
+  box-shadow: 0 0 12px color-mix(in oklab, var(--palette-amber) 60%, transparent);
+  transform-origin: top center;
+  transform: scaleY(var(--progress, 0));
+  transition: transform 120ms linear;
+}
+
+.svc-step {
+  position: relative;
+  padding-block: clamp(var(--space-md), 3vw, var(--space-lg));
+}
+
+.svc-step:first-child {
+  padding-top: 0;
+}
+
+/* El nodo sobre el hilo: anillo apagado con un núcleo que se enciende al
+   revelarse el paso (así los nodos «se prenden» al bajar). */
+.svc-step-dot {
+  position: absolute;
+  top: clamp(var(--space-md), 3vw, var(--space-lg));
+  /* Centra el nodo sobre el hilo (1.25rem del borde): el texto del paso
+     arranca a 3rem, así que -1.75rem lleva el nodo a la canaleta. */
+  left: -1.75rem;
+  translate: -50% 0;
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--palette-turquesa) 45%, transparent);
+  background: var(--color-bg);
+}
+
+.svc-step:first-child .svc-step-dot {
+  top: 0;
+}
+
+.svc-step-dot-core {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-text-subtle);
+  transition:
+    background-color var(--dur-base) var(--ease-tide),
+    box-shadow var(--dur-base) var(--ease-tide),
+    transform var(--dur-base) var(--ease-expo);
+}
+
+.svc-step.is-in .svc-step-dot-core {
+  background: var(--palette-amber);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--palette-amber) 70%, transparent);
+  transform: scale(1.15);
+}
+
+.svc-step-idx {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  color: var(--palette-amber);
+}
+
+.svc-step-name {
+  margin-top: var(--space-3xs);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+.svc-step-body {
+  margin-top: var(--space-2xs);
+  max-width: 52ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   03 · COMPROMISOS — placas con brillo que las cruza
+   =========================================================================== */
+.svc-commit-grid {
+  margin-top: var(--space-2xl);
+  display: grid;
+  gap: var(--space-md);
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 48rem) {
+  .svc-commit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.svc-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(var(--space-md), 3vw, var(--space-xl));
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--palette-night) 46%, transparent);
+  transition:
+    transform var(--dur-base) var(--ease-expo),
+    border-color var(--dur-base) var(--ease-tide),
+    box-shadow var(--dur-base) var(--ease-tide);
+}
+
+.svc-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-warm);
+  box-shadow: var(--shadow-md);
+}
+
+/* El brillo: una banda diagonal que espera fuera del recuadro y lo cruza al
+   pasar el puntero (una barrida de luz sobre el agua). */
+.svc-card-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    color-mix(in oklab, var(--palette-amber) 16%, transparent) 48%,
+    transparent 66%
+  );
+  transform: translateX(-120%);
+  transition: transform var(--dur-slower) var(--ease-soft);
+}
+
+.svc-card:hover .svc-card-sheen {
+  transform: translateX(120%);
+}
+
+.svc-card > *:not(.svc-card-sheen) {
+  position: relative;
+  z-index: 1;
+}
+
+.svc-card-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wider);
+  color: var(--palette-amber);
+}
+
+.svc-card-title {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+.svc-card-body {
+  margin-top: var(--space-sm);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   EL CIERRE — la marca de rumbo y la salida al formulario del footer
+   =========================================================================== */
+.svc-closing {
+  margin-top: var(--space-2xl);
+  display: grid;
+  gap: var(--space-lg);
+  align-items: center;
+  padding-top: var(--space-xl);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+@media (min-width: 48rem) {
+  .svc-closing {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-2xl);
+  }
+}
+
+.svc-closing-mark {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2xs);
+  width: clamp(7rem, 20vw, 9rem);
+}
+
+.svc-closing-mark svg {
+  width: 100%;
+  height: auto;
+}
+
+.svc-closing-ring {
+  stroke: color-mix(in oklab, var(--palette-turquesa) 55%, transparent);
+  stroke-width: 1.5;
+}
+
+.svc-closing-ticks line {
+  stroke: color-mix(in oklab, var(--palette-stone) 40%, transparent);
+  stroke-width: 1.2;
+}
+
+.svc-closing-needle {
+  fill: var(--palette-coral);
+  filter: drop-shadow(
+    0 0 5px color-mix(in oklab, var(--palette-coral) 55%, transparent)
+  );
+  transform-origin: 60px 60px;
+  animation: svc-needle 9s var(--ease-soft) infinite;
+}
+
+@keyframes svc-needle {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+.svc-closing-hub {
+  fill: var(--palette-amber);
+}
+
+.svc-closing-coords {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+.svc-closing-eyebrow {
+  color: var(--palette-turquesa);
+}
+
+.svc-closing-title {
+  margin-top: var(--space-3xs);
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.5rem);
+  line-height: var(--leading-snug);
+  text-wrap: pretty;
+}
+
+.svc-closing-body {
+  margin-top: var(--space-sm);
+  max-width: 56ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+.svc-closing-cta {
+  margin-top: var(--space-lg);
+}
+
+.svc-closing-cta-arrow {
+  margin-left: 0.35em;
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.svc-closing-cta:hover .svc-closing-cta-arrow,
+.svc-closing-cta:focus-visible .svc-closing-cta-arrow {
+  transform: translateY(3px);
+}
+
+/* ===========================================================================
+   REVELADO AL SCROLL — solo cuando el JS «arma» la página (data-armed).
+   Sin JS o con reduce-motion: todo visible y las palomitas ya dibujadas.
+   =========================================================================== */
+.svc[data-armed] [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity var(--dur-slow) var(--ease-tide),
+    transform var(--dur-slow) var(--ease-tide);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.svc[data-armed] [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* La palomita se dibuja cuando el cuerpo del servicio entra en cuadro. */
+.svc[data-armed] .svc-check-mark path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease-expo);
+}
+
+.svc[data-armed] .svc-item-body.is-in .svc-check-mark path {
+  stroke-dashoffset: 0;
+}
+
+/* Escalonado de las palomitas dentro de una misma lista. */
+.svc[data-armed] .svc-item-body.is-in .svc-check:nth-child(2) .svc-check-mark path {
+  transition-delay: 90ms;
+}
+.svc[data-armed] .svc-item-body.is-in .svc-check:nth-child(3) .svc-check-mark path {
+  transition-delay: 180ms;
+}
+.svc[data-armed] .svc-item-body.is-in .svc-check:nth-child(4) .svc-check-mark path {
+  transition-delay: 270ms;
+}
+.svc[data-armed] .svc-item-body.is-in .svc-check:nth-child(5) .svc-check-mark path {
+  transition-delay: 360ms;
+}
+.svc[data-armed] .svc-item-body.is-in .svc-check:nth-child(6) .svc-check-mark path {
+  transition-delay: 450ms;
+}
+
+/* ===========================================================================
+   MOVIMIENTO REDUCIDO — se apagan bucles y recorridos; el estado se conserva.
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .svc-closing-needle {
+    animation: none;
+  }
+
+  .svc-item-code,
+  .svc-tech,
+  .svc-card,
+  .svc-card-sheen,
+  .svc-step-dot-core,
+  .svc-closing-cta-arrow,
+  .svc-steps::after {
+    transition: none;
+  }
+
+  /* Las palomitas nacen ya dibujadas. */
+  .svc-check-mark path {
+    stroke-dashoffset: 0 !important;
+  }
+
+  /* Sin JS que mueva --progress, la sonda se muestra recorrida entera. */
+  .svc-steps {
+    --progress: 1;
+  }
+
+  .svc-step-dot-core {
+    background: var(--palette-amber);
+  }
+}

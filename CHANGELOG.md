@@ -554,3 +554,22 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - El refactor no cambia el resultado visual: cada vista sigue viéndose igual, pero la escenografía sale de un solo punto. Facilita que las futuras vistas (Servicios, etc.) monten su fondo con una sola línea (`<Seascape variant="full" />`).
 
+## [0.28.0] - 2026-07-25
+
+### Añadido
+
+- **Página de servicios — «la carta completa»** (`src/components/pages/Services/`, rutas `/servicios/` · `/en/services/`): la sección del Home enseña el mapa (tres servicios en una línea y las preguntas); esta página abre la carta entera. Tres bloques: el **catálogo** (cada servicio a fondo —qué incluye, para quién, stack—, con la clave de inventario `SFT/WEB/AUT` en voz mono), el **proceso** (cómo trabajamos por hitos, de la brújula a producción) y los **compromisos** (hechos, no adornos: propiedad total del código, sin ataduras, soporte real). Cierre con CTA al formulario del footer.
+- **Builder de imagen OG para la página** (`scripts/builders/services-og.ts`), registrado en `run-builders.ts`.
+- **`src/data/i18n.ts`** y **`locales/{es,en}.ts`**: esquema `servicesPage` completo con catálogo, proceso y compromisos en ambos idiomas.
+- **`src/data/schema.ts`**: la página de servicios se tipifica como `CollectionPage` y su slug se resuelve por `pageSlug`.
+- **Rutas** `/servicios.astro` y `/en/services.astro` (patrón ruta delgada → componente).
+
+### Cambiado
+
+- **Navbar y Footer**: el enlace «Servicios» deja de apuntar al ancla `#services` del Home y lleva a la página propia (`/servicios/` · `/en/services/`), con slug resuelto por `localizedPath`.
+
+### Técnico
+
+- La página monta `<Seascape variant="full">` + `<ViewHero>` del refactor anterior: una sola línea para el fondo y la portada. Los textos salen íntegramente de los locales; el componente no hardcodea copy.
+- Las plantillas de la sección intercalada de la página de Proyectos siguen el patrón «ladrillo» correcto: imagen grande (7fr) + texto pequeño (5fr), texto pequeño (5fr) + imagen grande (7fr), imagen grande (7fr) + texto pequeño (5fr). La imagen de negocios locales es del mismo tamaño que las otras dos, solo cambia de lado.
+

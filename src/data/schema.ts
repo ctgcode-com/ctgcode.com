@@ -224,6 +224,9 @@ function webPageType(pageName: string): string {
     // La bitácora no describe UNA cosa: enumera todo lo que hay a bordo.
     case 'projects':
       return 'CollectionPage';
+    // La carta de servicios tampoco: enumera el catálogo de lo que hacemos.
+    case 'services':
+      return 'CollectionPage';
     default:
       return 'WebPage';
   }

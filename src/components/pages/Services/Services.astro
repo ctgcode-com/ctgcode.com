@@ -1,0 +1,369 @@
+---
+/**
+ * Services (PÁGINA) — «la carta».
+ *
+ * NO repite la sección del Home. La sección enseña el mapa (tres servicios en
+ * una línea y las preguntas); esta página abre la carta entera: cada servicio
+ * A FONDO —con lo que incluye y para quién es—, CÓMO trabajamos (las fases) y
+ * los COMPROMISOS. Contenido propio (`servicesPage`), no un envoltorio de
+ * `services`.
+ *
+ * La estética es la del MAR pero VIVA y ASIMÉTRICA, distinta de la «bitácora»
+ * de proyectos (carta náutica en frío) y de la sección del Home:
+ *
+ *  - Portada con cáusticas de luz que derivan bajo el agua, un «ping» de sonar
+ *    que se expande y una luz que sigue al puntero; la rosa de los vientos
+ *    cuelga como marca de agua.
+ *  - El catálogo baja en ZIGZAG: el código gigante del servicio cruza de babor
+ *    a estribor asiento a asiento, en vez de una columna recta.
+ *  - El proceso es una línea de sonda que se LLENA a medida que se baja
+ *    (progreso ligado al scroll); cada fase se enciende al pasar.
+ *  - Los compromisos son placas con un brillo que cruza al pasar el puntero.
+ *
+ * Todo el movimiento respeta prefers-reduced-motion y nada decorativo desborda
+ * (los stages recortan sus capas): sin scroll horizontal.
+ */
+import Layout from "../../../layouts/Layout.astro";
+import Navbar from "../../global/Navbar/Navbar.astro";
+import Footer from "../../global/Footer/Footer.astro";
+import LangNotice from "../../global/LangNotice/LangNotice.astro";
+import CTA from "../../ui/CTA/CTA.astro";
+import Seascape from "../../backdrop/Seascape/Seascape.astro";
+import ViewHero from "../../sections/ViewHero/ViewHero.astro";
+import { locales } from "../../../data/i18n";
+import "./Services.css";
+
+/**
+ * Logotipos del stack — mismo criterio que en sections/Services: se importan
+ * con `?url` y se pintan con <img> (incrustarlos en línea rompería el diseño;
+ * varios traen clases/ids globales que se pisarían entre sí).
+ */
+import astroUrl from "../../../assets/astro.svg?url";
+import cssUrl from "../../../assets/css.svg?url";
+import fastapiUrl from "../../../assets/fastapi.svg?url";
+import htmxUrl from "../../../assets/htmx.svg?url";
+import javascriptUrl from "../../../assets/javascript.svg?url";
+import jinjaUrl from "../../../assets/jinja.svg?url";
+import postgresqlUrl from "../../../assets/postgresql.svg?url";
+import pythonUrl from "../../../assets/python.svg?url";
+import restApiUrl from "../../../assets/rest-api.svg?url";
+import rustUrl from "../../../assets/rust.svg?url";
+import typescriptUrl from "../../../assets/typescript.svg?url";
+
+const TECH: Record<string, { src: string; name: string }> = {
+  astro: { src: astroUrl, name: "Astro" },
+  css: { src: cssUrl, name: "CSS" },
+  fastapi: { src: fastapiUrl, name: "FastAPI" },
+  htmx: { src: htmxUrl, name: "htmx" },
+  javascript: { src: javascriptUrl, name: "JavaScript" },
+  jinja: { src: jinjaUrl, name: "Jinja" },
+  postgresql: { src: postgresqlUrl, name: "PostgreSQL" },
+  python: { src: pythonUrl, name: "Python" },
+  "rest-api": { src: restApiUrl, name: "REST API" },
+  rust: { src: rustUrl, name: "Rust" },
+  typescript: { src: typescriptUrl, name: "TypeScript" },
+};
+
+const techs = (keys: string[]) => keys.map((k) => TECH[k]).filter(Boolean);
+
+interface Props {
+  lang: keyof typeof locales;
+}
+
+const { lang } = Astro.props;
+const t = locales[lang].servicesPage;
+
+const ids = t.manifest.map((m) => m.href.replace(/^#/, ""));
+const [idCatalog, idProcess, idCommit] = ids;
+---
+
+<Layout
+  title={`${t.metaTitle} — CTG Code`}
+  description={t.metaDescription}
+  pageName="services"
+  lang={lang}
+>
+  <Navbar lang={lang} pageName="services" />
+
+  <main class="svc">
+    <!-- El fondo compartido del sitio: mar + cielo del atardecer + sol de la
+         marca + burbujas (idéntico a proyectos). -->
+    <Seascape variant="full" />
+
+    <!-- ══ PORTADA — el hero compartido del sitio ════════════════════════ -->
+    <ViewHero
+      lang={lang}
+      crumb={t.metaTitle}
+      eyebrow={t.eyebrow}
+      title={t.title}
+      titleMark={t.titleMark}
+      lead={t.lead}
+      manifest={t.manifest}
+    />
+
+    <!-- ══ 01 · EL CATÁLOGO — en zigzag ══════════════════════════════════ -->
+    <section id={idCatalog} class="svc-catalog" aria-labelledby="svc-catalog-title">
+      <div class="svc-wrap">
+        <header class="svc-head" data-reveal style="--i:0">
+          <p class="eyebrow svc-eyebrow">
+            <span class="svc-idx">01</span>
+            <span class="svc-sep">/</span>
+            {lang === "es" ? "el catálogo" : "the catalogue"}
+          </p>
+          <h2 id="svc-catalog-title" class="svc-head-title">
+            {lang === "es" ? "Tres formas de construir contigo" : "Three ways to build with you"}
+          </h2>
+        </header>
+
+        <ol class="svc-items" role="list">
+          {
+            t.catalog.map((s, i) => (
+              <li class="svc-item" data-side={i % 2 === 0 ? "left" : "right"}>
+                <!-- El código gigante: la marca de sonda del servicio. Cruza de
+                     lado a lado según la paridad (zigzag). -->
+                <div class="svc-item-mark" data-reveal style="--i:0">
+                  <span class="svc-item-code" aria-hidden="true">
+                    {s.code}
+                  </span>
+                  <span class="svc-item-num" aria-hidden="true">
+                    {s.idx}
+                  </span>
+                </div>
+
+                <div class="svc-item-body" data-reveal style="--i:1">
+                  <h3 class="svc-item-name">{s.name}</h3>
+                  <p class="svc-item-tagline">{s.tagline}</p>
+                  <p class="svc-item-desc">{s.body}</p>
+
+                  <div class="svc-item-cols">
+                    <div class="svc-item-col">
+                      <p class="svc-mini-label">{t.labels.deliverables}</p>
+                      <ul class="svc-checks" role="list">
+                        {s.deliverables.map((d) => (
+                          <li class="svc-check">
+                            <span class="svc-check-mark" aria-hidden="true">
+                              <svg viewBox="0 0 16 16" fill="none">
+                                <path
+                                  d="M3 8.5 L6.5 12 L13 4"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </span>
+                            <span>{d}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div class="svc-item-col">
+                      <p class="svc-mini-label">{t.labels.forWho}</p>
+                      <ul class="svc-tags" role="list">
+                        {s.forWho.map((w) => (
+                          <li class="svc-tag">{w}</li>
+                        ))}
+                      </ul>
+
+                      <p class="svc-mini-label svc-mini-label--stack">
+                        {t.labels.stack}
+                      </p>
+                      <ul class="svc-stack" role="list">
+                        {techs(s.stack).map((tech) => (
+                          <li class="svc-tech">
+                            <img
+                              src={tech.src}
+                              alt={tech.name}
+                              width="24"
+                              height="24"
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            <span class="svc-tech-name" aria-hidden="true">
+                              {tech.name}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══ 02 · CÓMO TRABAJAMOS — la sonda que se llena ══════════════════ -->
+    <section id={idProcess} class="svc-process" aria-labelledby="svc-process-title">
+      <div class="svc-wrap">
+        <header class="svc-head svc-head--center" data-reveal style="--i:0">
+          <p class="eyebrow svc-eyebrow svc-eyebrow--center">
+            <span class="svc-idx">{t.process.idx}</span>
+            <span class="svc-sep">/</span>
+            {t.process.eyebrow}
+          </p>
+          <h2 id="svc-process-title" class="svc-head-title">{t.process.titlePre}<br><span class="svc-hero-mark text-sunset">{t.process.titlePost}</span></h2>
+          <p class="svc-head-lead">{t.process.lead}</p>
+        </header>
+
+        <!-- La línea de sonda vive en el ::before del <ol>; el hilo lleno se
+             pinta encima con --progress (0→1), que mueve el script al bajar. -->
+        <ol class="svc-steps" role="list">
+          {
+            t.process.steps.map((step, i) => (
+              <li class="svc-step" data-reveal style={`--i:${i}`}>
+                <span class="svc-step-dot" aria-hidden="true">
+                  <span class="svc-step-dot-core" />
+                </span>
+                <div class="svc-step-copy">
+                  <p class="svc-step-idx" aria-hidden="true">
+                    {step.idx}
+                  </p>
+                  <h3 class="svc-step-name">{step.name}</h3>
+                  <p class="svc-step-body">{step.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══ 03 · COMPROMISOS + CIERRE ═════════════════════════════════════ -->
+    <section id={idCommit} class="svc-commit" aria-labelledby="svc-commit-title">
+      <div class="svc-wrap">
+        <header class="svc-head" data-reveal style="--i:0">
+          <p class="eyebrow svc-eyebrow">
+            <span class="svc-idx">{t.commitments.idx}</span>
+            <span class="svc-sep">/</span>
+            {t.commitments.eyebrow}
+          </p>
+          <h2 id="svc-commit-title" class="svc-head-title">
+            {t.commitments.title}
+          </h2>
+          <p class="svc-head-lead">{t.commitments.lead}</p>
+        </header>
+
+        <ul class="svc-commit-grid" role="list">
+          {
+            t.commitments.items.map((item, i) => (
+              <li class="svc-card" data-reveal style={`--i:${i}`}>
+                <span class="svc-card-sheen" aria-hidden="true" />
+                <p class="svc-card-code" aria-hidden="true">
+                  {item.code}
+                </p>
+                <h3 class="svc-card-title">{item.title}</h3>
+                <p class="svc-card-body">{item.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- El cierre: la marca de rumbo (aguja + coordenadas) a babor y el
+             texto con el CTA a estribor. El CTA baja al formulario del footer
+             de ESTA página (#contact); la flecha lo anuncia. -->
+        <aside class="svc-closing" data-reveal aria-labelledby="svc-closing-title">
+          <div class="svc-closing-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle class="svc-closing-ring" cx="60" cy="60" r="50"></circle>
+              <g class="svc-closing-ticks">
+                {
+                  Array.from({ length: 24 }).map((_, i) => (
+                    <line
+                      x1="60"
+                      y1="12"
+                      x2="60"
+                      y2={i % 6 === 0 ? "20" : "16"}
+                      transform={`rotate(${i * 15} 60 60)`}
+                    />
+                  ))
+                }
+              </g>
+              <path class="svc-closing-needle" d="M60 26 L70 78 L60 70 L50 78 Z"></path>
+              <circle class="svc-closing-hub" cx="60" cy="60" r="3.5"></circle>
+            </svg>
+            <span class="svc-closing-coords">10.4236° N · 75.5518° W</span>
+          </div>
+
+          <div class="svc-closing-body-wrap">
+            <p class="eyebrow svc-closing-eyebrow">{t.closing.eyebrow}</p>
+            <h2 id="svc-closing-title" class="svc-closing-title">
+              {t.closing.title}
+            </h2>
+            <p class="svc-closing-body">{t.closing.body}</p>
+            <CTA href="#contact" class="svc-closing-cta">
+              {t.closing.cta}
+              <span class="svc-closing-cta-arrow" aria-hidden="true">↓</span>
+            </CTA>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+
+  <LangNotice lang={lang} />
+</Layout>
+
+<script>
+  /**
+   * La vida de la página, guardada por prefers-reduced-motion:
+   *   1. Revelado escalonado al entrar en viewport (data-armed + IO).
+   *   2. La sonda del proceso que se LLENA con el scroll (variable --progress).
+   * El halo del hero que sigue al puntero lo maneja <SkyHeroFx>. Sin JS o con
+   * movimiento reducido: todo se ve fijo y completo desde el inicio.
+   */
+  const svc = document.querySelector<HTMLElement>(".svc");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (svc && !reduceMotion.matches) {
+    // 1 · Revelado ----------------------------------------------------------
+    svc.setAttribute("data-armed", "");
+    const revealables = Array.from(
+      svc.querySelectorAll<HTMLElement>("[data-reveal]"),
+    );
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+    revealables.forEach((el) => io.observe(el));
+
+    // 2 · La sonda del proceso se llena con el scroll -----------------------
+    const steps = svc.querySelector<HTMLElement>(".svc-steps");
+    if (steps) {
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const r = steps.getBoundingClientRect();
+        const vh = window.innerHeight;
+        // 0 cuando la lista entra por abajo; 1 cuando su base cruza el centro.
+        const start = vh * 0.85;
+        const end = vh * 0.5;
+        const p = (start - r.top) / (start - end + r.height);
+        steps.style.setProperty("--progress", String(Math.max(0, Math.min(1, p))));
+      };
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        },
+        { passive: true },
+      );
+      update();
+    }
+  }
+</script>

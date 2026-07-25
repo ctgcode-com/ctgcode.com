@@ -250,6 +250,74 @@ export type LocaleSchema = {
             items: { q: string; a: string }[];
         };
     };
+    /**
+     * La PÁGINA de servicios («la carta»). NO repite la sección del Home: va
+     * más a fondo. La sección enseña el mapa (tres servicios en una línea y las
+     * preguntas); esta página abre la carta entera —cada servicio con lo que
+     * incluye y para quién es—, añade CÓMO trabajamos (las fases) y los
+     * COMPROMISOS. Contenido propio, no un envoltorio de `services`.
+     */
+    servicesPage: {
+        /** Título y descripción PROPIOS (nunca los del home: penaliza SEO). */
+        metaTitle: string;
+        metaDescription: string;
+        eyebrow: string;
+        title: string;
+        /** Trozo del título que recibe el acento (gradiente de atardecer). */
+        titleMark: string;
+        lead: string;
+        /** Rótulos mono compartidos por las fichas. */
+        labels: {
+            deliverables: string;
+            forWho: string;
+            stack: string;
+        };
+        /** Índice de la portada: cada tramo con su ancla en la página. */
+        manifest: { idx: string; label: string; href: string }[];
+        /**
+         * El catálogo. Cada servicio se lee A FONDO —cuerpo largo, lo que
+         * incluye y a quién apunta—, no en la línea suelta de la sección.
+         */
+        catalog: {
+            idx: string;
+            /** Clave corta de tres letras (voz de inventario: SFT, WEB, AUT). */
+            code: string;
+            name: string;
+            /** Una línea que resume la promesa del servicio. */
+            tagline: string;
+            body: string;
+            /** Qué recibe el cliente (entregables reales del servicio). */
+            deliverables: string[];
+            /** Para quién es (perfiles/encargos típicos). */
+            forWho: string[];
+            /** CLAVES del registro de tecnologías (ver TECH en el componente). */
+            stack: string[];
+        }[];
+        /** Cómo trabajamos: las fases, de la idea a producción, por hitos. */
+        process: {
+            idx: string;
+            eyebrow: string;
+            titlePre: string;
+            titlePost: string;
+            lead: string;
+            steps: { idx: string; name: string; body: string }[];
+        };
+        /** Compromisos: cómo respondemos por el trabajo (hechos, no adornos). */
+        commitments: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            items: { code: string; title: string; body: string }[];
+        };
+        /** El cierre: la salida hacia el formulario del footer (#contact). */
+        closing: {
+            eyebrow: string;
+            title: string;
+            body: string;
+            cta: string;
+        };
+    };
     legal: {
         /** Etiqueta mono sobre el título del documento. */
         eyebrow: string;
@@ -367,6 +435,8 @@ export function pageSlug(
             return locales[lang].footer.termsSlug;
         case 'projects':
             return locales[lang].projects.indexSlug;
+        case 'services':
+            return locales[lang].services.indexSlug;
         default:
             return pageName;
     }

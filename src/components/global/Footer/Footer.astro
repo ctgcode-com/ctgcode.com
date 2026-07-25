@@ -45,7 +45,11 @@ const navItems = [
     label: t.nav.projects,
     href: localizedPath(lang, t.projects.indexSlug),
   },
-  { index: "03", label: t.nav.services, href: `${home}#services` },
+  {
+    index: "03",
+    label: t.nav.services,
+    href: localizedPath(lang, t.services.indexSlug),
+  },
 ];
 
 // Canales de atención. Estos mismos perfiles se declaran como `sameAs` en el
