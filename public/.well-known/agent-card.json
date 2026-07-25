@@ -1,0 +1,24 @@
+{
+  "name": "CTG Code",
+  "description": "Informational card for CTG Code, a software studio in Cartagena, Colombia (custom software, high-performance web development and automations). This describes a public, static informational web presence — not a live, invokable agent endpoint. To act, use the published skills or the direct contact channels.",
+  "url": "https://ctgcode.com",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "CTG Code",
+    "url": "https://ctgcode.com"
+  },
+  "documentationUrl": "https://ctgcode.com/llms.txt",
+  "skillsUrl": "https://ctgcode.com/.well-known/agent-skills/index.json",
+  "skills": [
+    {
+      "id": "submit-lead",
+      "name": "Submit a lead",
+      "description": "Submit a lead (name, email and project message) to CTG Code via the public contact form to request a quote or start a project.",
+      "tags": ["contact", "lead", "quote", "sales"]
+    }
+  ],
+  "contact": {
+    "email": "contacto@ctgcode.com",
+    "whatsapp": "+573052532602"
+  }
+}

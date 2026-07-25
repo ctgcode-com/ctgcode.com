@@ -1,0 +1,30 @@
+# CTG Code
+
+> Estudio de software en Cartagena de Indias (Colombia). Desarrollo de software a la medida y sitios web de alto rendimiento, con arquitectura limpia y velocidad medida, para clientes en Colombia y el resto del mundo.
+
+CTG Code es el estudio de David Serrano. Trabaja en remoto a nivel nacional e internacional. Cada proyecto se cotiza a precio cerrado sobre un alcance acordado, con hitos definidos y 30 días de garantía post-entrega. El sitio es bilingüe: español (por defecto) e inglés.
+
+## Servicios
+
+- [Desarrollo de Software a la Medida](https://ctgcode.com/#services): plataformas web complejas, paneles de administración y arquitecturas adaptadas al negocio, con foco en rendimiento, seguridad y escalabilidad. Stack: Python, FastAPI, PostgreSQL, TypeScript, Astro, Rust.
+- [Desarrollo Web de Alto Rendimiento](https://ctgcode.com/#services): sitios corporativos y landing pages optimizados al 100% en PageSpeed, enfocados en conversión, velocidad de carga y SEO. Stack: Astro, TypeScript, HTMX, Jinja.
+- [Automatizaciones e Integraciones](https://ctgcode.com/#services): integraciones a la medida e interfaces API para automatizar flujos operativos recurrentes y reducir tareas manuales. Stack: Python, FastAPI, REST API, PostgreSQL.
+
+## Proyectos
+
+- [Proyectos — la bitácora completa](https://ctgcode.com/proyectos/): sitios en producción, Helio (producto propio: sistema de gestión para talleres), tres plantillas web y tres automatizaciones listas para adaptar.
+- [Recogras — recograscolombia.com](https://recograscolombia.com/): sitio corporativo para una gestora ambiental de aceite de cocina usado en Cartagena. Astro estático. PageSpeed: 100 escritorio / 98 móvil, SEO 100, Accesibilidad 96.
+
+## Contacto
+
+- [Formulario de contacto](https://ctgcode.com/#contact): en el pie de página del sitio.
+- WhatsApp: +57 305 253 2602
+- Correo: contacto@ctgcode.com
+- Skill para agentes: [submit-lead](https://ctgcode.com/.well-known/agent-skills/index.json) — cómo enviar un lead mediante el formulario público.
+
+## Optional
+
+- [Inicio (EN)](https://ctgcode.com/en/) · [Projects (EN)](https://ctgcode.com/en/projects/)
+- [Política de Privacidad](https://ctgcode.com/privacidad/) · [Privacy Policy (EN)](https://ctgcode.com/en/privacy/)
+- [Términos y Condiciones](https://ctgcode.com/terminos/) · [Terms (EN)](https://ctgcode.com/en/terms/)
+- [Mapa del sitio (sitemap)](https://ctgcode.com/sitemap-index.xml)

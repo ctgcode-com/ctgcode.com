@@ -1,4 +1,4 @@
-# Authenticating with CTG Code
+# Auth.md — Authenticating with CTG Code
 
 CTG Code (https://ctgcode.com) is a public, static website. **No authentication is required.**
 

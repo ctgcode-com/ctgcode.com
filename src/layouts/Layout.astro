@@ -100,6 +100,7 @@ const schema = buildSchema({
     <meta name="robots" content={robots} />
     <meta name="googlebot" content={robots} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="describedby" type="application/json" href="/.well-known/agent-card.json" />
     <!-- Descubrimiento por agentes (RFC 9727): catálogo de recursos
          machine-readables del sitio, servido en /.well-known/api-catalog. -->
     <link rel="api-catalog" href="/.well-known/api-catalog" />

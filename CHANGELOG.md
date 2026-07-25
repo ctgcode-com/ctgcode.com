@@ -508,3 +508,21 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Se descartaron por diseño tres artefactos propuestos que no aplican a un sitio estático: la MCP `server-card.json` y la A2A `agent-card.json` anuncian un servidor/agente **invocable** (con endpoint y transporte) que el sitio no expone, y `agent-skills/index.json` queda huérfano sin ese agente. Publicar metadata de servicios inexistentes es engañoso y resta credibilidad; se añadirán como cards reales solo si se llega a exponer un endpoint de agente/MCP.
 - El `<link rel="sitemap">` ya existía; NO se añadió el `rel="service-doc"` propuesto hacia el sitemap (un sitemap no es documentación de servicio). El formato del linkset se corrigió al de RFC 9264 (la relación como clave con array de destinos), en vez del objeto plano `{anchor, rel, href}` propuesto.
 
+## [0.26.0] - 2026-07-24
+
+### Añadido
+
+- **Agent Skills Discovery** (RFC de Cloudflare, v0.2.0): `public/.well-known/agent-skills/index.json` que enumera una skill **real y honesta** — `submit-lead` — cuyo artefacto es `submit-lead/SKILL.md`: documenta cómo un agente envía un lead (nombre, email, mensaje) al formulario público mediante el endpoint Formspree del sitio (`https://formspree.io/f/xnjeaorj`), con guía de consentimiento. El index referencia el `SKILL.md` con su `digest` SHA-256 real, verificado contra el archivo desplegado.
+- **`public/llms.txt`** (llmstxt.org): resumen del estudio, servicios, proyectos y canales de contacto en la voz de la marca, con enlaces a ambos idiomas, para que los LLMs entiendan y citen el sitio de un vistazo.
+- **`public/.well-known/agent-card.json`** (descriptivo, enlazado con `rel="describedby"` desde el `<head>`): tarjeta que describe a la entidad CTG Code y remite a la skill `submit-lead` y a los canales de contacto. Es un documento **descriptivo**, no un endpoint de agente invocable (así se declara en su propia descripción).
+- **`robots.txt`**: `Disallow: /cdn-cgi/` en el grupo `User-agent: *` — las rutas de infraestructura de Cloudflare no son contenido y no deben rastrearse.
+
+### Cambiado
+
+- **`Content-Signal` abierto por completo**: `ai-train` pasa de `no` a `yes`. Coherente con la filosofía de máxima visibilidad del `robots.txt` (todos los agentes con `Allow: /`): ahora `search=yes, ai-input=yes, ai-train=yes` —que nos lean, nos citen y nos aprendan—.
+- **`public/auth.md`**: el H1 pasa a `# Auth.md — Authenticating with CTG Code` para incluir el literal «Auth.md» que esperan los validadores de descubrimiento de autenticación.
+
+### Técnico
+
+- Rectificaciones sobre la propuesta original: el `$schema` correcto de Agent Skills es `https://schemas.agentskills.io/discovery/0.2.0/schema.json` (no `agentskills.io/schema/...`); una skill del estándar es un artefacto `SKILL.md` con `digest`, no un endpoint —el URL de Formspree vive DENTRO del `SKILL.md`, no en el campo `url` del index—; y el nombre debe ser `submit-lead` (minúsculas y guiones; `submit_lead` con guion bajo es inválido). El digest se calcula sobre los bytes LF (como los sirve GitHub Pages). No se crea la MCP `server-card.json`: seguiría anunciando un servidor inexistente.
+

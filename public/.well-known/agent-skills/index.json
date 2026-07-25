@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "submit-lead",
+      "type": "skill-md",
+      "description": "Submit a lead (name, email and project message) to CTG Code to request a quote or start a project conversation, via the site's public contact form (Formspree).",
+      "url": "/.well-known/agent-skills/submit-lead/SKILL.md",
+      "digest": "sha256:2863f4207a829eec8e67330340089329d8f4a47984d94feb9c5efb8e205c42aa"
+    }
+  ]
+}
