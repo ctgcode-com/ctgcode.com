@@ -24,9 +24,10 @@ import Navbar from "../../global/Navbar/Navbar.astro";
 import Footer from "../../global/Footer/Footer.astro";
 import LangNotice from "../../global/LangNotice/LangNotice.astro";
 import CTA from "../../ui/CTA/CTA.astro";
-import Starfield from "../../backdrop/Starfield/Starfield.astro";
+import Seascape from "../../backdrop/Seascape/Seascape.astro";
+import ViewHero from "../../sections/ViewHero/ViewHero.astro";
 import StackList from "./StackList.astro";
-import { locales, localizedPath } from "../../../data/i18n";
+import { locales } from "../../../data/i18n";
 import "./Projects.css";
 
 /* La captura del sitio del cliente, en la cadena de respaldo del proyecto
@@ -93,7 +94,6 @@ const { lang } = Astro.props;
 const t = locales[lang].projectsPage;
 const t2 = locales[lang].projects;
 const pj = locales[lang].projects;
-const nav = locales[lang].nav;
 const featured = pj.featured;
 const L = t.labels;
 
@@ -112,105 +112,21 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
   <Navbar lang={lang} pageName="projects" />
 
   <main class="log">
-    <!-- Textura de fondo de toda la bitácora: carta náutica en frío (rejilla,
-         líneas de rumbo y lavados fríos que respiran). NO es el atardecer del
-         Home —nada de sol ni olas—: es el papel sobre el que se anota, y evita
-         que la noche quede como un plano negro liso. -->
-    <div class="log-backdrop" aria-hidden="true">
-      <!-- El cielo de la bóveda: un degradado que tiñe la franja alta (índigo/
-           violeta, como el cosmos del Home) y se disuelve en la noche. Es lo
-           que hace continua la costura portada → primer asiento. -->
-      <div class="log-sky"></div>
-      <div class="log-grid"></div>
-      <svg
-        class="log-rhumb"
-        viewBox="0 0 1200 1600"
-        preserveAspectRatio="xMidYMid slice"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g class="log-rhumb-lines">
-          {
-            Array.from({ length: 16 }).map((_, i) => (
-              <line
-                x1="1010"
-                y1="240"
-                x2={1010 + 1600 * Math.cos((i * Math.PI) / 8)}
-                y2={240 + 1600 * Math.sin((i * Math.PI) / 8)}
-              />
-            ))
-          }
-        </g>
-        <g class="log-rhumb-lines log-rhumb-lines--b">
-          {
-            Array.from({ length: 16 }).map((_, i) => (
-              <line
-                x1="150"
-                y1="1120"
-                x2={150 + 1600 * Math.cos((i * Math.PI) / 8 + Math.PI / 16)}
-                y2={1120 + 1600 * Math.sin((i * Math.PI) / 8 + Math.PI / 16)}
-              />
-            ))
-          }
-        </g>
-      </svg>
-      <div class="log-wash log-wash--a"></div>
-      <div class="log-wash log-wash--b"></div>
-      <div class="log-wash log-wash--c"></div>
-    </div>
+    <!-- El fondo compartido del sitio: el CUERPO es el MAR (con burbujas) y la
+         franja alta —el hero— es el CIELO del atardecer con el SOL de la marca
+         posado en el horizonte, disolviéndose en el agua. Vive en <Seascape>
+         para que todas las vistas compartan exactamente el mismo mar. -->
+    <Seascape variant="full" />
 
-    <!-- ══ ENCABEZADO — la portada del cuaderno, bajo la bóveda ══════════ -->
-    <!-- Sin data-tone: la portada es TRANSPARENTE y comparte el fondo de la
-         página (el cielo lo pinta .log-sky en el backdrop). Así no hay costura
-         entre la bóveda y el primer asiento: es un solo lienzo continuo. -->
-    <section class="bt-open" aria-labelledby="bt-title">
-      <Starfield />
-
-      <nav
-        class="bt-crumbs"
-        aria-label={lang === "es" ? "Migas de pan" : "Breadcrumb"}
-      >
-        <ol class="bt-crumbs-list" role="list">
-          <li class="bt-crumb">
-            <a class="bt-crumb-link" href={localizedPath(lang)}>{nav.home}</a>
-          </li>
-          <li class="bt-crumb" aria-current="page">
-            <span class="bt-crumb-here">{t.metaTitle}</span>
-          </li>
-        </ol>
-      </nav>
-
-      <div class="bt-open-wrap">
-        <header class="bt-open-copy">
-          <p class="eyebrow bt-open-eyebrow">{t.eyebrow}</p>
-          <h1 id="bt-title" class="bt-open-title">{t.title}</h1>
-          <p class="bt-open-lead">{t.lead}</p>
-        </header>
-
-        <!-- El manifiesto: el índice del cuaderno, en voz mono. Cuelga a
-             estribor y BAJO la línea del titular — no lo acompaña de igual
-             a igual. -->
-        <nav
-          class="bt-manifest"
-          aria-label={lang === "es" ? "Índice de la página" : "Page index"}
-        >
-          <ol class="bt-manifest-list" role="list">
-            {
-              t.manifest.map((entry) => (
-                <li class="bt-manifest-item">
-                  <a class="bt-manifest-link" href={entry.href}>
-                    <span class="bt-manifest-idx" aria-hidden="true">
-                      {entry.idx}
-                    </span>
-                    <span class="bt-manifest-rule" aria-hidden="true" />
-                    <span class="bt-manifest-label">{entry.label}</span>
-                  </a>
-                </li>
-              ))
-            }
-          </ol>
-        </nav>
-      </div>
-    </section>
+    <!-- ══ PORTADA — el hero compartido del sitio ════════════════════════ -->
+    <ViewHero
+      lang={lang}
+      crumb={t.metaTitle}
+      eyebrow={t.eyebrow}
+      title={t.title}
+      lead={t.lead}
+      manifest={t.manifest}
+    />
 
     <!-- ══ 01 · ENTREGADO ════════════════════════════════════════════════ -->
     <section

@@ -1,0 +1,98 @@
+---
+/**
+ * ViewHero — el HERO compartido de las vistas del sitio (el «esqueleto»).
+ *
+ * Mismo hueso para inicio, proyectos y servicios: bajo el cielo del atardecer
+ * (Seascape + SkyHeroFx), una portada con migas, eyebrow mono, titular grande
+ * (con un trozo acentuado opcional) y el ÍNDICE de la página colgando a
+ * estribor. Así, aunque cada página tenga su contenido, todas se leen igual.
+ *
+ * El ancho lo fija el estándar del sitio (var --wrap-view). Los colores están
+ * calibrados para leerse sobre el cielo (índigo arriba, magenta/rosa abajo).
+ */
+import { locales, localizedPath } from "../../../data/i18n";
+import SkyHeroFx from "../../backdrop/SkyHeroFx/SkyHeroFx.astro";
+import "./ViewHero.css";
+
+interface Props {
+  lang: keyof typeof locales;
+  /** Nombre de la vista para la miga final y el aria del titular. */
+  crumb: string;
+  eyebrow: string;
+  title: string;
+  /** Trozo del título que recibe el acento (gradiente de atardecer). Opcional. */
+  titleMark?: string;
+  lead: string;
+  manifest: { idx: string; label: string; href: string }[];
+}
+
+const { lang, crumb, eyebrow, title, titleMark, lead, manifest } = Astro.props;
+const nav = locales[lang].nav;
+
+/* El título se parte en tres para acentuar `titleMark`. Sin mark, se pinta
+   entero. */
+const mi = titleMark ? title.indexOf(titleMark) : -1;
+const pre = mi >= 0 ? title.slice(0, mi) : title;
+const post = mi >= 0 ? title.slice(mi + (titleMark as string).length) : "";
+---
+
+<section class="hv" data-sky-hero aria-labelledby="hv-title">
+  <SkyHeroFx />
+
+  <div class="hv-inner">
+    <nav
+      class="hv-crumbs"
+      aria-label={lang === "es" ? "Migas de pan" : "Breadcrumb"}
+    >
+      <ol class="hv-crumbs-list" role="list">
+        <li class="hv-crumb">
+          <a class="hv-crumb-link" href={localizedPath(lang)}>{nav.home}</a>
+        </li>
+        <li class="hv-crumb" aria-current="page">
+          <span class="hv-crumb-here">{crumb}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="hv-grid">
+      <header class="hv-copy">
+        <p class="eyebrow hv-eyebrow">{eyebrow}</p>
+        <h1 id="hv-title" class="hv-title">
+          {
+            mi >= 0 ? (
+              <Fragment>
+                {pre}
+                <span class="hv-mark text-sunset">{titleMark}</span>
+                {post}
+              </Fragment>
+            ) : (
+              title
+            )
+          }
+        </h1>
+        <p class="hv-lead">{lead}</p>
+      </header>
+
+      <nav
+        class="hv-manifest"
+        aria-label={lang === "es" ? "Índice de la página" : "Page index"}
+      >
+        <ol class="hv-manifest-list" role="list">
+          {
+            manifest.map((entry) => (
+              <li class="hv-manifest-item">
+                <a class="hv-manifest-link" href={entry.href}>
+                  <span class="hv-manifest-idx" aria-hidden="true">
+                    {entry.idx}
+                  </span>
+                  <span class="hv-manifest-rule" aria-hidden="true" />
+                  <span class="hv-manifest-label">{entry.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </div>
+  </div>
+</section>

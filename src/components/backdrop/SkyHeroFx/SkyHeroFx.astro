@@ -1,0 +1,57 @@
+---
+/**
+ * SkyHeroFx — las decoraciones del HERO bajo el cielo del atardecer.
+ *
+ * Compañero de <Seascape variant="full">: el Seascape pinta el cielo, el sol y
+ * el mar; esto le pone la VIDA al hero, igual en todas las vistas para que se
+ * lean como el mismo sitio:
+ *   · cirros que derivan por la bóveda,
+ *   · estrellas asomando SOLO en la franja azul alta (el cielo casi de noche),
+ *   · un halo cálido que sigue al puntero (colores del atardecer).
+ *
+ * Uso: hijo de la sección hero, y esa sección se marca con `data-sky-hero`
+ * (el script rastrea el puntero sobre ella). Postal estática con reduced-motion.
+ */
+import Cirrus from "../Cirrus/Cirrus.astro";
+import Starfield from "../Starfield/Starfield.astro";
+import "./SkyHeroFx.css";
+---
+
+<div class="skyfx" aria-hidden="true">
+  <Cirrus />
+  <Starfield />
+</div>
+
+<!-- El halo va en `position: fixed` (fuera del flujo del hero) para que NO lo
+     recorte la caja de la sección; lo controla el script vía --mx/--my. -->
+<span class="skyfx-cursorlight" aria-hidden="true"></span>
+
+<script>
+  /**
+   * Halo cálido que sigue al puntero en el hero. Solo vive mientras el puntero
+   * está DENTRO (.is-cursor) y se desvanece al salir. Coordenadas de viewport
+   * (px), porque el halo es `position: fixed`.
+   */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!reduceMotion.matches) {
+    document
+      .querySelectorAll<HTMLElement>("[data-sky-hero]")
+      .forEach((hero) => {
+        hero.addEventListener(
+          "pointermove",
+          (e) => {
+            hero.style.setProperty("--mx", `${e.clientX}px`);
+            hero.style.setProperty("--my", `${e.clientY}px`);
+          },
+          { passive: true },
+        );
+        hero.addEventListener("pointerenter", () =>
+          hero.classList.add("is-cursor"),
+        );
+        hero.addEventListener("pointerleave", () =>
+          hero.classList.remove("is-cursor"),
+        );
+      });
+  }
+</script>

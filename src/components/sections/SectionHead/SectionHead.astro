@@ -1,0 +1,36 @@
+---
+/**
+ * SectionHead — la cabecera de sección compartida (el «esqueleto»).
+ *
+ * Eyebrow mono con índice (01 / rótulo) + título grande + lead. Mismo ritmo y
+ * misma voz en todas las vistas, para que las secciones de proyectos y de
+ * servicios se lean iguales aunque su contenido difiera.
+ *
+ * Va marcada con `data-reveal` para engancharse al revelado al scroll de cada
+ * página (el IO de la vista la recoge sola).
+ */
+import "./SectionHead.css";
+
+interface Props {
+  idx: string;
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  /** id para el aria-labelledby de la sección contenedora. */
+  id?: string;
+  /** índice de escalonado del revelado (--i). */
+  reveal?: number;
+}
+
+const { idx, eyebrow, title, lead, id, reveal = 0 } = Astro.props;
+---
+
+<header class="sh" data-reveal style={`--i:${reveal}`}>
+  <p class="eyebrow sh-eyebrow">
+    <span class="sh-idx">{idx}</span>
+    <span class="sh-sep">/</span>
+    {eyebrow}
+  </p>
+  <h2 id={id} class="sh-title">{title}</h2>
+  {lead && <p class="sh-lead">{lead}</p>}
+</header>

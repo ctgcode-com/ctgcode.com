@@ -19,41 +19,10 @@
 
 main.log {
   position: relative;
-  background-color: var(--color-bg);
-  overflow: clip; /* recorta las líneas de rumbo que se salen del papel */
-}
-
-/* ===========================================================================
-   TEXTURA DE FONDO — la carta náutica en frío (NO el atardecer del Home)
-   Una capa única bajo toda la página: rejilla de carta, dos abanicos de
-   líneas de rumbo desde puntos opuestos y tres lavados fríos que respiran.
-   Fija (attachment por transform del scroll no; se deja estática y a toda la
-   altura del main). Todo en azules/violetas: el papel, no el cielo.
-   =========================================================================== */
-.log-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* El cielo de la bóveda: tiñe la franja alta con el índigo/violeta del cosmos
-   del Home y se disuelve en la noche antes de acabar la portada. Es la costura
-   continua: la portada (transparente) lo deja ver y el primer asiento sigue
-   sobre la misma noche, sin línea de corte. */
-.log-sky {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: clamp(80rem, 120vh, 110rem);
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--palette-indigo) 78%, var(--palette-night)) 0%,
-    color-mix(in oklab, var(--palette-indigo) 42%, var(--palette-night)) 42%,
-    color-mix(in oklab, var(--palette-violet) 20%, transparent) 74%,
-    transparent 100%
-  );
-  overflow: visible !important;
+  /* El fondo (mar + cielo del atardecer + burbujas) lo pinta <Seascape>, como
+     primer hijo. Aquí solo queda el color de respaldo y el recorte lateral. */
+  background-color: var(--palette-night);
+  overflow: clip;
 }
 
 .bt-metrics-and-quote {
@@ -168,115 +137,9 @@ main.log {
   color: var(--color-text-subtle);
 }
 
-/* La rejilla de la carta: finísima, se desvanece a los lados */
-.log-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklab, var(--palette-foam) 6%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--palette-foam) 6%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 3.5rem 3.5rem;
-  -webkit-mask-image: radial-gradient(
-    120% 80% at 50% 30%,
-    #000 40%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(120% 80% at 50% 30%, #000 40%, transparent 100%);
-  opacity: 0.6;
-}
+/* El mar y sus burbujas viven ahora en <Seascape> (backdrop compartido). */
 
-/* Los abanicos de rumbo: líneas larguísimas desde dos rosas invisibles */
-.log-rhumb {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.log-rhumb-lines line {
-  stroke: color-mix(in oklab, var(--palette-caribe) 30%, transparent);
-  stroke-width: 1;
-}
-
-.log-rhumb-lines--b line {
-  stroke: color-mix(in oklab, var(--palette-violet) 34%, transparent);
-}
-
-/* Lavados fríos: manchas suaves que dan hondura y matan el negro plano.
-   Colocadas a propósito bajo las columnas que quedaban vacías (babor de
-   Helio, babor de automatizaciones). */
-.log-wash {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.5;
-  will-change: transform;
-}
-
-.log-wash--a {
-  top: 4%;
-  left: -6%;
-  width: 42vw;
-  height: 42vw;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--palette-violet) 60%, transparent),
-    transparent 70%
-  );
-  animation: log-drift-a 26s var(--ease-soft) infinite alternate;
-}
-
-.log-wash--b {
-  top: 40%;
-  right: -10%;
-  width: 46vw;
-  height: 46vw;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--palette-deep) 72%, transparent),
-    transparent 70%
-  );
-  animation: log-drift-b 32s var(--ease-soft) infinite alternate;
-}
-
-.log-wash--c {
-  bottom: 8%;
-  left: 8%;
-  width: 40vw;
-  height: 40vw;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--palette-caribe) 46%, transparent),
-    transparent 70%
-  );
-  animation: log-drift-c 30s var(--ease-soft) infinite alternate;
-}
-
-@keyframes log-drift-a {
-  to {
-    transform: translate(6%, 4%) scale(1.12);
-  }
-}
-@keyframes log-drift-b {
-  to {
-    transform: translate(-5%, -3%) scale(1.1);
-  }
-}
-@keyframes log-drift-c {
-  to {
-    transform: translate(4%, -5%) scale(1.14);
-  }
-}
-
-/* Todo el contenido va POR ENCIMA del papel */
+/* Todo el contenido va POR ENCIMA del mar */
 .log > section {
   position: relative;
   z-index: 1;
@@ -543,112 +406,9 @@ main.log {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: min(116rem, 100%);
+  max-width: var(--wrap-view);
   margin-inline: auto;
   padding-inline: var(--content-padding);
-}
-
-/* ===========================================================================
-   PORTADA — la bóveda: el cuaderno se abre bajo las estrellas (cosmos)
-   =========================================================================== */
-.bt-open {
-  position: relative;
-  overflow-x: clip;
-  overflow-y: visible;
-  z-index: 2;
-  padding-inline: var(--content-padding);
-  padding-block: var(--space-2xl) var(--space-xl);
-}
-
-/* Un aliento violeta a babor: la bóveda no es plana. Es cielo estrellado, no
-   atardecer — el mismo recurso atmosférico que el cosmos del Home. */
-.bt-open::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    44% 42% at 22% 34%,
-    color-mix(in oklab, var(--palette-violet) 20%, transparent),
-    transparent 74%
-  );
-}
-
-.bt-open-wrap {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: min(116rem, 100%);
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-}
-
-.bt-open-title {
-  margin-top: var(--space-sm);
-  text-wrap: balance;
-}
-
-.bt-open-lead {
-  margin-top: var(--space-md);
-  max-width: 52ch;
-  font-size: var(--text-md);
-  color: var(--color-text-muted);
-}
-
-/* ---- El manifiesto: el índice del cuaderno ---------------------------------
-   Renglones numerados con la barra que se estira al pasar: la anotación se
-   subraya sola cuando la miras. */
-.bt-manifest-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: var(--border-thin) solid var(--color-border);
-}
-
-.bt-manifest-item {
-  border-bottom: var(--border-thin) solid var(--color-border);
-}
-
-.bt-manifest-link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding-block: var(--space-xs);
-  background-image: none; /* neutraliza el subrayado global de <a> */
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  transition: color var(--dur-fast) var(--ease-soft);
-}
-
-.bt-manifest-idx {
-  color: var(--palette-amber);
-}
-
-/* La barra: nace corta y se estira hacia el rótulo */
-.bt-manifest-rule {
-  width: var(--space-md);
-  height: 1px;
-  background: var(--color-border-strong);
-  transition:
-    width var(--dur-base) var(--ease-expo),
-    background-color var(--dur-base) var(--ease-soft);
-}
-
-.bt-manifest-link:hover,
-.bt-manifest-link:focus-visible {
-  color: var(--color-heading);
-}
-
-.bt-manifest-link:hover .bt-manifest-rule,
-.bt-manifest-link:focus-visible .bt-manifest-rule {
-  width: var(--space-xl);
-  background: var(--palette-amber);
 }
 
 @media (min-width: 48rem) {
@@ -662,31 +422,6 @@ main.log {
   /* Ajuste de margen superior de la reseña para alinearse perfectamente */
   .bt-metrics-and-quote .pj-quote {
     margin-top: 0;
-  }
-}
-
-@media (min-width: 60rem) {
-  .bt-open-wrap {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--space-2xl);
-    align-items: start;
-  }
-
-  .bt-open-copy {
-    grid-column: 1 / 8;
-  }
-
-  /* El índice NO acompaña al titular de igual a igual: cuelga a estribor y
-     BAJA, como una nota al margen escrita después. */
-  .bt-manifest {
-    grid-column: 9 / 13;
-    margin-top: clamp(4rem, 11vw, 9rem);
-  }
-
-  /* La entradilla entra sangrada: el bloque de texto no es un rectángulo. */
-  .bt-open-lead {
-    margin-inline-start: clamp(1rem, 3vw, 3rem);
   }
 }
 
@@ -1213,7 +948,16 @@ main.log {
 
   /* Intercalado: las IMPARES (1.ª y 3.ª) llevan la imagen a babor; la PAR (2.ª)
      la cruza a estribor invirtiendo el orden de la fila. Empieza y termina con
-     la imagen a la izquierda. */
+     la imagen a la izquierda.
+
+     CLAVE: al cruzar la fila hay que invertir TAMBIÉN las columnas (5fr 7fr en
+     vez de 7fr 5fr). Si no, la imagen cae en la columna estrecha y se ve más
+     pequeña que las demás. Así la imagen mide SIEMPRE lo mismo (la columna
+     ancha, 7fr) y solo cambia de lado — el patrón «ladrillo» que se busca. */
+  .bt-tpl:nth-child(even) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
   .bt-tpl:nth-child(even) .bt-frame {
     order: 2;
   }
@@ -1427,54 +1171,6 @@ main.log {
 }
 
 /* ===========================================================================
-   MIGAS DE PAN — la posición en el sitio, en voz mono, bajo las estrellas
-   =========================================================================== */
-.bt-crumbs {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: min(116rem, 100%);
-  margin-inline: auto;
-  margin-bottom: var(--space-lg);
-}
-
-.bt-crumbs-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2xs);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-}
-
-/* El separador «/» lo pone el diseño entre migas */
-.bt-crumb + .bt-crumb::before {
-  content: "/";
-  margin-inline-end: var(--space-2xs);
-  color: var(--color-text-subtle);
-}
-
-.bt-crumb-link {
-  background-image: none; /* neutraliza el subrayado global de <a> */
-  color: var(--color-text-muted);
-  transition: color var(--dur-fast) var(--ease-soft);
-}
-
-.bt-crumb-link:hover,
-.bt-crumb-link:focus-visible {
-  color: var(--palette-amber);
-}
-
-.bt-crumb-here {
-  color: var(--color-text-subtle);
-}
-
-/* ===========================================================================
    BLUEPRINT (Helio) — el plano del producto, dibujándose bajo una línea de
    escaneo. Hace de visual de la columna derecha. En móvil ocupa alto de más
    sin aportar, así que se OCULTA (el texto va a lo suyo).
@@ -1667,7 +1363,6 @@ main.log {
    todo, no solo acelerado).
 --------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .log-wash,
   .bp-scan {
     animation: none;
   }

@@ -1,0 +1,149 @@
+/* ===========================================================================
+   SEASCAPE — el fondo compartido «atardecer → mar» (co-ubicado con .astro)
+
+   Una sola capa detrás del contenido: el AGUA (base fría que se hunde en la
+   noche) + las BURBUJAS que la recorren, y arriba el CIELO del atardecer con el
+   sol (variante `full`) o un brillo de luz entrando al agua (variante `water`).
+   Todo lo animado usa solo transform/opacity; se apaga con reduced-motion.
+   =========================================================================== */
+
+.seascape {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* El MAR: agua honda y fría que se hunde en la noche (temple `sea`). */
+  background-color: color-mix(in oklab, var(--palette-deep) 26%, var(--palette-night));
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--palette-deep) 30%, var(--palette-abyss-violet)) 0%,
+    color-mix(in oklab, var(--palette-deep) 22%, var(--palette-night)) 58%,
+    var(--palette-night) 100%
+  );
+}
+
+/* ===========================================================================
+   EL CIELO DEL ATARDECER (variante `full`) — solo la franja alta (el hero)
+   La columna del ocaso baja de la bóveda índigo al fuego del horizonte y se
+   DISUELVE en el mar: esa disolución es la línea de mar. Colores a saturación
+   PLENA (no mezclados con la noche, que los apagaría a «cosmos»).
+   =========================================================================== */
+.sea-sky {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(44rem, 92vh, 64rem);
+  overflow: visible;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--palette-indigo) 86%, var(--palette-night)) 0%,
+    var(--palette-indigo) 20%,
+    var(--palette-violet) 42%,
+    var(--palette-magenta) 61%,
+    var(--palette-rose) 77%,
+    color-mix(in oklab, var(--palette-coral) 62%, transparent) 90%,
+    transparent 100%
+  );
+}
+
+/* EL SOL — resplandor cálido, abstracto, posado en el horizonte a estribor
+   (el sol de la marca). Sangra sobre el agua y respira despacio. */
+.sea-sky::after {
+  content: "";
+  position: absolute;
+  left: 74%;
+  bottom: 0;
+  width: clamp(26rem, 52vw, 44rem);
+  aspect-ratio: 1;
+  translate: -50% 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-amber) 88%, transparent) 0%,
+    color-mix(in oklab, var(--palette-coral) 60%, transparent) 26%,
+    color-mix(in oklab, var(--palette-scarlet) 34%, transparent) 46%,
+    transparent 68%
+  );
+  filter: blur(6px);
+  opacity: 0.72;
+  animation: sea-sun 9s var(--ease-soft) infinite alternate;
+}
+
+@keyframes sea-sun {
+  to {
+    opacity: 0.9;
+    translate: -50% 50%;
+    scale: 1.06;
+  }
+}
+
+/* ===========================================================================
+   LA LUZ ENTRANDO AL AGUA (variante `water`) — para las vistas sin hero
+   Un charco de luz fría que se filtra por la superficie (arriba-centro) y se
+   apaga con la profundidad. Sobrio: es el mar, sin cielo del atardecer.
+   =========================================================================== */
+.sea-topglow {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(22rem, 48vh, 40rem);
+  background:
+    radial-gradient(
+      120% 100% at 50% -12%,
+      color-mix(in oklab, var(--palette-turquesa) 24%, transparent) 0%,
+      color-mix(in oklab, var(--palette-caribe) 12%, transparent) 38%,
+      transparent 76%
+    );
+}
+
+/* ===========================================================================
+   LAS BURBUJAS DEL MAR — cáusticas de luz que derivan a lo largo del cuerpo
+   `screen` las suma al agua en vez de taparla. Una sola regla + variables.
+   =========================================================================== */
+.sea-bubble {
+  position: absolute;
+  top: var(--top);
+  left: var(--left);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  will-change: transform;
+  animation: sea-bubble-drift var(--dur, 28s) var(--ease-soft) var(--delay, 0s)
+    infinite alternate;
+}
+
+.sea-bubble[data-hue="turquesa"] {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-turquesa) 42%, transparent),
+    transparent 68%
+  );
+}
+
+.sea-bubble[data-hue="caribe"] {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-caribe) 46%, transparent),
+    transparent 68%
+  );
+}
+
+@keyframes sea-bubble-drift {
+  to {
+    transform: translate(var(--dx, 5%), var(--dy, -4%)) scale(1.12);
+  }
+}
+
+/* ===========================================================================
+   MOVIMIENTO REDUCIDO — el agua se queda quieta (postal), sin recorridos.
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .sea-bubble,
+  .sea-sky::after {
+    animation: none;
+  }
+}

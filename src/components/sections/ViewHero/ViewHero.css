@@ -1,0 +1,177 @@
+/* ===========================================================================
+   VIEW HERO — el hero compartido de las vistas (co-ubicado con ViewHero.astro)
+   Bajo el cielo del atardecer: migas + eyebrow + titular + lead, con el índice
+   colgando a estribor y más abajo (asimetría intencional). Colores calibrados
+   para leerse sobre el cielo (índigo arriba, magenta/rosa hacia el horizonte).
+   =========================================================================== */
+
+.hv {
+  position: relative;
+  overflow-x: clip;
+  padding-block: clamp(var(--space-2xl), 12vw, var(--space-3xl));
+}
+
+.hv-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--wrap-view);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* ---- Migas de pan --------------------------------------------------------- */
+.hv-crumbs {
+  margin-bottom: var(--space-xl);
+}
+
+.hv-crumbs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.hv-crumb + .hv-crumb::before {
+  content: "/";
+  margin-inline-end: var(--space-2xs);
+  color: var(--color-text-muted);
+}
+
+.hv-crumb-link {
+  background-image: none;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.hv-crumb-link:hover,
+.hv-crumb-link:focus-visible {
+  color: var(--palette-amber);
+}
+
+.hv-crumb-here {
+  color: var(--color-text); /* sand: legible sobre el cielo */
+}
+
+/* ---- Titular + índice (asimétrico) ---------------------------------------- */
+.hv-grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 64rem) {
+  .hv-grid {
+    /* La copia se lleva el ancho sobrante; el índice ocupa lo justo (13–16rem)
+       y cuelga a estribor. Con esto el titular respira y envuelve en 2 líneas. */
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 16rem);
+    align-items: end;
+    column-gap: var(--space-xl);
+  }
+}
+
+.hv-eyebrow {
+  color: var(--palette-turquesa);
+}
+
+.hv-title {
+  margin-top: var(--space-sm);
+  /* Sin tope en `ch`: el título usa el ancho de su columna y solo envuelve
+     cuando la pantalla lo exige. */
+  font-size: clamp(2.5rem, 1.1rem + 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: var(--tracking-tighter);
+  text-wrap: balance;
+}
+
+/* El trozo acentuado hereda el gradiente de .text-sunset y brilla despacio. */
+.hv-mark {
+  background-size: 220% auto;
+  animation: hv-shimmer 7s var(--ease-soft) infinite;
+}
+
+@keyframes hv-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.hv-lead {
+  margin-top: var(--space-lg);
+  max-width: 54ch;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+/* El índice cae más abajo que el titular (asimetría intencional). */
+.hv-manifest {
+  align-self: end;
+}
+
+.hv-manifest-list {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+.hv-manifest-link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+  background-image: none;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.hv-manifest-idx {
+  color: var(--palette-amber);
+}
+
+/* La barra entre el número y el rótulo; se enciende al pasar. */
+.hv-manifest-rule {
+  height: var(--border-thin);
+  background: linear-gradient(to right, var(--color-border-strong), transparent);
+  transition: background var(--dur-base) var(--ease-soft);
+}
+
+.hv-manifest-label {
+  justify-self: end;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.hv-manifest-link:hover,
+.hv-manifest-link:focus-visible {
+  color: var(--color-heading);
+}
+
+.hv-manifest-link:hover .hv-manifest-label,
+.hv-manifest-link:focus-visible .hv-manifest-label {
+  color: var(--palette-amber);
+}
+
+.hv-manifest-link:hover .hv-manifest-rule,
+.hv-manifest-link:focus-visible .hv-manifest-rule {
+  background: linear-gradient(to right, var(--palette-amber), transparent);
+}

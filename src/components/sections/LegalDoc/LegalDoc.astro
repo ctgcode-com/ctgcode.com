@@ -16,6 +16,7 @@
  */
 import { locales, type LegalDocument } from "../../../data/i18n";
 import { legalEntity, legalDataPending } from "../../../data/legal";
+import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import "./LegalDoc.css";
 
 interface Props {
@@ -31,6 +32,11 @@ const index = (i: number): string => String(i + 1).padStart(2, "0");
 ---
 
 <main class="legal section" data-tone="night">
+  <!-- Las vistas legales son COMPLETAMENTE AGUA (sin cielo del atardecer, sin
+       hero): solo el mar con un brillo frío entrando por arriba —la luz
+       penetrando la superficie—. -->
+  <Seascape variant="water" />
+
   <article class="lg-doc">
     <header class="lg-head">
       <p class="eyebrow">{t.eyebrow}</p>

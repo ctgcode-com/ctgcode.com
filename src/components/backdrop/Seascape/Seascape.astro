@@ -1,0 +1,60 @@
+---
+/**
+ * Seascape — el fondo compartido «atardecer → mar» del sitio.
+ *
+ * Nace de la página de proyectos (al usuario le encantó) y ahora es el ESTÁNDAR
+ * de fondo de todas las vistas, para que —estés donde estés— se entienda que es
+ * CTG Code. Encapsula el mar y su cielo en un solo lugar, con dos variantes:
+ *
+ *   · `full`  → el mar entero CON su cielo del atardecer en la franja alta
+ *               (el hero): bóveda índigo→violeta→magenta→coral y el SOL de la
+ *               marca posado en el horizonte, disolviéndose en el agua.
+ *   · `water` → solo agua, SIN cielo, con un brillo frío entrando por arriba
+ *               (la luz penetrando la superficie del mar). Para las vistas sin
+ *               hero (legales).
+ *
+ * Las «burbujas» (cáusticas de luz a la deriva) recorren el CUERPO en ambas.
+ *
+ * Uso: primer hijo de un contenedor con `position: relative; overflow-x: clip`;
+ * se pinta detrás del contenido (z-index 0, aria-hidden). Las decoraciones del
+ * hero (cirros, estrellas, halo del cursor) NO viven aquí —son del patrón de
+ * hero—: esto es solo el agua y el cielo.
+ */
+import "./Seascape.css";
+
+interface Props {
+  variant?: "full" | "water";
+}
+
+const { variant = "full" } = Astro.props;
+
+/* Las burbujas del mar: cáusticas repartidas A LO LARGO del cuerpo. Se generan
+   aquí (una sola regla CSS + variables por burbuja). Arrancan bajo el cielo
+   (>15%) para vivir en el agua, no en el hero. */
+const bubbles = [
+  { top: "16%", left: "-4%", size: "34vw", hue: "turquesa", dur: "26s", delay: "0s", dx: "6%", dy: "5%" },
+  { top: "26%", left: "72%", size: "40vw", hue: "caribe", dur: "32s", delay: "-6s", dx: "-7%", dy: "3%" },
+  { top: "37%", left: "8%", size: "30vw", hue: "turquesa", dur: "28s", delay: "-3s", dx: "5%", dy: "-4%" },
+  { top: "48%", left: "78%", size: "36vw", hue: "caribe", dur: "34s", delay: "-10s", dx: "-6%", dy: "-3%" },
+  { top: "60%", left: "-6%", size: "38vw", hue: "caribe", dur: "30s", delay: "-4s", dx: "6%", dy: "4%" },
+  { top: "71%", left: "70%", size: "32vw", hue: "turquesa", dur: "27s", delay: "-8s", dx: "-5%", dy: "-5%" },
+  { top: "82%", left: "6%", size: "34vw", hue: "turquesa", dur: "31s", delay: "-2s", dx: "5%", dy: "3%" },
+  { top: "92%", left: "74%", size: "30vw", hue: "caribe", dur: "29s", delay: "-12s", dx: "-6%", dy: "-4%" },
+];
+---
+
+<div class="seascape" data-variant={variant} aria-hidden="true">
+  {/* El cielo del atardecer (solo con hero) — o el brillo de luz entrando al
+      agua (legales). */}
+  {variant === "full" ? <div class="sea-sky"></div> : <div class="sea-topglow"></div>}
+
+  {
+    bubbles.map((b) => (
+      <span
+        class="sea-bubble"
+        data-hue={b.hue}
+        style={`--top:${b.top};--left:${b.left};--size:${b.size};--dur:${b.dur};--delay:${b.delay};--dx:${b.dx};--dy:${b.dy}`}
+      />
+    ))
+  }
+</div>

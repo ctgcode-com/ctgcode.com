@@ -10,17 +10,16 @@
 
 .legal {
   position: relative;
+  overflow-x: clip; /* contiene las burbujas del Seascape que rozan los cantos */
   padding-inline: var(--content-padding);
-  /* Un aliento de índigo arriba: enlaza con el cosmos del resto del sitio sin
-     montar una escena. Es lo único decorativo del documento. */
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--palette-indigo) 26%, transparent) 0%,
-    transparent 32rem
-  );
+  /* El fondo (agua + brillo superior) lo pone el <Seascape variant="water">;
+     aquí ya no se pinta escena propia. */
 }
 
 .lg-doc {
+  /* Por encima del agua del Seascape. */
+  position: relative;
+  z-index: 1;
   /* Medida de lectura corta: lo contrario del ancho completo del resto del
      sitio. Un documento se lee, no se recorre. */
   max-width: 46rem;

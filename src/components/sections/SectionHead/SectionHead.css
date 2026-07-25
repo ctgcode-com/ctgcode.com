@@ -1,0 +1,39 @@
+/* ===========================================================================
+   SECTION HEAD — cabecera de sección compartida (co-ubicado con .astro)
+   El título usa el ancho disponible (sin tope en `ch`); la medida de lectura
+   se conserva solo en el lead.
+   =========================================================================== */
+
+.sh {
+  max-width: none;
+}
+
+.sh-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.sh-idx {
+  color: var(--palette-amber);
+}
+
+.sh-sep {
+  color: var(--color-text-subtle);
+}
+
+.sh-title {
+  margin-top: var(--space-sm);
+  font-size: clamp(1.85rem, 1.1rem + 3vw, 3.25rem);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.sh-lead {
+  margin-top: var(--space-md);
+  max-width: 54ch;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}

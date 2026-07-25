@@ -536,3 +536,21 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - **NO se fabrica infraestructura OAuth**: publicar un `/.well-known/oauth-authorization-server` con un `register_uri` o un `oauth-protected-resource` que apuntan a servicios inexistentes sería metadata falsa, no funcional y un anti-patrón de seguridad. El sitio es público y estático: la respuesta correcta a «¿cómo registro un agente?» es «no hace falta», y así se documenta. Si un validador exige endpoints OAuth reales, ese check no aplica a este tipo de sitio y su rojo es un falso negativo.
 
+## [0.27.0] - 2026-07-25
+
+### Añadido
+
+- **Fondo marino compartido `Seascape`** (`src/components/backdrop/Seascape/`): nuevo componente de escenografía que unifica el mar con burbujas, el cielo del atardecer y el sol de la marca en un único backdrop reutilizable. Acepta `variant` (`full` para vistas con cielo + mar, `water` para solo el agua) de modo que cada vista (Home, Proyectos, Servicios, páginas legales) monte exactamente el mismo mar sin duplicar CSS ni lógica. Incluye `SkyHeroFx` (`src/components/backdrop/SkyHeroFx/`), que pinta la franja de cielo con el sol posado en el horizonte.
+- **Hero reutilizable `ViewHero`** (`src/components/sections/ViewHero/`): portada compartida con miga de pan, eyebrow, título, entradilla y manifiesto (índice en voz mono). Sustituye al hero artesanal que Projects tenía en línea (portada + cielo + estrellas) y se usará igual en Servicios.
+- **Cabecera de sección `SectionHead`** (`src/components/sections/SectionHead/`): bloque de cabecera reutilizable (eyebrow + título + entradilla) para las secciones internas de las páginas.
+- **Token `--wrap-view`** (`src/styles/tokens.css`): ancho estándar de las vistas (hero + cuerpo), para que Proyectos y Servicios compartan esqueleto.
+
+### Cambiado
+
+- **Proyectos (`Projects.astro` + `Projects.css`)**: la portada propia (cielo estrellado, carta náutica, líneas de rumbo, lavados fríos) se retira y se sustituye por `<Seascape variant="full">` + `<ViewHero>`. Se eliminan ~420 líneas de CSS de fondo artesanal y ~90 de Astro; el resultado visual es el mismo mar del Home con la portada compartida.
+- **Páginas legales (`LegalDoc.astro` + `LegalDoc.css`)**: el gradiente índigo propio se sustituye por `<Seascape variant="water">` (solo agua, sin cielo). Las burbujas del Seascape se contienen con `overflow-x: clip` y el documento se apila sobre el agua con `z-index: 1`.
+
+### Técnico
+
+- El refactor no cambia el resultado visual: cada vista sigue viéndose igual, pero la escenografía sale de un solo punto. Facilita que las futuras vistas (Servicios, etc.) monten su fondo con una sola línea (`<Seascape variant="full" />`).
+

@@ -278,6 +278,10 @@
   --container-max: 96rem; /* tope absoluto     */
   --content-padding: clamp(1.25rem, 0.6rem + 3.5vw, 3rem);
 
+  /* Ancho ESTÁNDAR de las vistas (hero + cuerpo): el «punto medio» unificado
+     del sitio, para que inicio, proyectos y servicios compartan esqueleto. */
+  --wrap-view: min(96rem, 100%);
+
   /* -------------------------------------------------------------------------
      CAPAS (z-index) — sin números mágicos sueltos
   ------------------------------------------------------------------------- */

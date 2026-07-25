@@ -1,0 +1,72 @@
+/* ===========================================================================
+   SKY HERO FX — decoraciones del hero (co-ubicado con SkyHeroFx.astro)
+   Cirros + estrellas (solo en la franja azul) + halo cálido del cursor.
+   Compartido por todos los heroes con cielo del atardecer.
+   =========================================================================== */
+
+.skyfx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Un aliento cálido a babor (magenta encendido) que equilibra el peso del sol
+   a estribor. Va tras los cirros/estrellas. */
+.skyfx::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    46% 44% at 20% 30%,
+    color-mix(in oklab, var(--palette-magenta) 24%, transparent),
+    transparent 74%
+  );
+}
+
+/* LAS ESTRELLAS: solo en la franja azul ALTA del cielo (casi noche); se
+   desvanecen antes del calor del horizonte. Sin la carta celeste del Home
+   —aquí queremos estrellitas de fondo, no el mapa de navegación—. */
+.skyfx .sf-chart {
+  display: none;
+}
+
+.skyfx .starfield {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 28%,
+    transparent 58%
+  );
+  mask-image: linear-gradient(to bottom, #000 0%, #000 28%, transparent 58%);
+}
+
+/* EL HALO CÁLIDO que sigue al puntero. `position: fixed` para que no lo recorte
+   la caja del hero; por encima del contenido pero DEBAJO del navbar. Nace
+   apagado; solo se enciende con el puntero dentro (.is-cursor en el hero). */
+.skyfx-cursorlight {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) - 1);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  background: radial-gradient(
+    24rem 24rem at var(--mx, 50vw) var(--my, 30vh),
+    color-mix(in oklab, var(--palette-coral) 26%, transparent) 0%,
+    color-mix(in oklab, var(--palette-amber) 14%, transparent) 34%,
+    transparent 62%
+  );
+  transition: opacity var(--dur-slower) var(--ease-tide);
+}
+
+[data-sky-hero].is-cursor .skyfx-cursorlight {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skyfx-cursorlight {
+    display: none;
+  }
+}
