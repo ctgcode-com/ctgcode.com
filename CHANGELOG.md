@@ -526,3 +526,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - Rectificaciones sobre la propuesta original: el `$schema` correcto de Agent Skills es `https://schemas.agentskills.io/discovery/0.2.0/schema.json` (no `agentskills.io/schema/...`); una skill del estándar es un artefacto `SKILL.md` con `digest`, no un endpoint —el URL de Formspree vive DENTRO del `SKILL.md`, no en el campo `url` del index—; y el nombre debe ser `submit-lead` (minúsculas y guiones; `submit_lead` con guion bajo es inválido). El digest se calcula sobre los bytes LF (como los sirve GitHub Pages). No se crea la MCP `server-card.json`: seguiría anunciando un servidor inexistente.
 
+## [0.26.1] - 2026-07-24
+
+### Cambiado
+
+- **`public/auth.md` reescrito para describir explícitamente la postura de autenticación y registro de agentes** (lo que buscan los validadores tipo WorkOS `auth.md`), pero **en negación veraz**: declara punto por punto que no hay autenticación, ni registro de agentes/`register_uri` (RFC 7591 no aplica), ni recursos protegidos, ni servidor OAuth (`/.well-known/oauth-authorization-server` RFC 8414 ni `/.well-known/oauth-protected-resource` RFC 9728), y explica cómo un agente debe acceder (fetch directo, sitemap, `llms.txt`, la skill `submit-lead`). El H1 conserva el literal «Auth.md».
+
+### Técnico
+
+- **NO se fabrica infraestructura OAuth**: publicar un `/.well-known/oauth-authorization-server` con un `register_uri` o un `oauth-protected-resource` que apuntan a servicios inexistentes sería metadata falsa, no funcional y un anti-patrón de seguridad. El sitio es público y estático: la respuesta correcta a «¿cómo registro un agente?» es «no hace falta», y así se documenta. Si un validador exige endpoints OAuth reales, ese check no aplica a este tipo de sitio y su rojo es un falso negativo.
+
