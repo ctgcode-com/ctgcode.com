@@ -573,3 +573,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - La página monta `<Seascape variant="full">` + `<ViewHero>` del refactor anterior: una sola línea para el fondo y la portada. Los textos salen íntegramente de los locales; el componente no hardcodea copy.
 - Las plantillas de la sección intercalada de la página de Proyectos siguen el patrón «ladrillo» correcto: imagen grande (7fr) + texto pequeño (5fr), texto pequeño (5fr) + imagen grande (7fr), imagen grande (7fr) + texto pequeño (5fr). La imagen de negocios locales es del mismo tamaño que las otras dos, solo cambia de lado.
 
+## [0.28.1] - 2026-07-25
+
+### Añadido
+
+- **Microsoft Clarity** (mapas de calor / grabaciones de sesión) integrado con **Consent Mode v2** (`src/layouts/Layout.astro`): la cola `clarity(...)` se crea de inmediato, pero la librería **solo se inyecta si hay consentimiento** (lectura de `ctg-cookie-consent` en `localStorage`) o cuando el banner lo concede (evento `ctg-consent-resolved`). Así no se contradice la Política de Privacidad (todo denegado por defecto).
+
+### Cambiado
+
+- **CSP ampliada** (`Layout.astro`): se añaden `https://*.clarity.ms` y `https://c.bing.com` a `script-src`, `connect-src` e `img-src` para que Clarity no viole la Content-Security-Policy.
+
