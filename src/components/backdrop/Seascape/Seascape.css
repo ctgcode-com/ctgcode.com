@@ -46,38 +46,7 @@
   );
 }
 
-/* EL SOL — resplandor cálido, abstracto, posado en el horizonte a estribor
-   (el sol de la marca). Sangra sobre el agua y respira despacio. */
-.sea-sky::after {
-  content: "";
-  position: absolute;
-  left: 74%;
-  bottom: 0;
-  width: clamp(26rem, 52vw, 44rem);
-  aspect-ratio: 1;
-  translate: -50% 50%;
-  border-radius: 50%;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--palette-amber) 88%, transparent) 0%,
-    color-mix(in oklab, var(--palette-coral) 60%, transparent) 26%,
-    color-mix(in oklab, var(--palette-scarlet) 34%, transparent) 46%,
-    transparent 68%
-  );
-  filter: blur(6px);
-  opacity: 0.72;
-  animation: sea-sun 9s var(--ease-soft) infinite alternate;
-}
 
-@keyframes sea-sun {
-  to {
-    opacity: 0.9;
-    translate: -50% 50%;
-    scale: 1.06;
-  }
-}
 
 /* ===========================================================================
    LA LUZ ENTRANDO AL AGUA (variante `water`) — para las vistas sin hero
@@ -135,6 +104,56 @@
 @keyframes sea-bubble-drift {
   to {
     transform: translate(var(--dx, 5%), var(--dy, -4%)) scale(1.12);
+  }
+}
+
+/* ===========================================================================
+   LA ONDA AL TOCAR EL CUERPO — un anillo que se abre sobre el agua (como la
+   estrella del cielo, pero aquí es agua). Nace donde tocas y se disuelve.
+   `position: fixed` (coordenadas de viewport) para no depender de ancestros.
+   =========================================================================== */
+.sea-ripple {
+  position: fixed;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: -0.8rem 0 0 -0.8rem;
+  border-radius: 50%;
+  border: 1.5px solid
+    color-mix(in oklab, var(--palette-turquesa) 72%, transparent);
+  pointer-events: none;
+  z-index: calc(var(--z-header) - 1);
+  mix-blend-mode: screen;
+  animation: sea-ripple 900ms var(--ease-expo) forwards;
+}
+
+/* Un segundo anillo interior, más tenue y con leve retraso: doble onda. */
+.sea-ripple::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid
+    color-mix(in oklab, var(--palette-caribe) 60%, transparent);
+  animation: sea-ripple 900ms var(--ease-expo) 120ms forwards;
+}
+
+@keyframes sea-ripple {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  16% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(3.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sea-ripple {
+    display: none;
   }
 }
 

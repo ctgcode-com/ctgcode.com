@@ -11,7 +11,6 @@
  * escritorio).
  */
 import { locales, type LocaleSchema } from "../../../data/i18n";
-import Cirrus from "../../backdrop/Cirrus/Cirrus.astro";
 import "./About.css";
 import trustIcon from "../../../assets/trust.svg?raw";
 import excellenceIcon from "../../../assets/excellence.svg?raw";
@@ -58,18 +57,10 @@ const valueIcons: Record<string, string> = {
 <section
   id="about"
   class="about section"
-  data-tone="dusk"
   aria-labelledby="about-title"
 >
-  <!-- Atmósfera del CIELO (dusk): carta náutica tenue + cirros encendidos.
-       Las estrellas quedaron arriba, en el cosmos del Hero; aquí ya es cielo. -->
-  <div class="ab-atmos" aria-hidden="true">
-    <div class="ab-chartgrid"></div>
-    <Cirrus />
-    <div class="ab-glow ab-glow--ember"></div>
-    <div class="ab-glow ab-glow--dusk"></div>
-  </div>
-
+  <!-- Sin escena propia: el fondo (mar del atardecer) lo pinta el <Seascape>
+       compartido del inicio; aquí solo va el contenido, sobre el agua. -->
   <div class="ab-wrap">
     <header class="ab-head ab-reveal" style="--i:0">
       <p class="eyebrow ab-eyebrow">

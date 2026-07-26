@@ -20,6 +20,7 @@
  * hero (cirros, estrellas, halo del cursor) NO viven aquí —son del patrón de
  * hero—: esto es solo el agua y el cielo.
  */
+import Sun from "../Sun/Sun.astro";
 import "./Seascape.css";
 
 interface Props {
@@ -46,7 +47,15 @@ const bubbles = [
 <div class="seascape" data-variant={variant} aria-hidden="true">
   {/* El cielo del atardecer (solo con hero) — o el brillo de luz entrando al
       agua (legales). */}
-  {variant === "full" ? <div class="sea-sky"></div> : <div class="sea-topglow"></div>}
+  {
+    variant === "full" ? (
+      <div class="sea-sky">
+        <Sun />
+      </div>
+    ) : (
+      <div class="sea-topglow" />
+    )
+  }
 
   {
     bubbles.map((b) => (
@@ -58,3 +67,35 @@ const bubbles = [
     ))
   }
 </div>
+
+<script>
+  /**
+   * Tocar el CUERPO (el mar) → nace una onda donde tocaste. Es el gemelo
+   * acuático de las estrellas del cielo: allá arriba nacen estrellas (lo maneja
+   * <SkyHeroFx> sobre el hero), aquí abajo nacen ondas. Se ignora el hero y los
+   * controles. Postal quieta con movimiento reducido (el CSS oculta la onda).
+   */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!reduceMotion.matches) {
+    document.addEventListener("pointerdown", (e) => {
+      const target = e.target as HTMLElement;
+      // Solo en el cuerpo de la página; el hero tiene su propio gesto (estrellas).
+      if (!target.closest("main")) return;
+      if (target.closest("[data-sky-hero]")) return;
+      if (
+        target.closest(
+          "a, button, input, textarea, select, label, summary, [role='button']",
+        )
+      )
+        return;
+
+      const ripple = document.createElement("span");
+      ripple.className = "sea-ripple";
+      ripple.style.left = `${e.clientX}px`;
+      ripple.style.top = `${e.clientY}px`;
+      document.body.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+    });
+  }
+</script>

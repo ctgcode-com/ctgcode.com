@@ -6,8 +6,10 @@
  * misma voz en todas las vistas, para que las secciones de proyectos y de
  * servicios se lean iguales aunque su contenido difiera.
  *
- * Va marcada con `data-reveal` para engancharse al revelado al scroll de cada
- * página (el IO de la vista la recoge sola).
+ * Por defecto se marca con `data-reveal` para engancharse al revelado al scroll
+ * de cada página (el IO de la vista la recoge sola). Si la cabecera vive dentro
+ * de un contenedor que YA se revela, se pasa `noReveal` para no duplicar el
+ * gesto.
  */
 import "./SectionHead.css";
 
@@ -20,12 +22,19 @@ interface Props {
   id?: string;
   /** índice de escalonado del revelado (--i). */
   reveal?: number;
+  /** true si un contenedor padre ya maneja el revelado (evita duplicarlo). */
+  noReveal?: boolean;
 }
 
-const { idx, eyebrow, title, lead, id, reveal = 0 } = Astro.props;
+const { idx, eyebrow, title, lead, id, reveal = 0, noReveal = false } =
+  Astro.props;
 ---
 
-<header class="sh" data-reveal style={`--i:${reveal}`}>
+<header
+  class="sh"
+  data-reveal={noReveal ? undefined : ""}
+  style={noReveal ? undefined : `--i:${reveal}`}
+>
   <p class="eyebrow sh-eyebrow">
     <span class="sh-idx">{idx}</span>
     <span class="sh-sep">/</span>

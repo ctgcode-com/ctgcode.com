@@ -19,6 +19,136 @@ main {
   background-color: var(--color-bg);
 }
 
+/* ===========================================================================
+   EL DESCENSO — ahora sobre el fondo compartido <Seascape>
+   El mar + el cielo del atardecer los pinta el Seascape (primer hijo); el
+   contenido (hero + secciones) se apila encima.
+   =========================================================================== */
+.descent {
+  position: relative;
+  overflow-x: clip;
+}
+
+.descent > section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===========================================================================
+   HERO SOBRIO — bajo el cielo del atardecer (mismo esqueleto que las
+   sub-páginas: eyebrow + título + lead), con la fila de acciones del landing.
+   Las decoraciones del cielo (cirros, estrellas, halo) las pone <SkyHeroFx>.
+   =========================================================================== */
+.hhero {
+  position: relative;
+  overflow-x: clip;
+  display: flex;
+  align-items: center;
+  min-height: min(82vh, 52rem);
+  padding-block: clamp(var(--space-2xl), 12vw, var(--space-3xl));
+}
+
+.hhero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--wrap-view);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+.hhero-eyebrow {
+  color: var(--palette-turquesa);
+}
+
+.hhero-title {
+  margin-top: var(--space-sm);
+  font-size: clamp(2.75rem, 1.2rem + 6vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: var(--tracking-tighter);
+  text-wrap: balance;
+}
+
+/* El trozo acentuado hereda el gradiente de .text-sunset y brilla despacio. */
+.hhero-mark {
+  background-size: 220% auto;
+  animation: hhero-shimmer 7s var(--ease-soft) infinite;
+}
+
+@keyframes hhero-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* El cursor que parpadea: el último gesto de «estudio de software». */
+.hhero-caret {
+  display: inline-block;
+  margin-left: 0.05em;
+  color: var(--palette-turquesa);
+  animation: hhero-blink 1.1s steps(1) infinite;
+}
+
+@keyframes hhero-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hhero-lead {
+  margin-top: var(--space-lg);
+  max-width: 54ch;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+.hhero-actions {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.hhero-more {
+  background-image: none; /* neutraliza el subrayado global de <a> */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.hhero-more::before {
+  content: "→ ";
+  color: var(--palette-amber);
+}
+
+.hhero-more:hover,
+.hhero-more:focus-visible {
+  color: var(--color-heading);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hhero-mark,
+  .hhero-caret {
+    animation: none;
+  }
+}
+
+
+
 .hero {
   position: relative;
   /* Recorte solo horizontal: en vertical el sello del estudio CRUZA la

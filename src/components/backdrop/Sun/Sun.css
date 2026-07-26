@@ -1,92 +1,90 @@
 /* ===========================================================================
-   SUN — el sol medido con sextante (co-ubicado con Sun.astro)
-
-   --sun: progreso 0 → 1 publicado por el script (0: la sección asoma abajo;
-   1: ya se fue por arriba). Por defecto 0.5: la postal estática — el sol
-   posado sobre el horizonte. La línea del horizonte vive en el 62% de la
-   sección (el corte duro del tono horizon). Solo transform/opacity animados.
+   SUN — el sol que se oculta tras el horizonte
+   --sun: progreso 0 → 1 (0: alto en el cielo; 1: oculto tras el horizonte)
+   El sol cae rápidamente hacia el horizonte y se recorta tras el borde inferior
+   del cielo (.ss-sky) mediante clip-path.
+   Al completarse el ocaso (--sun >= 0.9), el disco del astro se desvanece a opacity 0
+   para evitar que vuelva a asomar al continuar scrolleando por el resto de la página.
    =========================================================================== */
 
 .sunset {
-  --sun-x: 63%; /* el sol NO va centrado: cae descentrado, como se mira desde el malecón */
-  --horizon-y: 62%;
+  --sun-x: 74%; /* Posicionado a estribor en desktop */
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* Sin recorte propio: la senda de reflejos cruza la costura hacia el mar
-     (la sección anfitriona recorta solo en horizontal). El sol sí queda
-     recortado por su cielo (.ss-sky). */
   overflow: visible;
   pointer-events: none;
 }
 
-/* ---- El cielo: recorta al sol SOLO al cruzar la línea del horizonte --------
-   clip-path abierto por arriba/lados: hundirse tras el agua tiene sentido;
-   cortarse en seco contra la sección anterior, no. El sol, su anillo y su
-   halo pueden asomarse por encima de la costura (la sección anfitriona deja
-   el overflow vertical visible). */
+/* ---- El cielo: recorta al sol al cruzar la línea del horizonte -------------
+   clip-path abierto arriba/lados y cerrado abajo en bottom: 0 (la línea). */
 .ss-sky {
   position: absolute;
-  inset: 0 0 calc(100% - var(--horizon-y)) 0;
+  inset: 0 0 0 0;
   clip-path: inset(-100rem -100rem 0 -100rem);
 }
 
 .ss-sun {
   position: absolute;
-  top: 0;
+  top: clamp(2.5rem, 6vh, 4.5rem);
   left: var(--sun-x);
-  width: clamp(8.5rem, 19vw, 16rem);
+  width: clamp(8.5rem, 18vw, 15rem);
   aspect-ratio: 1;
-  /* La caída: de lo alto del cielo a hundirse tras el horizonte. */
-  transform: translate(-50%, calc(-10% + var(--sun, 0.5) * 300%));
-  will-change: transform;
+  /* Caída: se desplaza en vh para alcanzar y cruzar el horizonte (bottom: 0) */
+  transform: translate(-50%, calc(var(--sun, 0) * 110vh));
+  /* Al ocultarse tras el horizonte (--sun >= 0.8), el astro se desvanece a opacity 0 */
+  opacity: clamp(0, calc(1 - (var(--sun, 0) - 0.78) * 4.5), 1);
+  will-change: transform, opacity;
 }
 
-/* El halo: se enciende conforme el sol se acerca al agua */
+/* El halo: suave resplandor alrededor del astro */
 .ss-halo {
   position: absolute;
-  inset: -55%;
+  inset: -50%;
   border-radius: 50%;
-  background: var(--glow-sun);
-  opacity: calc(0.4 + var(--sun, 0.5) * 0.5);
-  filter: blur(18px);
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--palette-amber) 55%, transparent) 0%,
+    color-mix(in oklab, var(--palette-coral) 30%, transparent) 42%,
+    transparent 72%
+  );
+  opacity: calc(0.4 + var(--sun, 0) * 0.4);
+  filter: blur(22px);
 }
 
-/* El núcleo: ámbar puro con el borde ya quemado */
+/* El núcleo del sol: tamaño original refinado (inset: 26%) */
 .ss-core {
   position: absolute;
-  inset: 12%;
+  inset: 26%;
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 42%,
     var(--palette-amber) 0%,
-    var(--palette-amber) 46%,
-    var(--palette-scarlet) 82%,
-    var(--palette-crimson) 100%
+    var(--palette-amber) 44%,
+    var(--palette-coral) 66%,
+    var(--palette-scarlet) 92%
   );
-  box-shadow: 0 0 44px 8px
-    color-mix(in oklab, var(--palette-scarlet) 55%, transparent);
+  box-shadow:
+    0 0 3.5rem color-mix(in oklab, var(--palette-coral) 55%, transparent),
+    0 0 7rem color-mix(in oklab, var(--palette-amber) 28%, transparent);
 }
 
-/* ---- El limbo del sextante: gira mientras mide la caída --------------------
-   El anillo vive claramente FUERA del disco (aire entre ambos) y las marcas
-   apuntan hacia afuera: el sol queda limpio, el instrumento se lee. */
+/* ---- El limbo del sextante ------------------------------------------------ */
 .ss-ring {
   position: absolute;
-  inset: -26%;
-  width: 152%;
-  max-width: none; /* el reset clava svg a max-width:100% y lo descentraba */
-  height: 152%;
+  inset: -6%;
+  width: 112%;
+  max-width: none;
+  height: 112%;
   overflow: visible;
 }
 
 .ss-ring-rotor {
   transform-origin: 110px 110px;
-  transform: rotate(calc(-24deg + var(--sun, 0.5) * 48deg));
+  transform: rotate(calc(-24deg + var(--sun, 0) * 48deg));
   transform-box: view-box;
 }
 
-/* La órbita completa, punteada y tenue: la trayectoria del astro */
 .ss-ring-orbit {
   stroke: color-mix(in oklab, var(--palette-sand) 26%, transparent);
   stroke-width: 1;
@@ -94,7 +92,6 @@
   stroke-linecap: round;
 }
 
-/* El limbo graduado: solo el arco superior (160°), como en el instrumento */
 .ss-ring-limb {
   stroke: color-mix(in oklab, var(--palette-sand) 52%, transparent);
   stroke-width: 1.5;
@@ -105,7 +102,6 @@
   stroke-width: 1;
 }
 
-/* El índice: la lectura, en ámbar */
 .ss-index line {
   stroke: color-mix(in oklab, var(--palette-amber) 85%, transparent);
   stroke-width: 1.5;
@@ -115,57 +111,64 @@
   fill: var(--palette-amber);
 }
 
-/* ---- La línea de fuego ----------------------------------------------------- */
-.ss-horizon {
-  position: absolute;
-  top: var(--horizon-y);
-  left: 0;
-  right: 0;
-  height: 2px;
-  transform: translateY(-1px);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in oklab, var(--palette-scarlet) 55%, transparent) 30%,
-    var(--palette-amber) var(--sun-x),
-    color-mix(in oklab, var(--palette-scarlet) 55%, transparent) 82%,
-    transparent 100%
-  );
-  opacity: 0.9;
-}
-
-/* La calima: el aire encendido pegado al horizonte */
+/* ---- El resplandor en el borde del horizonte ------------------------------
+   NO está al inicio (opacity: 0). Se FORMA progresivamente a medida que el sol cae. */
 .ss-haze {
   position: absolute;
-  top: var(--horizon-y);
+  bottom: 0;
   left: var(--sun-x);
-  width: min(72%, 46rem);
-  height: clamp(4rem, 12vw, 8rem);
-  transform: translate(-50%, -50%);
+  width: min(80%, 50rem);
+  height: clamp(4.5rem, 13vw, 9.5rem);
+  transform: translate(-50%, 50%);
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    color-mix(in oklab, var(--palette-scarlet) 52%, transparent) 0%,
-    color-mix(in oklab, var(--palette-crimson) 30%, transparent) 45%,
-    transparent 75%
+    color-mix(in oklab, var(--palette-amber) 78%, transparent) 0%,
+    color-mix(in oklab, var(--palette-scarlet) 52%, transparent) 38%,
+    color-mix(in oklab, var(--palette-crimson) 30%, transparent) 62%,
+    transparent 88%
   );
-  filter: blur(22px);
-  opacity: calc(0.35 + var(--sun, 0.5) * 0.5);
+  filter: blur(24px);
+  /* Se forma cuando --sun pasa de 0.2 a 0.8 */
+  opacity: clamp(0, calc((var(--sun, 0) - 0.2) * 2), 1);
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* ---- La senda del sol: reflejos que titilan sobre el agua ------------------ */
+/* La línea brillante del horizonte: se forma igual a medida que el sol baja */
+.ss-horizon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--palette-scarlet) 55%, transparent) 25%,
+    var(--palette-amber) var(--sun-x),
+    color-mix(in oklab, var(--palette-scarlet) 55%, transparent) 85%,
+    transparent 100%
+  );
+  /* Se forma cuando --sun pasa de 0.25 a 0.8 */
+  opacity: clamp(0, calc((var(--sun, 0) - 0.25) * 2.2), 0.95);
+  z-index: 2;
+}
+
+/* ---- Senda del sol sobre el agua: se forma al caer el sol ----------------- */
 .ss-glitter {
   position: absolute;
-  top: calc(var(--horizon-y) + 0.35%);
-  bottom: -13%; /* la senda CRUZA la costura y muere ya dentro del mar */
+  top: 100%;
+  bottom: -40%;
   left: var(--sun-x);
   width: clamp(3.5rem, 9vw, 6rem);
   transform: translateX(-50%);
-  /* La senda se abre hacia el observador: perspectiva de agua, no columna. */
   clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%);
   mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
-  opacity: calc(0.25 + var(--sun, 0.5) * 0.55);
+  opacity: clamp(0, calc((var(--sun, 0) - 0.3) * 2), 0.85);
+  z-index: 0;
 }
 
 .ss-glitter-layer {
@@ -201,7 +204,94 @@
   }
 }
 
-/* ---- Móvil: el sol se acerca al centro y se aligera ------------------------ */
+/* Animation timeline nativo para el Compositor GPU */
+@supports (animation-timeline: scroll()) {
+  .ss-sun {
+    animation: ss-sun-descent linear both, ss-sun-fadeout linear both;
+    animation-timeline: scroll(root block), scroll(root block);
+    animation-range: 0 85vh, 65vh 90vh;
+  }
+
+  .ss-ring-rotor {
+    animation: ss-ring-rotate linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 85vh;
+  }
+
+  .ss-haze {
+    animation: ss-haze-appear linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 15vh 80vh;
+  }
+
+  .ss-horizon {
+    animation: ss-horizon-appear linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 20vh 80vh;
+  }
+
+  .ss-glitter {
+    animation: ss-glitter-appear linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 25vh 80vh;
+  }
+}
+
+@keyframes ss-sun-descent {
+  from {
+    transform: translate(-50%, 0%);
+  }
+  to {
+    transform: translate(-50%, 110vh);
+  }
+}
+
+@keyframes ss-sun-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ss-ring-rotate {
+  from {
+    transform: rotate(-24deg);
+  }
+  to {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes ss-haze-appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ss-horizon-appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes ss-glitter-appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}
+
+/* ---- Móvil ---------------------------------------------------------------- */
 @media (max-width: 47.99rem) {
   .sunset {
     --sun-x: 58%;
@@ -212,10 +302,31 @@
   }
 }
 
-/* ---- Postal estática: sol posado en el horizonte, reflejo quieto ----------- */
+/* ---- Postal estática con prefers-reduced-motion -------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .ss-glitter-layer {
+  .ss-glitter-layer,
+  .ss-sun,
+  .ss-ring-rotor,
+  .ss-haze,
+  .ss-horizon,
+  .ss-glitter {
     animation: none;
-    opacity: 0.7;
+  }
+
+  .ss-sun {
+    transform: translate(-50%, 50vh); /* Posado en el horizonte */
+    opacity: 0.8;
+  }
+
+  .ss-haze {
+    opacity: 0.8;
+  }
+
+  .ss-horizon {
+    opacity: 0.9;
+  }
+
+  .ss-glitter {
+    opacity: 0.6;
   }
 }

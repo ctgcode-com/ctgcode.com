@@ -43,58 +43,7 @@
   padding-top: clamp(var(--space-2xl), 9vw, var(--space-3xl));
 }
 
-/* Sin tope de ancho en la cabecera: el título usa el ancho de la sección y
-   solo envuelve cuando la pantalla lo exige. La medida de lectura se conserva
-   donde importa —en el lead (`.svc-head-lead`, tope propio en ch)—, no en el
-   título. */
-.svc-head {
-  max-width: none;
-}
-
-.svc-head--center {
-  max-width: 60rem;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.svc-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-}
-
-.svc-eyebrow--center {
-  justify-content: center;
-}
-
-.svc-idx {
-  color: var(--palette-amber);
-}
-
-.svc-sep {
-  color: var(--color-text-subtle);
-}
-
-.svc-head-title {
-  margin-top: var(--space-sm);
-  font-size: clamp(1.85rem, 1.1rem + 3vw, 3.25rem);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-tight);
-  /* `balance` para un wrap equilibrado; nada de `nowrap` (rompía móvil). */
-  text-wrap: balance;
-}
-
-.svc-head-lead {
-  margin-top: var(--space-md);
-  max-width: 54ch;
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: var(--color-text-muted);
-}
-
-.svc-head--center .svc-head-lead {
-  margin-inline: auto;
-}
+/* Las cabeceras de tramo las pinta ahora <SectionHead> (compartido). */
 
 /* Rótulo mono compartido */
 .svc-mini-label {
@@ -385,7 +334,8 @@
   --progress: 0; /* 0→1; lo mueve el script al bajar (ver reduce-motion) */
   position: relative;
   margin-top: var(--space-2xl);
-  margin-inline: auto;
+  /* Alineada a la izquierda (no centrada): el proceso sigue el mismo ritmo a
+     babor que la cabecera de SectionHead y el resto de las secciones. */
   max-width: 52rem;
   /* Canaleta izquierda de 3rem para la sonda; el texto arranca tras ella, así
      el hilo (a 1.25rem del borde) queda SIEMPRE a la izquierda del texto. */

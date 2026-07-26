@@ -12,7 +12,6 @@
  */
 import { locales, localizedPath } from "../../../data/i18n";
 import ScrollShot from "../../ui/ScrollShot/ScrollShot.astro";
-import Sun from "../../backdrop/Sun/Sun.astro";
 import "./Projects.css";
 
 /* Capturas de página completa del sitio del cliente, en los tres formatos de
@@ -39,12 +38,11 @@ const mobileShot = { avif: mobAvif, webp: mobWebp, png: mobPng };
 
 <section
   id="projects"
-  class="projects horizon-stage"
-  data-tone="horizon"
+  class="projects"
   aria-labelledby="projects-title"
 >
-  <Sun />
-
+  <!-- Sin escena propia (el sol vive ahora en el hero): el fondo lo pinta el
+       <Seascape> compartido; aquí solo el contenido, sobre el mar. -->
   <div class="pj-wrap">
     <header class="pj-head">
       <p class="eyebrow pj-eyebrow">

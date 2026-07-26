@@ -26,6 +26,7 @@ import LangNotice from "../../global/LangNotice/LangNotice.astro";
 import CTA from "../../ui/CTA/CTA.astro";
 import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import ViewHero from "../../sections/ViewHero/ViewHero.astro";
+import SectionHead from "../../sections/SectionHead/SectionHead.astro";
 import StackList from "./StackList.astro";
 import { locales } from "../../../data/i18n";
 import "./Projects.css";
@@ -137,17 +138,14 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
       <div class="bt-shipped-wrap">
         <!-- Texto a babor: cabecera + ficha del proyecto, en una columna. -->
         <div class="bt-shipped-text" data-reveal style="--i:0">
-          <header class="bt-head bt-head--left">
-            <p class="eyebrow bt-eyebrow">
-              <span class="bt-idx">{t.delivered.idx}</span>
-              <span class="bt-sep">/</span>
-              {t.delivered.eyebrow}
-            </p>
-            <h2 id="bt-shipped-title" class="bt-head-title">
-              {t.delivered.title}
-            </h2>
-            <p class="bt-head-lead">{t.delivered.lead}</p>
-          </header>
+          <SectionHead
+            idx={t.delivered.idx}
+            eyebrow={t.delivered.eyebrow}
+            title={t.delivered.title}
+            lead={t.delivered.lead}
+            id="bt-shipped-title"
+            noReveal
+          />
 
           <article class="bt-entry">
             <p class="bt-status bt-status--live">
@@ -374,17 +372,13 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
       aria-labelledby="bt-templates-title"
     >
       <div class="bt-templates-wrap">
-        <header class="bt-head bt-head--left" data-reveal style="--i:0">
-          <p class="eyebrow bt-eyebrow">
-            <span class="bt-idx">{t.templates.idx}</span>
-            <span class="bt-sep">/</span>
-            {t.templates.eyebrow}
-          </p>
-          <h2 id="bt-templates-title" class="bt-head-title bt-head-title--wide">
-            {t.templates.title}
-          </h2>
-          <p class="bt-head-lead">{t.templates.lead}</p>
-        </header>
+        <SectionHead
+          idx={t.templates.idx}
+          eyebrow={t.templates.eyebrow}
+          title={t.templates.title}
+          lead={t.templates.lead}
+          id="bt-templates-title"
+        />
 
         <!-- Filas intercaladas: la imagen (el hero de la plantilla) a un lado y
              la ficha al otro. Empieza y termina con la imagen a BABOR; la de en
@@ -529,17 +523,13 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
       </div>
 
       <div class="bt-auto-wrap">
-        <header class="bt-head bt-head--left" data-reveal style="--i:0">
-          <p class="eyebrow bt-eyebrow">
-            <span class="bt-idx">{t.automations.idx}</span>
-            <span class="bt-sep">/</span>
-            {t.automations.eyebrow}
-          </p>
-          <h2 id="bt-auto-title" class="bt-head-title bt-head-title--wide">
-            {t.automations.title}
-          </h2>
-          <p class="bt-head-lead">{t.automations.lead}</p>
-        </header>
+        <SectionHead
+          idx={t.automations.idx}
+          eyebrow={t.automations.eyebrow}
+          title={t.automations.title}
+          lead={t.automations.lead}
+          id="bt-auto-title"
+        />
 
         <!-- Sin imagen que enseñar, la pieza se identifica por su clave (ACC,
              RES, FAC) y el asiento se lee como el renglón de un inventario. -->

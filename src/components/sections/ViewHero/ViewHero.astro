@@ -12,6 +12,7 @@
  */
 import { locales, localizedPath } from "../../../data/i18n";
 import SkyHeroFx from "../../backdrop/SkyHeroFx/SkyHeroFx.astro";
+import CompassRose from "../../backdrop/CompassRose/CompassRose.astro";
 import "./ViewHero.css";
 
 interface Props {
@@ -38,6 +39,9 @@ const post = mi >= 0 ? title.slice(mi + (titleMark as string).length) : "";
 
 <section class="hv" data-sky-hero aria-labelledby="hv-title">
   <SkyHeroFx />
+  <!-- La rosa de los vientos como marca de agua del hero (aprovechada de la
+       escena del mar): el instrumento maestro cuelga a estribor. -->
+  <CompassRose class="hv-rose" />
 
   <div class="hv-inner">
     <nav

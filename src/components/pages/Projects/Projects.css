@@ -164,28 +164,8 @@ main.log {
   color: var(--color-text-subtle);
 }
 
-.bt-head-title {
-  margin-top: var(--space-sm);
-  font-size: clamp(1.9rem, 1.1rem + 3.2vw, 3.25rem);
-  line-height: var(--leading-tight);
-  max-width: 100%;
-  text-wrap: balance;
-}
-
-/* Titular que puede correrse a lo ancho (secciones sin columna a un lado) */
-.bt-head-title--wide {
-  max-width: 100%;
-  text-wrap: balance;
-}
-
-/* La entradilla usa el ancho disponible y solo hace wrap si hace falta; se le
-   deja una medida generosa para no volverse una línea interminable. */
-.bt-head-lead {
-  margin-top: var(--space-md);
-  max-width: 100%;
-  font-size: var(--text-md);
-  color: var(--color-text-muted);
-}
+/* Los títulos y leads de cabecera de sección los pinta ahora <SectionHead>
+   (compartido). Helio conserva su cabecera propia (nombre + tagline). */
 
 /* El estado de la pieza: un punto que dice si respira o si está en el banco */
 .bt-status {

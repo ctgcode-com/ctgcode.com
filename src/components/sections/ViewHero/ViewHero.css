@@ -20,6 +20,24 @@
   padding-inline: var(--content-padding);
 }
 
+/* La rosa de los vientos, marca de agua a estribor (tras el contenido). La
+   recorta el hero (overflow-x: clip), así puede colgar del borde. */
+.hv-rose {
+  top: clamp(2rem, 7vw, 6rem);
+  right: clamp(-2rem, 2vw, 2rem);
+  width: clamp(11rem, 24vw, 22rem);
+  aspect-ratio: 1;
+  z-index: 0;
+  opacity: 0.14;
+}
+
+@media (min-width: 64rem) {
+  .hv-rose {
+    right: -3rem;
+    opacity: 0.16;
+  }
+}
+
 /* ---- Migas de pan --------------------------------------------------------- */
 .hv-crumbs {
   margin-bottom: var(--space-xl);

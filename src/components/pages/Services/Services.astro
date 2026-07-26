@@ -30,6 +30,7 @@ import LangNotice from "../../global/LangNotice/LangNotice.astro";
 import CTA from "../../ui/CTA/CTA.astro";
 import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import ViewHero from "../../sections/ViewHero/ViewHero.astro";
+import SectionHead from "../../sections/SectionHead/SectionHead.astro";
 import { locales } from "../../../data/i18n";
 import "./Services.css";
 
@@ -104,16 +105,14 @@ const [idCatalog, idProcess, idCommit] = ids;
     <!-- ══ 01 · EL CATÁLOGO — en zigzag ══════════════════════════════════ -->
     <section id={idCatalog} class="svc-catalog" aria-labelledby="svc-catalog-title">
       <div class="svc-wrap">
-        <header class="svc-head" data-reveal style="--i:0">
-          <p class="eyebrow svc-eyebrow">
-            <span class="svc-idx">01</span>
-            <span class="svc-sep">/</span>
-            {lang === "es" ? "el catálogo" : "the catalogue"}
-          </p>
-          <h2 id="svc-catalog-title" class="svc-head-title">
-            {lang === "es" ? "Tres formas de construir contigo" : "Three ways to build with you"}
-          </h2>
-        </header>
+        <SectionHead
+          idx="01"
+          eyebrow={lang === "es" ? "el catálogo" : "the catalogue"}
+          title={lang === "es"
+            ? "Tres formas de construir contigo"
+            : "Three ways to build with you"}
+          id="svc-catalog-title"
+        />
 
         <ol class="svc-items" role="list">
           {
@@ -199,15 +198,13 @@ const [idCatalog, idProcess, idCommit] = ids;
     <!-- ══ 02 · CÓMO TRABAJAMOS — la sonda que se llena ══════════════════ -->
     <section id={idProcess} class="svc-process" aria-labelledby="svc-process-title">
       <div class="svc-wrap">
-        <header class="svc-head svc-head--center" data-reveal style="--i:0">
-          <p class="eyebrow svc-eyebrow svc-eyebrow--center">
-            <span class="svc-idx">{t.process.idx}</span>
-            <span class="svc-sep">/</span>
-            {t.process.eyebrow}
-          </p>
-          <h2 id="svc-process-title" class="svc-head-title">{t.process.titlePre}<br><span class="svc-hero-mark text-sunset">{t.process.titlePost}</span></h2>
-          <p class="svc-head-lead">{t.process.lead}</p>
-        </header>
+        <SectionHead
+          idx={t.process.idx}
+          eyebrow={t.process.eyebrow}
+          title={`${t.process.titlePre}${t.process.titlePost}`}
+          lead={t.process.lead}
+          id="svc-process-title"
+        />
 
         <!-- La línea de sonda vive en el ::before del <ol>; el hilo lleno se
              pinta encima con --progress (0→1), que mueve el script al bajar. -->
@@ -235,17 +232,13 @@ const [idCatalog, idProcess, idCommit] = ids;
     <!-- ══ 03 · COMPROMISOS + CIERRE ═════════════════════════════════════ -->
     <section id={idCommit} class="svc-commit" aria-labelledby="svc-commit-title">
       <div class="svc-wrap">
-        <header class="svc-head" data-reveal style="--i:0">
-          <p class="eyebrow svc-eyebrow">
-            <span class="svc-idx">{t.commitments.idx}</span>
-            <span class="svc-sep">/</span>
-            {t.commitments.eyebrow}
-          </p>
-          <h2 id="svc-commit-title" class="svc-head-title">
-            {t.commitments.title}
-          </h2>
-          <p class="svc-head-lead">{t.commitments.lead}</p>
-        </header>
+        <SectionHead
+          idx={t.commitments.idx}
+          eyebrow={t.commitments.eyebrow}
+          title={t.commitments.title}
+          lead={t.commitments.lead}
+          id="svc-commit-title"
+        />
 
         <ul class="svc-commit-grid" role="list">
           {

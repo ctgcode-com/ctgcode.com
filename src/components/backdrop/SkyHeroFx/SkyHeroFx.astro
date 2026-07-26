@@ -52,6 +52,30 @@ import "./SkyHeroFx.css";
         hero.addEventListener("pointerleave", () =>
           hero.classList.remove("is-cursor"),
         );
+
+        /* Clic en el cielo → nace una estrella donde tocaste (se ignoran los
+           controles). El campo de estrellas vive en <SkyHeroFx>, pero el clic
+           lo escuchamos en el hero: la capa de estrellas es pointer-events:none
+           para no robar los clics del contenido. */
+        const field = hero.querySelector<HTMLElement>(".starfield");
+        if (field) {
+          hero.addEventListener("pointerdown", (e) => {
+            const target = e.target as HTMLElement;
+            if (
+              target.closest(
+                "a, button, input, textarea, select, label, [role='button']",
+              )
+            )
+              return;
+            const rect = field.getBoundingClientRect();
+            const star = document.createElement("span");
+            star.className = "sf-born";
+            star.style.left = `${e.clientX - rect.left}px`;
+            star.style.top = `${e.clientY - rect.top}px`;
+            field.appendChild(star);
+            star.addEventListener("animationend", () => star.remove());
+          });
+        }
       });
   }
 </script>

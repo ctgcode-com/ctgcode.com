@@ -583,3 +583,16 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - **CSP ampliada** (`Layout.astro`): se añaden `https://*.clarity.ms` y `https://c.bing.com` a `script-src`, `connect-src` e `img-src` para que Clarity no viole la Content-Security-Policy.
 
+## [0.29.0] - 2026-07-26
+
+### Cambiado
+
+- **Ocultamiento del sol tras el horizonte** (`src/components/backdrop/Sun/`, `Seascape.astro`, `Home.astro`): se corrige el comportamiento del sol para que descienda y se oculte gradualmente **tras la línea del horizonte** en lugar de flotar o deslizarse sobre el cuerpo del mar. Al trasponer el horizonte, la masa del astro y el limbo del sextante se recortan mediante `clip-path` tras el agua, mientras que el resplandor cálido (`.ss-haze`) y la línea de fuego (`.ss-horizon`) permanecen en el borde brillando con intensidad continua.
+- **`Seascape.astro`**: integra la escena `<Sun />` dentro de la franja del cielo (`.sea-sky`) en la variante `full`, encapsulando el ocaso en el backdrop compartido.
+- **`Home.astro` y `Home.css`**: se elimina la implementación duplicada de `.hhero-sun` fixed en el hero que flotaba sobre el cuerpo de la página, unificando la escenografía en el backdrop compartido.
+
+### Técnico
+
+- La caída del sol se sincroniza tanto mediante CSS `animation-timeline: scroll()` en el hilo del Compositor GPU como mediante interpolación fluida (rAF lerp `--sun`) cross-browser. Con `prefers-reduced-motion: reduce`, se congela en una postal estática con el sol posado en la línea del horizonte.
+
+
