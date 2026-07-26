@@ -147,6 +147,12 @@ main {
   }
 }
 
+/* El hero de Inicio lleva el sol, por lo que se desactiva el halo del cursor;
+   los heros de Proyectos y Servicios sí llevan el halo del cursor. */
+.hhero .skyfx-cursorlight {
+  display: none;
+}
+
 
 
 .hero {
