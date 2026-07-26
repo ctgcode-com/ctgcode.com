@@ -27,8 +27,8 @@
 .ft-inner {
   max-width: min(100rem, 100%);
   margin-inline: auto;
-  /* El padding superior deja respirar a la marea (la lengua de agua de
-     NightSand mide ~5.75rem como mucho). */
+  /* El padding superior deja respirar a la orilla (la banda húmeda de
+     NightSand mide hasta ~9rem). */
   padding: calc(var(--space-2xl) + var(--space-md)) var(--content-padding)
     var(--space-lg);
   display: grid;
@@ -232,8 +232,9 @@
 }
 
 /* ---- Volver a la superficie -------------------------------------------------
-   Aquí abajo la única luz propia es fría: bioluminiscencia (turquesa como
-   soporte, nunca como marca). La flecha sube como una burbuja. */
+   En la arena cálida de noche, el botón se enciende en ámbar al pasar (el mismo
+   calor con que «atardecen» los enlaces del sitio), no en el turquesa frío del
+   mar. La flecha sube como una burbuja. */
 .ft-surface {
   grid-column: 1 / -1;
   justify-self: start;
@@ -259,9 +260,9 @@
 
 .ft-surface:hover,
 .ft-surface:focus-visible {
-  color: var(--color-accent);
-  border-color: var(--color-accent-strong);
-  box-shadow: var(--glow-turquesa);
+  color: var(--color-brand-soft);
+  border-color: var(--color-border-warm);
+  box-shadow: var(--glow-amber);
 }
 
 .ft-arrow {

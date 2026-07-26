@@ -1,316 +1,141 @@
 /* ===========================================================================
    NIGHT SAND — la arena del puerto, de noche (co-ubicado con NightSand.astro)
 
-   La rompiente: dos trenes de agua que derivan (translateX del SVG) y avanzan/
-   retroceden sobre la arena (translateY del envoltorio) con periodos que no
-   son múltiplos entre sí — la composición nunca se repite igual: cada ola
-   "llega" distinta. El tren delantero es agua color noche (el color exacto en
-   que muere el tono sea → costura invisible); el trasero es el retroceso, un
-   agua apenas más lechosa que asoma entre cresta y cresta.
-   Solo transform/opacity en lo animado.
+   La orilla de ESTE mar: el agua entrega a la arena por la LÍNEA DE MAREA, un
+   filo orgánico e irregular (.ns-shore) —la forma real de la orilla, suave y
+   estática, no un degradado recto ni un oleaje geométrico— con un rastro de
+   espuma. La arena NO es un color liso: moteado tonal (.ns-mottle) + grano fino
+   (.ns-grain), ambos ruido `feTurbulence` con la REGIÓN DEL FILTRO fijada al
+   mosaico (x/y/width/height 0..100%) para que `stitchTiles` cierre sin costura.
+   Todo estático (sin animación).
    =========================================================================== */
 
 .nightsand {
   position: absolute;
-  inset: 0;
+  inset: -4rem;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+
+  /* Los dos ruidos, incrustados como data-URI (grises; su color lo pone el
+     modo de fusión sobre la arena). La región del filtro va fijada a 0..100%:
+     sin eso, el filtro se calcula en -10%..110% y `stitchTiles` cierra en ese
+     borde, no en el del mosaico → costura visible. Con ella, no. */
+  --sand-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --sand-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
 }
 
-/* ---- Sombreado de la playa -------------------------------------------------
-   Arriba, la franja empapada (más noche); abajo, la arena seca aclara apenas
-   con un rescoldo de espuma. Da relieve de playa, no un color plano. */
-.ns-shading {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--palette-night) 45%, var(--palette-sand-night))
-        0%,
-      transparent 32%
-    ),
-    linear-gradient(
-      to bottom,
-      transparent 58%,
-      color-mix(in oklab, var(--palette-foam) 7%, var(--palette-sand-night))
-        100%
-    );
-}
-
-/* ---- La rompiente ---------------------------------------------------------- */
-.ns-wash {
+/* El desvanecido natural del mar sobre la arena: el agua nocturna se disuelve
+   suavemente hacia abajo sin ningun horizonte o filo plano. */
+.ns-water-fade {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: clamp(4.5rem, 9vw, 7rem);
-}
 
-/* Cada tren rebasa el borde superior (top negativo): al avanzar sobre la
-   arena (translateY +) nunca abre un hueco entre el mar y el agua. */
-.ns-wave {
-  position: absolute;
-  inset: -1.75rem 0 0 0;
-  animation: var(--surge-anim, ns-surge-a) var(--surge-dur, 21s)
-    var(--ease-soft) var(--surge-delay, 0s) infinite;
-  will-change: transform;
-}
+  /* Más alta: con el inset:-4rem del contenedor, el tramo que el footer recorta
+     por overflow debe seguir cayendo dentro de la zona 100% noche. */
+  height: clamp(20rem, 38vh, 30rem);
+  pointer-events: none;
 
-.ns-wave svg {
-  position: absolute;
-  inset: 0;
-  width: 200%;
-  max-width: none; /* el reset clava svg a max-width:100% y cortaría la deriva */
-  height: 100%;
-  /* El filo del agua va DIFUMINADO: la frontera agua/arena es un borde
-     húmedo, no una curva dibujada. La espuma la ponen los parches. */
-  filter: blur(1.2px);
-  animation: ns-drift var(--drift-dur, 60s) linear infinite;
-  will-change: transform;
-}
-
-/* Tren TRASERO: el retroceso — agua apenas lechosa que asoma entre crestas */
-.ns-wave--back {
-  --surge-anim: ns-surge-a;
-  --surge-dur: 19s;
-  --drift-dur: 53s;
-}
-
-.ns-wave--back .ns-water {
-  fill: color-mix(
-    in oklab,
-    color-mix(in oklab, var(--palette-deep) 20%, var(--palette-night)) 88%,
-    var(--palette-foam)
-  );
-}
-
-/* Tren DELANTERO: la ola que llega — el MISMO azul-noche en que termina el
-   mar (la costura invisible) y la espuma más viva. Partitura propia, nunca
-   en fase con el retroceso. */
-.ns-wave--front {
-  --surge-anim: ns-surge-b;
-  --surge-dur: 27s;
-  --surge-delay: -9s;
-  --drift-dur: 71s;
-}
-
-.ns-wave--front svg {
-  animation-direction: reverse; /* contracorriente: la resaca */
-}
-
-.ns-wave--front .ns-water {
-  fill: color-mix(in oklab, var(--palette-deep) 20%, var(--palette-night));
-}
-
-/* Parches de espuma sobre la línea de agua: manchas suaves que se encienden
-   y apagan cada una a su ritmo — la espuma trabaja por trozos, no subraya. */
-.ns-glint {
-  position: absolute;
-  top: 46%;
-  width: calc(var(--gs, 1) * 3.5rem);
-  height: calc(var(--gs, 1) * 0.8rem);
-  border-radius: 50%;
-  background: radial-gradient(
-    50% 80% at 50% 50%,
-    color-mix(in oklab, var(--palette-foam) 42%, transparent) 0%,
-    transparent 72%
-  );
-  filter: blur(1px);
-  opacity: 0;
-  animation: ns-glint var(--gd, 8s) var(--ease-soft) var(--gdelay, 0s) infinite;
-}
-
-@keyframes ns-glint {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0.1rem, 0) scaleX(0.85);
-  }
-  28% {
-    opacity: 0.85;
-    transform: translate3d(0.5rem, -0.05rem, 0) scaleX(1.05);
-  }
-  55% {
-    opacity: 0.3;
-    transform: translate3d(0.9rem, 0.05rem, 0) scaleX(1);
-  }
-  76% {
-    opacity: 0.6;
-    transform: translate3d(1.3rem, 0, 0) scaleX(0.95);
-  }
-}
-
-/* Vaivenes IRREGULARES: la marea no es un péndulo. Paradas desiguales con
-   inicio = fin (bucle sin salto); el delantero tiene "la ola grande" que
-   llega mucho más lejos de vez en cuando. */
-@keyframes ns-surge-a {
-  0%,
-  100% {
-    transform: translateY(-0.25rem);
-  }
-  22% {
-    transform: translateY(0.4rem);
-  }
-  41% {
-    transform: translateY(-0.05rem);
-  }
-  63% {
-    transform: translateY(0.55rem);
-  }
-  84% {
-    transform: translateY(0.1rem);
-  }
-}
-
-@keyframes ns-surge-b {
-  0%,
-  100% {
-    transform: translateY(-0.5rem);
-  }
-  16% {
-    transform: translateY(0.55rem);
-  }
-  34% {
-    transform: translateY(-0.25rem);
-  }
-  55% {
-    transform: translateY(1.35rem); /* la ola grande */
-  }
-  71% {
-    transform: translateY(0.15rem);
-  }
-  88% {
-    transform: translateY(0.7rem);
-  }
-}
-
-/* La deriva: un periodo completo del filo, cierra sin costura */
-@keyframes ns-drift {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ---- La boya de puerto: luz roja, mar adentro ------------------------------ */
-.ns-buoy {
-  position: absolute;
-  top: 22%;
-  right: clamp(2rem, 12vw, 9rem);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--palette-ocaso);
-  box-shadow: 0 0 10px 3px
-    color-mix(in oklab, var(--palette-crimson) 55%, transparent);
-  animation: ns-buoy 3.4s var(--ease-soft) infinite;
-}
-
-/* Destello de ocultación: como una luz de puerto real (períodos de sombra) */
-@keyframes ns-buoy {
-  0%,
-  58%,
-  100% {
-    opacity: 1;
-  }
-  66%,
-  92% {
-    opacity: 0.15;
-  }
-}
-
-/* ---- Arena mojada: la franja espejo bajo la rompiente ----------------------
-   Ambos extremos del gradiente son transparentes: nada de filos rectos. */
-.ns-wet {
-  position: absolute;
-  top: clamp(3rem, 7vw, 5.5rem);
-  left: 0;
-  right: 0;
-  height: clamp(3rem, 7vw, 5rem);
   background: linear-gradient(
     to bottom,
+    var(--palette-night) 0%,
+    var(--palette-night) 42%,
+    /* noche SÓLIDA sostenida = mismo color con que cierra el mar */
+    color-mix(in oklab, var(--palette-night) 55%, transparent) 72%,
+    transparent 100% /* desde aquí revela la arena (tal cual la tienes) */
+  );
+}
+
+/* ---- La orilla: el filo orgánico del agua (la línea de marea) --------------
+   La máscara desvanece cualquier recta superior del SVG para que solo queden
+   visibles las olas orgánicas disolviéndose en la playa. */
+.ns-shore {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(clamp(11rem, 24vw, 19rem) + 4rem);
+  filter: blur(25px);
+  mask-image: linear-gradient(
+    to bottom,
     transparent 0%,
-    color-mix(in oklab, var(--palette-foam) 10%, transparent) 40%,
+    transparent 15%,
+    #000 35%,
+    #000 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 15%,
+    #000 35%,
+    #000 85%,
     transparent 100%
   );
 }
 
-/* ---- Grano de arena --------------------------------------------------------- */
+.ns-shore-foam {
+  stroke: color-mix(in oklab, var(--palette-foam) 55%, transparent);
+  stroke-width: 2.5;
+  opacity: 0.38;
+}
+
+/* La segunda orilla (más adentro) deja apenas un hilo de espuma */
+.ns-shore-foam--faint {
+  opacity: 0.15;
+}
+
+/* ---- Sombreado de la playa: la arena seca aclara apenas hacia abajo -------- */
+.ns-shading {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 56%,
+    color-mix(in oklab, var(--palette-foam) 8%, var(--palette-sand-night)) 100%
+  );
+}
+
+/* ---- Moteado: manchas suaves más claras y oscuras (la arena no es uniforme) */
+.ns-mottle {
+  position: absolute;
+  inset: 0;
+  background-image: var(--sand-mottle);
+  background-size: 900px 900px;
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+}
+
+/* ---- Grano de arena: el ruido fino encima, casi subliminal ----------------- */
 .ns-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.75;
-  background-image:
-    radial-gradient(
-      1px 1px at 12% 34%,
-      color-mix(in oklab, var(--palette-foam) 30%, transparent) 50%,
-      transparent 100%
-    ),
-    radial-gradient(
-      1px 1px at 47% 61%,
-      color-mix(in oklab, var(--palette-foam) 22%, transparent) 50%,
-      transparent 100%
-    ),
-    radial-gradient(
-      1px 1px at 81% 27%,
-      color-mix(in oklab, var(--palette-foam) 26%, transparent) 50%,
-      transparent 100%
-    ),
-    radial-gradient(
-      1px 1px at 29% 83%,
-      color-mix(in oklab, var(--palette-foam) 20%, transparent) 50%,
-      transparent 100%
-    ),
-    radial-gradient(
-      1px 1px at 66% 88%,
-      color-mix(in oklab, var(--palette-foam) 24%, transparent) 50%,
-      transparent 100%
-    );
-  background-size:
-    233px 211px,
-    181px 197px,
-    257px 239px,
-    203px 227px,
-    271px 191px; /* tamaños primos: el patrón nunca se ve cuadriculado */
+  background-image: var(--sand-grain);
+  background-size: 300px 300px;
+  opacity: 0.34;
+  mix-blend-mode: overlay;
 }
 
-/* ---- El último rescoldo del cielo sobre la orilla -------------------------- */
+/* ---- El último rescoldo del cielo sobre la orilla --------------------------
+   Cálido (el atardecer que se fue), no magenta: un charco de luz coral/ámbar
+   muy tenue posado a un lado de la arena, guiño a la marca. */
 .ns-ember {
   position: absolute;
-  top: -10%;
-  left: 8%;
-  width: min(52vw, 34rem);
+  top: -8%;
+  left: 6%;
+  width: min(56vw, 38rem);
   aspect-ratio: 2.6 / 1;
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    color-mix(in oklab, var(--palette-magenta) 16%, transparent) 0%,
-    color-mix(in oklab, var(--palette-violet) 10%, transparent) 50%,
-    transparent 78%
+    color-mix(in oklab, var(--palette-coral) 13%, transparent) 0%,
+    color-mix(in oklab, var(--palette-amber) 7%, transparent) 46%,
+    transparent 76%
   );
-  filter: blur(30px);
+  filter: blur(38px);
 }
 
-/* ---- Postal estática: la rompiente queda a media llegada ------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .ns-wave,
-  .ns-wave svg,
-  .ns-buoy,
-  .ns-glint {
-    animation: none;
-  }
-
-  .ns-glint {
-    opacity: 0.45; /* la espuma queda puesta, no se apaga */
-  }
-
-  /* Composición fija con los filos desfasados (viva, aunque quieta) */
-  .ns-wave--back svg {
-    transform: translateX(-19%);
-  }
-
-  .ns-wave--front {
-    transform: translateY(0.5rem);
-  }
-}
+/* Nada se anima: la escena es una postal también con movimiento normal, así
+   que reduced-motion no necesita apagar nada aquí. */

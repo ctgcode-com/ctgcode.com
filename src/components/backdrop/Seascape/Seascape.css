@@ -9,16 +9,48 @@
 
 .seascape {
   position: absolute;
-  inset: 0;
+  inset: -4rem;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
   /* El MAR: agua honda y fría que se hunde en la noche (temple `sea`). */
-  background-color: color-mix(in oklab, var(--palette-deep) 26%, var(--palette-night));
+  background-color: color-mix(
+    in oklab,
+    var(--palette-deep) 26%,
+    var(--palette-night)
+  );
   background-image: linear-gradient(
     to bottom,
     color-mix(in oklab, var(--palette-deep) 30%, var(--palette-abyss-violet)) 0%,
     color-mix(in oklab, var(--palette-deep) 22%, var(--palette-night)) 58%,
+    var(--palette-night) 100%
+  );
+}
+
+/* El degradado de empalme natural en el fondo del cuerpo del sitio:
+   A unos cientos de píxeles del footer, el mar empieza a oscurecerse suavemente
+   hasta convertirse 100% en el color nocturno de la parte superior del footer (var(--palette-night)),
+   logrando una transición continua y sedosa sin ningún borde o corte horizontal. */
+.seascape::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: clamp(24rem, 45vh, 38rem);
+  pointer-events: none;
+  z-index: 1;
+
+  /* El mar se hunde suavemente hasta el NEGRO NOCHE exacto con el que arranca
+     el footer (.ns-water-fade = var(--palette-night)). Al terminar el mar en el
+     mismo color con el que empieza la arena, la costura mar→arena desaparece:
+     el footer recoge ese negro y desde ahí revela la arena (su primer patrón). */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklab, var(--palette-deep) 22%, var(--palette-night)) 22%,
+    var(--palette-night) 70%,
     var(--palette-night) 100%
   );
 }
@@ -46,8 +78,6 @@
   );
 }
 
-
-
 /* ===========================================================================
    LA LUZ ENTRANDO AL AGUA (variante `water`) — para las vistas sin hero
    Un charco de luz fría que se filtra por la superficie (arriba-centro) y se
@@ -57,13 +87,12 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: clamp(22rem, 48vh, 40rem);
-  background:
-    radial-gradient(
-      120% 100% at 50% -12%,
-      color-mix(in oklab, var(--palette-turquesa) 24%, transparent) 0%,
-      color-mix(in oklab, var(--palette-caribe) 12%, transparent) 38%,
-      transparent 76%
-    );
+  background: radial-gradient(
+    120% 100% at 50% -12%,
+    color-mix(in oklab, var(--palette-turquesa) 24%, transparent) 0%,
+    color-mix(in oklab, var(--palette-caribe) 12%, transparent) 38%,
+    transparent 76%
+  );
 }
 
 /* ===========================================================================
@@ -132,8 +161,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px solid
-    color-mix(in oklab, var(--palette-caribe) 60%, transparent);
+  border: 1px solid color-mix(in oklab, var(--palette-caribe) 60%, transparent);
   animation: sea-ripple 900ms var(--ease-expo) 120ms forwards;
 }
 

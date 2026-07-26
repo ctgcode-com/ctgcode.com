@@ -595,4 +595,14 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - La caída del sol se sincroniza tanto mediante CSS `animation-timeline: scroll()` en el hilo del Compositor GPU como mediante interpolación fluida (rAF lerp `--sun`) cross-browser. Con `prefers-reduced-motion: reduce`, se congela en una postal estática con el sol posado en la línea del horizonte.
 
+## [0.29.1] - 2026-07-26
+
+### Cambiado
+
+- **Ajustes de acoplamiento visual del footer (`NightSand`, `Seascape`, `Footer`)**: refactor de los patrones de fondo y capas de la arena de noche para extender las olas y texturas fuera del marco de página (`inset: -4rem` + `overflow: hidden`) y pulir el desvanecido continuo entre el lecho marino y la playa.
+
+### Técnico
+
+- Máscara gradual sobre `.ns-shore` para suavizar filos superiores y extensión del backdrop en los laterales.
+
 

@@ -38,9 +38,12 @@
   --palette-night: #0b0718; /* Noche — púrpura casi negro, fondo base */
   --palette-ink: #0c2233; /* Tinta        — texto oscuro sobre claro */
 
-  /* Arena de noche — el puerto al final del descenso */
-  --palette-sand-night: #2a2233; /* Arena oscura con rescoldo del cielo */
-  --palette-foam: #cbb8c4; /* Espuma fría sobre la arena nocturna     */
+  /* Arena de noche — la orilla al final del descenso. Un pardo cálido y oscuro
+     de arena real (no un liso azulado ni el malva viejo #2a2233): el material
+     cambia de agua a playa, y la costura la hace la banda húmeda de la orilla,
+     no un color plano. La textura (grano + moteado) la pone <NightSand />. */
+  --palette-sand-night: #2b2620; /* Arena mojada de noche, parda y cálida     */
+  --palette-foam: #c8c1b4; /* Arena pálida / espuma seca sobre la orilla     */
 
   /* Neutros cálidos */
   --palette-sand: #f6f1e7; /* Arena     — texto claro / documentos */
