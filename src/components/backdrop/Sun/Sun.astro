@@ -121,9 +121,24 @@ import "./Sun.css";
     const stop = () => {
       cancelAnimationFrame(raf);
       raf = 0;
+      /**
+       * Se invalida la posición interpolada. Ahora que el bucle SÍ se detiene
+       * al salir el cielo de vista, `current` quedaría congelado a medio
+       * camino, y al volver el sol entraría deslizándose desde ese valor
+       * viejo en lugar de estar ya donde toca. Con `-1`, el primer fotograma
+       * tras reanudar se sitúa directamente en el objetivo, sin barrido
+       * (mismo criterio que en `ui/ScrollShot`).
+       */
+      current = -1;
     };
 
-    const parent = scene.closest("main") || scene.parentElement || document.body;
+    /**
+     * Se observa el CIELO, no el `<main>`. Observando `main` el guardián era
+     * inerte: abarca el documento entero, así que intersecta el viewport a
+     * cualquier altura de scroll, `inView` nunca pasaba a `false` y el bucle
+     * seguía pidiendo fotogramas hasta el pie de página — donde el sol ya está
+     * oculto tras el horizonte y `--sun` lleva rato clavado en 1.
+     */
     const io = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting;
@@ -132,7 +147,7 @@ import "./Sun.css";
       },
       { rootMargin: "20% 0px 20% 0px" },
     );
-    io.observe(parent);
+    io.observe(sky || scene);
 
     // La altura se refresca sola cuando el cielo cambia de tamaño (rotación,
     // carga de fuentes, cambio de contenido). Un ResizeObserver lo cubre todo

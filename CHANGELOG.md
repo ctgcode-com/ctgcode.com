@@ -670,3 +670,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - **Precisión recortada en los iconos de valores (`src/assets/{trust,excellence,resilience,innovation}.svg`)**: entre el 96% y el 98% de cada archivo eran datos de trazado, con coordenadas de hasta cinco decimales sobre un `viewBox` de 512. Se redondean a dos. Los cuatro archivos pasan de 77.298 a 42.320 bytes (45% menos) y, como el componente `About` los incrusta en línea —lo exige el recoloreado con `currentColor` en `:hover` y `:focus-within`—, el documento del inicio baja de 62.006 a 43.446 bytes comprimidos: **18.560 bytes menos, el 30% del HTML de la página**.
 - El redondeo es visualmente inocuo y acotado: los trazados usan **solo comandos absolutos** (cero relativos), así que el error no se acumula. El máximo por coordenada es de 0,005 unidades sobre 512, es decir 0,000625 px a 64 px de render.
+
+## [0.29.8] - 2026-07-31
+
+### Corregido
+
+- **El guardián de visibilidad del sol era inerte (`Sun.astro`)**: el `IntersectionObserver` observaba `<main>`, que abarca el documento entero y por tanto intersecta el viewport a cualquier altura de scroll. `inView` nunca pasaba a `false`, así que el bucle de animación seguía pidiendo fotogramas hasta el pie de página, donde el sol lleva rato oculto tras el horizonte. Ahora observa el cielo (`.sea-sky`), que es la única franja donde el astro significa algo.
+- **El sol entraba deslizándose al volver a subir**: como consecuencia de lo anterior, al detenerse de verdad el bucle la posición interpolada quedaba congelada, y al reaparecer el cielo el sol se desplazaba desde ese valor viejo hasta el correcto. Al parar se invalida la interpolación, de modo que el primer fotograma tras reanudar se sitúa directamente en el objetivo, sin barrido (mismo criterio que en `ui/ScrollShot`).
+
+### Técnico
+
+- Verificado en navegador: con el cielo fuera de vista el script del sol desaparece de las peticiones de fotograma, y al volver arriba `--sun` vuelve a 0 en menos de 150 ms sin transición perceptible.
+- No se detectó ninguna fuga de memoria en el recorrido del sitio: seis pasadas completas arriba y abajo dejan el heap en 3.814 KB frente a los 3.732 KB iniciales, oscilando en vez de crecer.
