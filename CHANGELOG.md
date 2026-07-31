@@ -682,3 +682,14 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - Verificado en navegador: con el cielo fuera de vista el script del sol desaparece de las peticiones de fotograma, y al volver arriba `--sun` vuelve a 0 en menos de 150 ms sin transición perceptible.
 - No se detectó ninguna fuga de memoria en el recorrido del sitio: seis pasadas completas arriba y abajo dejan el heap en 3.814 KB frente a los 3.732 KB iniciales, oscilando en vez de crecer.
+
+## [0.29.9] - 2026-07-31
+
+### Corregido
+
+- **Los documentos legales seguían en el sitemap con los datos del responsable sin confirmar (`astro.config.mjs`)**: el comentario de `data/legal.ts` prometía que `legalDataPending` los sacaría del índice **y** del sitemap, pero la integración no tenía filtro. El interruptor movía el `meta robots` a `noindex`, mostraba el aviso y omitía el JSON-LD, y aun así el sitio pedía indexar en el sitemap lo que prohibía indexar en la propia página. Ahora un `filter` retira las cuatro URL legales mientras el interruptor esté activo.
+
+### Técnico
+
+- Las URL se derivan de los mismos slugs que usan el Layout y el pie (`footer.privacySlug` / `footer.termsSlug` de cada idioma), no se escriben a mano en la configuración.
+- Comprobado en los dos estados: con los datos completos el sitemap lista 16 URL; con el interruptor activo, 12.
