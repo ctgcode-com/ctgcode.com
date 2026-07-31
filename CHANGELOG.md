@@ -606,3 +606,16 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Máscara gradual sobre `.ns-shore` para suavizar filos superiores y extensión del backdrop en los laterales.
 
 
+
+## [0.29.2] - 2026-07-31
+
+### Corregido
+
+- **Microsoft Clarity solo se carga tras el consentimiento (`Layout.astro`)**: la etiqueta se inyectaba siempre y el permiso se pasaba únicamente por su Consent API. Se comprobó en producción que esa vía suprime la grabación de la sesión —Clarity lo declara en consola— pero **no** impide que deje cinco cookies en el dominio de Microsoft (`SM`, `MR`, `ANONCHK`, `CLID`, `MUID`) ni que sincronice el `MUID` con Bing, todo ello antes de que el visitante decida. Ahora la etiqueta no se descarga hasta que hay permiso, y en una visita de vuelta con el permiso ya dado se carga de inmediato.
+- **El oyente del consentimiento estaba en el blanco equivocado (`Layout.astro`)**: escuchaba `ctg-consent-resolved` en `window` mientras el banner lo despacha en `document`. Un `CustomEvent` sin `bubbles` despachado en `document` nunca alcanza `window`, así que la llamada a la Consent API era código muerto y el fallo no producía ningún error en consola.
+
+### Técnico
+
+- La cola de `clarity()` se sigue instalando siempre, de modo que cualquier llamada previa a la carga se encola y la etiqueta la procesa al arrancar.
+- Verificado contra el build de producción en un contexto de navegador limpio: sin aceptar, cero peticiones a `clarity.ms` y ninguna cookie de tercera parte; tras aceptar, la etiqueta y el motor cargan sin violar la CSP.
+- Aviso operativo: la inyección estática existía para que los verificadores de Bing Webmaster Tools y Clarity detectaran la etiqueta sin interacción. Con el cambio, un bot que ejecute JS ya no la verá cargarse; la integración debe estar verificada antes de desplegar.

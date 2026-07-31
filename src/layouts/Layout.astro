@@ -273,42 +273,60 @@ const schema = buildSchema({
     )}
 
     <!-- Microsoft Clarity (mapas de calor / grabaciones de sesión).
-         Se inyecta de forma estática con el ID "xshyomjk3n" para que los bots
-         de verificación (Bing Webmaster Tools / Clarity) detecten la presencia
-         de la etiqueta en el HTML sin requerir interacción previa.
-         
-         Para cumplir con el RGPD/GDPR, el estado de consentimiento se pasa a
-         Clarity mediante su Consent API (clarity("consent", bool)): por defecto
-         está denegado hasta que el usuario acepte en el CookieBanner. -->
+
+         La etiqueta NO se descarga hasta que el usuario acepta. Antes se
+         inyectaba siempre y el consentimiento se pasaba solo por la Consent API
+         (clarity("consent", bool)); se comprobó en producción que esa vía
+         suprime la GRABACIÓN de la sesión —Clarity lo dice en consola— pero no
+         impide que deje cinco cookies en su propio dominio (SM, MR, ANONCHK,
+         CLID, MUID) ni que sincronice el MUID con Bing, todo ello ANTES de que
+         nadie decida. Condicionar la carga es lo único que cumple la regla de
+         "nada antes de aceptar".
+
+         La cola de clarity() sí se instala siempre: así cualquier llamada
+         anterior a la carga se encola y la etiqueta la procesa al arrancar. -->
     <script is:inline>
-      (function (c, l, a, r, i) {
-        c[a] =
-          c[a] ||
-          function () {
-            (c[a].q = c[a].q || []).push(arguments);
-          };
-        var t = l.createElement(r);
-        t.async = 1;
-        t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt";
-        var y = l.getElementsByTagName(r)[0];
-        y.parentNode.insertBefore(t, y);
-      })(window, document, "clarity", "script", "xshyomjk3n");
+      window.clarity =
+        window.clarity ||
+        function () {
+          (window.clarity.q = window.clarity.q || []).push(arguments);
+        };
 
-      function checkClarityConsent() {
-        try {
-          return localStorage.getItem("ctg-cookie-consent") === "granted";
-        } catch (e) {
-          return false;
+      (function () {
+        var CLARITY_ID = "xshyomjk3n";
+        var injected = false;
+
+        function clarityConsented() {
+          try {
+            return localStorage.getItem("ctg-cookie-consent") === "granted";
+          } catch (e) {
+            return false;
+          }
         }
-      }
 
-      // Aplicar el estado de consentimiento inicial (denegado si no hay preferencia previa)
-      window.clarity("consent", checkClarityConsent());
+        function loadClarity() {
+          if (injected || !clarityConsented()) return;
+          injected = true;
 
-      // Actualizar el consentimiento cuando el banner emite la decisión del usuario
-      window.addEventListener("ctg-consent-resolved", function () {
-        window.clarity("consent", checkClarityConsent());
-      });
+          window.clarity("consent", true);
+
+          var t = document.createElement("script");
+          t.async = 1;
+          t.src = "https://www.clarity.ms/tag/" + CLARITY_ID + "?ref=bwt";
+          document.head.appendChild(t);
+        }
+
+        // Visita de vuelta con el permiso ya concedido: se carga de inmediato.
+        loadClarity();
+
+        // El banner despacha en `document`, así que el oyente vive en el MISMO
+        // blanco: un CustomEvent sin `bubbles` despachado en document nunca
+        // alcanza window, y el oyente quedaba muerto sin dar ningún error.
+        document.addEventListener("ctg-consent-resolved", function () {
+          if (clarityConsented()) loadClarity();
+          else window.clarity("consent", false);
+        });
+      })();
     </script>
   </head>
   <body>
