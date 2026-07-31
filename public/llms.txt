@@ -6,9 +6,10 @@ CTG Code es el estudio de David Serrano. Trabaja en remoto a nivel nacional e in
 
 ## Servicios
 
-- [Desarrollo de Software a la Medida](https://ctgcode.com/#services): plataformas web complejas, paneles de administración y arquitecturas adaptadas al negocio, con foco en rendimiento, seguridad y escalabilidad. Stack: Python, FastAPI, PostgreSQL, TypeScript, Astro, Rust.
-- [Desarrollo Web de Alto Rendimiento](https://ctgcode.com/#services): sitios corporativos y landing pages optimizados al 100% en PageSpeed, enfocados en conversión, velocidad de carga y SEO. Stack: Astro, TypeScript, HTMX, Jinja.
-- [Automatizaciones e Integraciones](https://ctgcode.com/#services): integraciones a la medida e interfaces API para automatizar flujos operativos recurrentes y reducir tareas manuales. Stack: Python, FastAPI, REST API, PostgreSQL.
+- [Servicios — la carta completa](https://ctgcode.com/servicios/): cada servicio a fondo (qué incluye y para quién es), las fases de trabajo de la idea a producción y los compromisos del estudio.
+- [Desarrollo de Software a la Medida](https://ctgcode.com/servicios/): plataformas web complejas, paneles de administración y arquitecturas adaptadas al negocio, con foco en rendimiento, seguridad y escalabilidad. Stack: Python, FastAPI, PostgreSQL, TypeScript, Astro, Rust.
+- [Desarrollo Web de Alto Rendimiento](https://ctgcode.com/servicios/): sitios corporativos y landing pages optimizados al 100% en PageSpeed, enfocados en conversión, velocidad de carga y SEO. Stack: Astro, TypeScript, HTMX, Jinja.
+- [Automatizaciones e Integraciones](https://ctgcode.com/servicios/): integraciones a la medida e interfaces API para automatizar flujos operativos recurrentes y reducir tareas manuales. Stack: Python, FastAPI, REST API, PostgreSQL.
 
 ## Proyectos
 
@@ -24,7 +25,7 @@ CTG Code es el estudio de David Serrano. Trabaja en remoto a nivel nacional e in
 
 ## Optional
 
-- [Inicio (EN)](https://ctgcode.com/en/) · [Projects (EN)](https://ctgcode.com/en/projects/)
+- [Inicio (EN)](https://ctgcode.com/en/) · [Services (EN)](https://ctgcode.com/en/services/) · [Projects (EN)](https://ctgcode.com/en/projects/)
 - [Política de Privacidad](https://ctgcode.com/privacidad/) · [Privacy Policy (EN)](https://ctgcode.com/en/privacy/)
 - [Términos y Condiciones](https://ctgcode.com/terminos/) · [Terms (EN)](https://ctgcode.com/en/terms/)
 - [Mapa del sitio (sitemap)](https://ctgcode.com/sitemap-index.xml)

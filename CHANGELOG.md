@@ -653,3 +653,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Técnico
 
 - El origen es el `default` de `pageSlug()`, que devuelve el `pageName` tal cual cuando no lo reconoce: `404` se convertía en `/404/` sin que nada fallara en el build. Es el modo de fallo silencioso que permite el esquema de slugs traducidos, y conviene tenerlo presente al añadir vistas nuevas.
+
+## [0.29.6] - 2026-07-31
+
+### Cambiado
+
+- **La carta de servicios entra en el resumen para agentes (`llms.txt`)**: el archivo no mencionaba `/servicios/` ni `/en/services/`. Los tres servicios apuntaban al ancla `#services` del inicio, escrita cuando servicios vivía solo como sección; desde entonces es una vista completa con catálogo, fases y compromisos, y quedaba invisible para los motores generativos. Ahora los tres enlazan a la página, se añade una entrada propia para la carta completa y la versión en inglés figura entre los enlaces secundarios.
+
+### Técnico
+
+- Nada valida este archivo —ni el build ni el sistema de tipos—, así que conviene repasarlo cada vez que se añada o renombre una vista.
