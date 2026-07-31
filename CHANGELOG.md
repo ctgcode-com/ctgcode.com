@@ -643,3 +643,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - La altura se refresca con un `ResizeObserver` sobre el cielo en vez de con un oyente de `resize`: cubre también la carga de fuentes y los cambios de contenido, y dispara una primera medición con el layout ya resuelto.
 - La posición de scroll se guarda en el oyente `scroll` pasivo, que se despacha antes del rAF del mismo fotograma, así que no se pierde sincronía.
 - En la traza de producción (móvil, CPU 4x, Fast 4G) el script del sol era el primer culpable del reflow forzado con 2.496 ms; tras el cambio desaparece por completo de la atribución. La animación conserva su interpolación: `--sun` recorre 0 → 0,52 → 0,84 al descender.
+
+## [0.29.5] - 2026-07-31
+
+### Corregido
+
+- **Canónica y `hreflang` en las páginas fuera del índice (`Layout.astro`)**: la 404 declaraba `<link rel="canonical">` hacia `https://ctgcode.com/404/` y alternativas de idioma hacia `/404/` y `/en/404/`. Ninguna de las tres URL existe: el SSG emite `404.html` y el alojamiento lo sirve directamente, sin ruta propia. Ahora las páginas `noindex` no declaran ubicación canónica ni alternativas, con el mismo criterio que ya se aplicaba al JSON-LD.
+
+### Técnico
+
+- El origen es el `default` de `pageSlug()`, que devuelve el `pageName` tal cual cuando no lo reconoce: `404` se convertía en `/404/` sin que nada fallara en el build. Es el modo de fallo silencioso que permite el esquema de slugs traducidos, y conviene tenerlo presente al añadir vistas nuevas.

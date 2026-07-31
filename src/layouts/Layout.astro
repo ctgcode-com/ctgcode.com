@@ -85,13 +85,22 @@ const schema = buildSchema({
     <link rel="preload" href={jakartaWoff2} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interWoff2} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={monoWoff2} as="font" type="font/woff2" crossorigin />
-    <link rel="canonical" href={canonicalUrl} />
+    {/* Canónica y alternativas de idioma SOLO en lo indexable. La 404 no tiene
+        URL propia —se sirve como 404.html, no existe /404/— así que declararla
+        canónica apuntaba a una ruta inexistente, y sus hreflang prometían
+        /404/ y /en/404/, que tampoco existen. Mismo criterio que el JSON-LD,
+        que ya se omite fuera del índice. */}
+    {!noindex && (
+      <>
+        <link rel="canonical" href={canonicalUrl} />
 
-    <!-- Alternativas por idioma (hreflang) para SEO multiidioma -->
-    {alternates.map((alt) => (
-      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={`${siteUrl}${localizedPath('es', pageSlug('es', pageName))}`} />
+        {/* Alternativas por idioma (hreflang) para SEO multiidioma */}
+        {alternates.map((alt) => (
+          <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={`${siteUrl}${localizedPath('es', pageSlug('es', pageName))}`} />
+      </>
+    )}
 
     <!-- 2. SEO General y Rastreo -->
     <title>{title}</title>
