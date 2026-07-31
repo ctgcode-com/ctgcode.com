@@ -76,11 +76,31 @@ import "./Sun.css";
     let inView = false;
     let current = -1;
 
+    /**
+     * El cielo y su altura se resuelven FUERA del bucle: no cambian al hacer
+     * scroll, solo cuando el elemento cambia de tamaño. Medirlos dentro del
+     * rAF obligaba a un reflow sincrónico por fotograma —leer geometría y
+     * escribir `--sun` en el mismo frame es layout thrashing—, y el navegador
+     * recalculaba sesenta veces por segundo un valor constante.
+     */
+    const sky = scene.closest(".sea-sky") || scene.parentElement;
+    let skyHeight = 0;
+
+    const measure = () => {
+      skyHeight = sky ? sky.getBoundingClientRect().height : window.innerHeight;
+    };
+
+    /**
+     * La posición de scroll también se cachea, y por el mismo motivo: leerla
+     * dentro del bucle, después de haber escrito `--sun` en el fotograma
+     * anterior, obliga al navegador a rehacer el layout para responder. El
+     * evento `scroll` se despacha antes del rAF del mismo fotograma, así que
+     * guardarla ahí no pierde ni un frame de sincronía.
+     */
+    let scrollY = window.scrollY;
+
     const target = (): number => {
-      const sky = scene.closest(".sea-sky") || scene.parentElement;
-      const skyHeight = sky ? sky.getBoundingClientRect().height : window.innerHeight;
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const raw = scrollY / (skyHeight * 0.95);
+      const raw = scrollY / ((skyHeight || window.innerHeight) * 0.95);
       return Math.min(1, Math.max(0, raw));
     };
 
@@ -114,7 +134,27 @@ import "./Sun.css";
     );
     io.observe(parent);
 
-    window.addEventListener("scroll", start, { passive: true });
+    // La altura se refresca sola cuando el cielo cambia de tamaño (rotación,
+    // carga de fuentes, cambio de contenido). Un ResizeObserver lo cubre todo
+    // sin sondeos y dispara una primera vez con el layout ya resuelto.
+    if (sky && "ResizeObserver" in window) {
+      new ResizeObserver(() => {
+        measure();
+        start();
+      }).observe(sky);
+    } else {
+      measure();
+      window.addEventListener("resize", measure, { passive: true });
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        scrollY = window.scrollY;
+        start();
+      },
+      { passive: true },
+    );
 
     reduceMotion.addEventListener("change", (e) => {
       if (e.matches) {

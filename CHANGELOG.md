@@ -631,3 +631,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Técnico
 
 - Lighthouse en móvil sube de 97 a **100 en Accesibilidad**, sin auditorías fallidas.
+
+## [0.29.4] - 2026-07-31
+
+### Corregido
+
+- **Reflow forzado en el bucle del sol (`Sun.astro`)**: el rAF que publica `--sun` leía la geometría del documento y escribía estilo en el mismo fotograma —layout thrashing— sesenta veces por segundo. Eran dos lecturas: `closest(".sea-sky")` con `getBoundingClientRect().height`, que devuelve un valor que no cambia al hacer scroll, y `window.scrollY || document.documentElement.scrollTop`, cuyo respaldo entra en juego justo con la página arriba (`scrollY` vale 0) y también obliga a rehacer el layout. Ahora la altura del cielo se resuelve fuera del bucle y la posición de scroll se cachea en el oyente; el bucle solo hace cuentas y escribe.
+
+### Técnico
+
+- La altura se refresca con un `ResizeObserver` sobre el cielo en vez de con un oyente de `resize`: cubre también la carga de fuentes y los cambios de contenido, y dispara una primera medición con el layout ya resuelto.
+- La posición de scroll se guarda en el oyente `scroll` pasivo, que se despacha antes del rAF del mismo fotograma, así que no se pierde sincronía.
+- En la traza de producción (móvil, CPU 4x, Fast 4G) el script del sol era el primer culpable del reflow forzado con 2.496 ms; tras el cambio desaparece por completo de la atribución. La animación conserva su interpolación: `--sun` recorre 0 → 0,52 → 0,84 al descender.
