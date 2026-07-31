@@ -663,3 +663,10 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Técnico
 
 - Nada valida este archivo —ni el build ni el sistema de tipos—, así que conviene repasarlo cada vez que se añada o renombre una vista.
+
+## [0.29.7] - 2026-07-31
+
+### Técnico
+
+- **Precisión recortada en los iconos de valores (`src/assets/{trust,excellence,resilience,innovation}.svg`)**: entre el 96% y el 98% de cada archivo eran datos de trazado, con coordenadas de hasta cinco decimales sobre un `viewBox` de 512. Se redondean a dos. Los cuatro archivos pasan de 77.298 a 42.320 bytes (45% menos) y, como el componente `About` los incrusta en línea —lo exige el recoloreado con `currentColor` en `:hover` y `:focus-within`—, el documento del inicio baja de 62.006 a 43.446 bytes comprimidos: **18.560 bytes menos, el 30% del HTML de la página**.
+- El redondeo es visualmente inocuo y acotado: los trazados usan **solo comandos absolutos** (cero relativos), así que el error no se acumula. El máximo por coordenada es de 0,005 unidades sobre 512, es decir 0,000625 px a 64 px de render.
