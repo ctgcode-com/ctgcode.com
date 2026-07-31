@@ -619,3 +619,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - La cola de `clarity()` se sigue instalando siempre, de modo que cualquier llamada previa a la carga se encola y la etiqueta la procesa al arrancar.
 - Verificado contra el build de producción en un contexto de navegador limpio: sin aceptar, cero peticiones a `clarity.ms` y ninguna cookie de tercera parte; tras aceptar, la etiqueta y el motor cargan sin violar la CSP.
 - Aviso operativo: la inyección estática existía para que los verificadores de Bing Webmaster Tools y Clarity detectaran la etiqueta sin interacción. Con el cambio, un bot que ejecute JS ya no la verá cargarse; la integración debe estar verificada antes de desplegar.
+
+## [0.29.3] - 2026-07-31
+
+### Corregido
+
+- **El resultado del formulario de contacto no se anunciaba y el foco se perdía (`Footer.astro`)**: al enviar, el `<form>` se oculta con `display: none` llevándose consigo el botón que tenía el foco, que caía a `<body>`. Los bloques de éxito y error no tenían ningún atributo de anuncio, así que quien usa lector de pantalla no recibía confirmación ni aviso de fallo en la única acción del sitio. Ahora el bloque de éxito es `role="status"`, el de error `role="alert"` —un fallo interrumpe, no informa de pasada— y el foco aterriza en el que aparece. Al reiniciar el formulario vuelve al primer campo.
+- **Contraste insuficiente en la barra de URL del navegador simulado (`ScrollShot.css`)**: `--color-text-subtle` daba 4.32:1 contra el fondo del marco, por debajo del 4.5:1 que exige AA para texto pequeño (12px). Se compone con el tono `muted` para subir el contraste sin llevarlo al texto pleno: la barra sigue leyéndose como cromo del navegador y no como contenido.
+- **Nombre accesible de la marca (`Navbar.astro`)**: el enlace declaraba `aria-label="CTG Code"` mientras en pantalla se lee «CTGCode». El nombre accesible debe contener el texto visible (WCAG 2.5.3), y el espacio lo rompía: el control por voz no encontraba el enlace. Se retira la etiqueta y el nombre pasa a salir del propio texto.
+
+### Técnico
+
+- Lighthouse en móvil sube de 97 a **100 en Accesibilidad**, sin auditorías fallidas.

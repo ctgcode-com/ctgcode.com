@@ -72,7 +72,11 @@ const navItems = [
 <header class="site-header" data-tone="night">
   <div class="header-bar">
     <div class="header-inner">
-      <a class="brand" href={home} aria-label="CTG Code">
+      {/* Sin `aria-label`: el nombre accesible sale del propio texto visible
+          («CTGCode»). Con la etiqueta puesta el nombre era «CTG Code», que no
+          contiene literalmente lo que se lee en pantalla, y el control por voz
+          no encontraba el enlace (WCAG 2.5.3, «Label in Name»). */}
+      <a class="brand" href={home}>
         <span class="brand-logo" set:html={logo} aria-hidden="true" />
         <span class="brand-word"
           >CTG<span class="brand-word-accent">Code</span></span

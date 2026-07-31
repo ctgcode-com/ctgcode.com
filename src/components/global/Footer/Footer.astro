@@ -97,8 +97,12 @@ const legalItems = [
         <p class="ft-lead">{t.footer.lead}</p>
       </div>
 
-      <!-- Encabezado de éxito (oculto por defecto) -->
-      <div id="ft-header-success" class="ft-fade is-fading ft-hidden">
+      <!-- Encabezado de éxito (oculto por defecto).
+           `role="status"` y `tabindex="-1"`: al enviarse el formulario, éste se
+           oculta con display:none y el foco —que estaba en el botón— se perdía
+           en <body>, sin que nada anunciara el resultado. Ahora el foco aterriza
+           aquí y el bloque se lee. -->
+      <div id="ft-header-success" class="ft-fade is-fading ft-hidden" role="status" tabindex="-1">
         <p class="ft-claim">{t.footer.success}</p>
         <p class="ft-lead">{t.footer.messageSent}</p>
 
@@ -109,8 +113,9 @@ const legalItems = [
         </button>
       </div>
 
-      <!-- Encabezado de error (oculto por defecto) -->
-      <div id="ft-header-error" class="ft-fade is-fading ft-hidden">
+      <!-- Encabezado de error (oculto por defecto). `role="alert"` en vez de
+           "status": un fallo de envío interrumpe, no informa de pasada. -->
+      <div id="ft-header-error" class="ft-fade is-fading ft-hidden" role="alert" tabindex="-1">
         <p class="ft-claim">{t.footer.error}</p>
         <p class="ft-lead">{t.footer.messageError}</p>
 
@@ -300,6 +305,11 @@ const legalItems = [
       feedbackBlock?.getBoundingClientRect(); // Forzar animación (Reflow)
 
       feedbackBlock?.classList.remove("is-fading");
+
+      // El botón que tenía el foco acaba de ocultarse: sin mover el foco aquí
+      // se pierde en <body> y quien navega con teclado o lector de pantalla no
+      // recibe el resultado de su envío.
+      feedbackBlock?.focus();
     }, 300);
   };
 
@@ -317,6 +327,10 @@ const legalItems = [
 
       form?.classList.remove("is-fading");
       headerDefault?.classList.remove("is-fading");
+
+      // Vuelta simétrica: el botón de reinicio también desaparece, así que el
+      // foco aterriza en el primer campo, listo para escribir de nuevo.
+      form?.querySelector<HTMLInputElement>("input")?.focus();
     }, 300);
   };
 

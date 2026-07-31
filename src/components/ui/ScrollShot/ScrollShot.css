@@ -59,7 +59,11 @@
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-wide);
-  color: var(--color-text-subtle);
+  /* `--color-text-subtle` a solas (gris marea) daba 4.32:1 contra el fondo del
+     marco: a 2xs se exige 4.5:1. Se le sube el cuerpo con el tono `muted` sin
+     llevarlo al texto pleno, para que la barra siga leyéndose como cromo del
+     navegador simulado y no como contenido. */
+  color: color-mix(in oklab, var(--color-text-muted) 62%, var(--color-text-subtle));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
