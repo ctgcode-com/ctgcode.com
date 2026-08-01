@@ -239,7 +239,7 @@ const en: LocaleSchema = {
                         'Entry and exit log',
                         'Attendance reports',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/en/automation-access-control',
                 },
                 {
                     slug: 'booking-engine',
@@ -252,7 +252,7 @@ const en: LocaleSchema = {
                         'Confirmations and reminders',
                         'Cancellations that free the slot',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/en/automation-bookings',
                 },
                 {
                     slug: 'billing-alerts',
@@ -265,7 +265,7 @@ const en: LocaleSchema = {
                         'Configurable notice schedule',
                         'History of everything sent to each customer',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/en/automation-billing-alerts',
                 },
             ],
         },

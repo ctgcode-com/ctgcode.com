@@ -61,11 +61,15 @@ export default defineConfig({
       filter: (page) => !(legalDataPending && LEGAL_URLS.has(page)),
 
       /**
-       * Las seis URL de las demos NO se listan aquí. Se construyen con
-       * `PUBLIC_DEMO` y salen con `noindex`: simulan negocios que no existen y
-       * un buscador podría tomarlas por fichas legítimas. Quien pide indexarse
-       * es la página dedicada de cada plantilla en /plantillas/ (y su gemela en
-       * /en/templates/), que son rutas reales y las recoge la integración sola.
+       * Las doce URL de las demos NO se listan aquí —seis de plantillas y seis
+       * de automatizaciones—. Se construyen con `PUBLIC_DEMO` y salen con
+       * `noindex`: simulan negocios que no existen y un buscador podría
+       * tomarlas por fichas legítimas.
+       *
+       * Quien pide indexarse es la página dedicada de cada plantilla en
+       * /plantillas/ (y su gemela en /en/templates/) y, en el caso de las
+       * automatizaciones, la sección de /proyectos que las enlaza. Son rutas
+       * reales y las recoge la integración sola.
        */
     }),
   ],

@@ -97,6 +97,65 @@ jobs:
           cp -r dist ../../dist/en/template-startup-product
           cd ../..
 
+      # Las tres demos de automatización se construyen igual que las plantillas
+      # y por la misma razón: simulan negocios que no existen, así que salen
+      # con `noindex, follow` y sin sitemap propio. La diferencia es que aquí
+      # no hay página dedicada que posicione — quien lo hace es la sección de
+      # automatizaciones de /proyectos, que es la que enlaza a cada demo.
+      - name: Checkout control-acceso-smart
+        uses: actions/checkout@v4
+        with:
+          repository: ctgcode-com/control-acceso-smart
+          path: automations/control-acceso-smart
+          token: ${{ secrets.PORTFOLIO_TRIGGER_TOKEN || github.token }}
+
+      - name: Build demo control de acceso (ES & EN)
+        run: |
+          mkdir -p dist/en
+          cd automations/control-acceso-smart
+          bun install
+          BASE_PATH="/automatizacion-control-acceso" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/automatizacion-control-acceso
+          BASE_PATH="/en/automation-access-control" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/en/automation-access-control
+          cd ../..
+
+      - name: Checkout gestion-reservas-clases
+        uses: actions/checkout@v4
+        with:
+          repository: ctgcode-com/gestion-reservas-clases
+          path: automations/gestion-reservas-clases
+          token: ${{ secrets.PORTFOLIO_TRIGGER_TOKEN || github.token }}
+
+      - name: Build demo motor de reservas (ES & EN)
+        run: |
+          mkdir -p dist/en
+          cd automations/gestion-reservas-clases
+          bun install
+          BASE_PATH="/automatizacion-reservas" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/automatizacion-reservas
+          BASE_PATH="/en/automation-bookings" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/en/automation-bookings
+          cd ../..
+
+      - name: Checkout alertas-facturacion-recurrente
+        uses: actions/checkout@v4
+        with:
+          repository: ctgcode-com/alertas-facturacion-recurrente
+          path: automations/alertas-facturacion-recurrente
+          token: ${{ secrets.PORTFOLIO_TRIGGER_TOKEN || github.token }}
+
+      - name: Build demo alertas de facturación (ES & EN)
+        run: |
+          mkdir -p dist/en
+          cd automations/alertas-facturacion-recurrente
+          bun install
+          BASE_PATH="/automatizacion-alertas-facturacion" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/automatizacion-alertas-facturacion
+          BASE_PATH="/en/automation-billing-alerts" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
+          cp -r dist ../../dist/en/automation-billing-alerts
+          cd ../..
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

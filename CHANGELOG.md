@@ -793,3 +793,16 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - La nota de procedencia de las dos plantillas nuevas explica por qué NO se publica su puntuación de SEO: la demo lleva `noindex` a propósito —simula un negocio que no existe— y Lighthouse la deja en 66-69 solo por `is-crawlable`; el resto de sus auditorías de SEO pasan. Publicar un 100 ahí sería falso y publicar el 69 sin contexto, engañoso. El bloque de servicios sí la conserva porque mide Recogras, que sí se indexa.
 - Verificado sobre `dist/`: 18 páginas, títulos y descripciones únicos, canónica autorreferencial (salvo las dos redirecciones, que apuntan a su destino por diseño), hreflang recíproco con `x-default`, JSON-LD válido con los 49 `@id` cerrados, las ocho FAQ del grafo idénticas a las del acordeón y los seis PNG de OG de plantilla. En navegador contra `bun run preview`: cero scroll horizontal en 390, 768, 1280, 1366 y 1920, y 100 en accesibilidad, prácticas recomendadas, SEO y navegación agéntica, con 0 auditorías fallidas.
+
+## [0.32.0] - 2026-08-01
+
+### Añadido
+
+- **Las tres automatizaciones ya tienen demo navegable.** El tramo de automatizaciones de la bitácora enseñaba las tres piezas con el botón de demo apagado —«demo en preparación»— desde que existe. Ahora cada una enlaza a un panel real: control de acceso en `/automatizacion-control-acceso`, motor de reservas en `/automatizacion-reservas` y alertas de facturación en `/automatizacion-alertas-facturacion`, con sus gemelas en inglés. Las construye este repositorio en el despliegue, dos veces por pieza —una por idioma—, con el mismo mecanismo que ya usaban las tres plantillas.
+
+### Técnico
+
+- Las demos viven en sus propios repositorios (`control-acceso-smart`, `gestion-reservas-clases`, `alertas-facturacion-recurrente`) y contienen **solo la demo**: un panel en Astro que simula el comportamiento del módulo en el navegador. La lógica real de cada servicio se trasladó a repositorios privados, porque es el producto que se vende y no algo que haya que regalar para poder enseñarlo.
+- Salen con `PUBLIC_DEMO=true`, así que llevan `noindex, follow` y no entran en ningún sitemap: simulan negocios que no existen y un buscador podría tomarlas por fichas legítimas. A diferencia de las plantillas, aquí no hay página dedicada que posicione en su lugar —quien lo hace es la propia sección de automatizaciones de `/proyectos`, que es la que las enlaza—. `llms.txt` gana la nota equivalente a la que ya tenían las demos de plantilla.
+- Estas demos **sí llevan un framework de JavaScript**, a diferencia de las plantillas: Astro 5 con Tailwind 4, shadcn/ui y una isla de React 19 para el panel. Son ~85 KB comprimidos que las plantillas no pagan. Es una decisión deliberada —un panel con estado compartido entre tarjetas, tabla y bitácora es justo lo que React resuelve bien—, pero conviene tenerla presente antes de comparar sus cifras con las de las plantillas.
+- El comentario del filtro del sitemap en `astro.config.mjs` pasa de seis a doce URL de demo y separa las dos familias.

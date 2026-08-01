@@ -239,7 +239,7 @@ const es: LocaleSchema = {
                         'Registro de entradas y salidas',
                         'Reportes de asistencia',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/automatizacion-control-acceso',
                 },
                 {
                     slug: 'motor-reservas',
@@ -252,7 +252,7 @@ const es: LocaleSchema = {
                         'Confirmaciones y recordatorios',
                         'Cancelaciones que liberan el cupo',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/automatizacion-reservas',
                 },
                 {
                     slug: 'alertas-facturacion',
@@ -265,7 +265,7 @@ const es: LocaleSchema = {
                         'Calendario de avisos configurable',
                         'Historial de lo enviado a cada cliente',
                     ],
-                    demoUrl: '',
+                    demoUrl: '/automatizacion-alertas-facturacion',
                 },
             ],
         },
