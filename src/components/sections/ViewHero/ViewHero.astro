@@ -19,6 +19,12 @@ interface Props {
   lang: keyof typeof locales;
   /** Nombre de la vista para la miga final y el aria del titular. */
   crumb: string;
+  /**
+   * Miga INTERMEDIA, opcional. Las vistas de primer nivel (proyectos,
+   * servicios) cuelgan directas del inicio y no la usan; las páginas de
+   * plantilla sí, porque viven bajo la bitácora: inicio → proyectos → plantilla.
+   */
+  parent?: { label: string; href: string };
   eyebrow: string;
   title: string;
   /** Trozo del título que recibe el acento (gradiente de atardecer). Opcional. */
@@ -27,7 +33,8 @@ interface Props {
   manifest: { idx: string; label: string; href: string }[];
 }
 
-const { lang, crumb, eyebrow, title, titleMark, lead, manifest } = Astro.props;
+const { lang, crumb, parent, eyebrow, title, titleMark, lead, manifest } =
+  Astro.props;
 const nav = locales[lang].nav;
 
 /* El título se parte en tres para acentuar `titleMark`. Sin mark, se pinta
@@ -52,6 +59,15 @@ const post = mi >= 0 ? title.slice(mi + (titleMark as string).length) : "";
         <li class="hv-crumb">
           <a class="hv-crumb-link" href={localizedPath(lang)}>{nav.home}</a>
         </li>
+        {
+          parent && (
+            <li class="hv-crumb">
+              <a class="hv-crumb-link" href={parent.href}>
+                {parent.label}
+              </a>
+            </li>
+          )
+        }
         <li class="hv-crumb" aria-current="page">
           <span class="hv-crumb-here">{crumb}</span>
         </li>

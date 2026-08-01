@@ -1,0 +1,954 @@
+/* ===========================================================================
+   TEMPLATE · LA FICHA DE UNA PLANTILLA
+   (co-ubicado con pages/Template/Template.astro)
+
+   Mismo mar que el resto de las vistas (lo pinta <Seascape>), pero ordenada
+   por COMPOSICIÓN y no por decoración:
+
+     · La PLACA cabalga la costura cielo/mar, desplazada a babor. Ni centrada
+       ni pegada al hero: es una etiqueta clavada en el canto.
+     · La ESCALERA de perfiles baja un peldaño por ítem; la regla vertical de
+       la izquierda sostiene el eje para que el desequilibrio no quede cojo.
+     · El INVENTARIO ancla la captura mientras la lista corre.
+     · La FRONTERA reparte el ancho de forma desigual a propósito: lo que entra
+       ocupa más que lo que no, y así se lee antes de leerse.
+
+   Prefijo `tp-` para no chocar con `bt-` (la bitácora) ni con `sv-`/`pj-`.
+   Cero valores mágicos: todo sale de tokens.css.
+   =========================================================================== */
+
+main.tp {
+  position: relative;
+  background-color: var(--palette-night);
+  overflow: clip;
+}
+
+.tp-wrap {
+  position: relative;
+  z-index: var(--z-base);
+  width: 100%;
+  max-width: var(--wrap-view);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* Rótulo mono compartido por varias piezas: la voz «de estudio». */
+.tp-mini-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+}
+
+/* Título que solo existe para los lectores de pantalla (la sección de precio
+   se lee sola por composición, pero necesita su encabezado accesible). */
+.tp-sr-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===========================================================================
+   LA PLACA — ficha de inventario sobre la costura
+   =========================================================================== */
+
+.tp-plate {
+  position: relative;
+  z-index: var(--z-raised);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+  width: fit-content;
+  max-width: calc(var(--wrap-view) - var(--content-padding) * 2);
+  /* Cabalga la costura: sube sobre el borde inferior del cielo. */
+  margin-block: calc(var(--space-xl) * -1) var(--space-2xl);
+  /* A babor, alineada con el contenido del hero — no centrada. */
+  margin-inline: max(
+      var(--content-padding),
+      (100vw - var(--wrap-view)) / 2 + var(--content-padding)
+    )
+    auto;
+  padding: var(--space-md) var(--space-lg);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--palette-night) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: var(--shadow-lg);
+}
+
+/* El filo del atardecer en el canto: la marca, medida. */
+.tp-plate::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-sm);
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-cta);
+}
+
+.tp-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-lg);
+  margin: 0;
+}
+
+.tp-fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.tp-fact-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.tp-fact-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-heading);
+}
+
+.tp-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  background-image: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.tp-demo:hover,
+.tp-demo:focus-visible {
+  color: var(--palette-coral);
+}
+
+.tp-demo-arrow {
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.tp-demo:hover .tp-demo-arrow {
+  transform: translate(0.15em, -0.15em);
+}
+
+/* ===========================================================================
+   SECCIONES — ritmo vertical común
+   =========================================================================== */
+
+.tp-who,
+.tp-inside,
+.tp-proof,
+.tp-included,
+.tp-boundary,
+.tp-price,
+.tp-faq,
+.tp-siblings {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+/* La primera ya viene separada por la placa: no dobla el aire. */
+.tp-who {
+  padding-block-start: 0;
+}
+
+/* ===========================================================================
+   01 · LA ESCALERA DE PERFILES
+   =========================================================================== */
+
+.tp-ladder {
+  --rung-step: 3.5%;
+  margin: var(--space-xl) 0 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: var(--border-thin) solid var(--color-border);
+}
+
+.tp-rung {
+  position: relative;
+  padding: var(--space-md) 0 var(--space-md) var(--space-lg);
+  /* El peldaño: cada perfil baja y se desplaza a estribor. */
+  margin-inline-start: calc(var(--step, 0) * var(--rung-step));
+}
+
+/* La marca del peldaño sobre la regla vertical. */
+.tp-rung::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: calc(var(--space-md) + 0.6em);
+  width: var(--space-md);
+  height: var(--border-thin);
+  background: var(--palette-amber);
+}
+
+.tp-rung-who {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+}
+
+.tp-rung-pain {
+  max-width: var(--measure);
+  margin: var(--space-2xs) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* ===========================================================================
+   02 · EL INVENTARIO — captura anclada + lista de secciones
+   =========================================================================== */
+
+.tp-inside-grid {
+  display: grid;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+/* La captura es apaisada (1905×771): se tumba a lo ancho, no se encierra en
+   una columna estrecha donde quedaría de sello. */
+.tp-shot {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.tp-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tp-sections {
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-section {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.tp-section-idx {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-subtle);
+}
+
+.tp-section-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--color-heading);
+}
+
+.tp-section-body {
+  max-width: var(--measure);
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.tp-stack-label {
+  margin-top: var(--space-lg);
+}
+
+.tp-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-xs);
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-tech {
+  padding: var(--space-3xs) var(--space-xs);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* ===========================================================================
+   03 · EN PRODUCCIÓN — el caso real
+   =========================================================================== */
+
+.tp-proof-grid {
+  display: grid;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  border: var(--border-thin) solid var(--color-border-warm);
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--palette-abyss-violet) 40%, transparent);
+}
+
+.tp-proof-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.tp-proof-idx {
+  color: var(--palette-amber);
+}
+
+.tp-proof-sep {
+  color: var(--color-text-subtle);
+}
+
+.tp-proof-title {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.tp-proof-body {
+  max-width: var(--measure);
+  margin: var(--space-sm) 0 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.tp-visit {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  margin-top: var(--space-md);
+  background-image: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.tp-visit:hover,
+.tp-visit:focus-visible {
+  color: var(--palette-coral);
+}
+
+.tp-visit-label {
+  text-transform: none;
+  color: var(--color-text-muted);
+}
+
+.tp-visit-arrow {
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.tp-visit:hover .tp-visit-arrow {
+  transform: translate(0.15em, -0.15em);
+}
+
+.tp-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-md);
+  margin: 0;
+}
+
+.tp-metric-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.tp-metric-value {
+  margin: var(--space-3xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  color: var(--color-heading);
+}
+
+.tp-source {
+  margin: var(--space-md) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-normal);
+  color: var(--color-text-subtle);
+}
+
+/* ===========================================================================
+   QUÉ INCLUYE — la oferta pesa; los extras, no
+   =========================================================================== */
+
+.tp-included-grid {
+  display: grid;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+.tp-includes {
+  display: grid;
+  gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-include {
+  position: relative;
+  padding-inline-start: var(--space-lg);
+}
+
+/* La marca de «va dentro»: un filo cálido, no un emoji ni un icono suelto. */
+.tp-include::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.45em;
+  width: var(--space-sm);
+  height: var(--border-thick);
+  border-radius: var(--radius-pill);
+  background: var(--palette-amber);
+}
+
+.tp-include-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--color-heading);
+}
+
+.tp-include-body {
+  max-width: var(--measure);
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.tp-extras {
+  align-self: start;
+  padding: var(--space-md);
+  border: var(--border-thin) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--palette-night) 60%, transparent);
+}
+
+.tp-extras-lead {
+  max-width: var(--measure-narrow);
+  margin: var(--space-2xs) 0 var(--space-md);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.tp-extra-list {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-extra {
+  padding-top: var(--space-sm);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.tp-extra-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+}
+
+.tp-extra-body {
+  margin: var(--space-3xs) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-subtle);
+  text-wrap: pretty;
+}
+
+/* ===========================================================================
+   LA FRONTERA — dos platillos de peso desigual
+   =========================================================================== */
+
+.tp-scales {
+  display: grid;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+.tp-scale-label {
+  margin: 0 0 var(--space-md);
+  padding-bottom: var(--space-2xs);
+  border-bottom: var(--border-thin) solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+
+.tp-scale-label--in {
+  color: var(--palette-amber);
+  border-bottom-color: var(--color-border-warm);
+}
+
+.tp-scale-label--out {
+  color: var(--color-text-subtle);
+}
+
+.tp-scale-list {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-in,
+.tp-out {
+  position: relative;
+  padding-inline-start: var(--space-md);
+  line-height: var(--leading-relaxed);
+  text-wrap: pretty;
+}
+
+.tp-in {
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.tp-out {
+  font-size: var(--text-sm);
+  color: var(--color-text-subtle);
+}
+
+/* Entra: un filo lleno. No entra: un filo hueco. La diferencia se ve sin leer. */
+.tp-in::before,
+.tp-out::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.6em;
+  width: var(--space-xs);
+  height: var(--border-thick);
+  border-radius: var(--radius-pill);
+}
+
+.tp-in::before {
+  background: var(--palette-amber);
+}
+
+.tp-out::before {
+  background: var(--color-border-strong);
+}
+
+.tp-boundary-note {
+  max-width: var(--measure);
+  margin: var(--space-xl) 0 0;
+  padding-inline-start: var(--space-md);
+  border-inline-start: var(--border-thick) solid var(--color-border-warm);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+/* ===========================================================================
+   PRECIO Y PLAZO — un renglón de inventario, no una tarjeta de SaaS
+   =========================================================================== */
+
+/* Ancho de LAYOUT, no de lectura: la cifra en pesos es una cadena larga
+   («$1.400.000 – $2.000.000 COP») y en 44rem partidos en dos columnas se
+   rompía dejando «COP» en un renglón suelto. */
+.tp-ticket {
+  display: grid;
+  gap: var(--space-xl);
+  max-width: var(--container-wide);
+  padding: var(--space-lg);
+  border: var(--border-thin) solid var(--color-border-warm);
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--palette-abyss-violet) 40%, transparent);
+}
+
+.tp-price-cop,
+.tp-price-delivery {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.tp-price-usd {
+  margin: var(--space-3xs) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--palette-amber);
+}
+
+.tp-price-note {
+  max-width: var(--measure);
+  margin: var(--space-sm) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-subtle);
+  text-wrap: pretty;
+}
+
+/* ===========================================================================
+   PREGUNTAS — mismo acordeón que la sección de servicios del Home
+   =========================================================================== */
+
+.tp-faq-list {
+  max-width: var(--container-content);
+  margin-top: var(--space-xl);
+}
+
+.tp-q {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.tp-q-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+
+.tp-q-head::-webkit-details-marker {
+  display: none;
+}
+
+.tp-q-head:hover {
+  color: var(--palette-amber);
+}
+
+.tp-q-head:focus-visible {
+  outline: var(--border-thick) solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.tp-q-text {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-normal);
+  color: var(--color-heading);
+  text-wrap: pretty;
+}
+
+/* El signo: «+» que se recoge en «−» al abrir. */
+.tp-q-sign {
+  position: relative;
+  flex-shrink: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: 0.35em;
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.tp-q-sign::before,
+.tp-q-sign::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: var(--border-thin);
+  background: currentColor;
+  transform: translateY(-50%);
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.tp-q-sign::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.tp-q[open] .tp-q-sign {
+  transform: rotate(180deg);
+  color: var(--palette-amber);
+}
+
+.tp-q[open] .tp-q-sign::after {
+  transform: translateY(-50%) rotate(90deg) scaleX(0);
+}
+
+.tp-q-body {
+  padding-bottom: var(--space-md);
+}
+
+.tp-q-answer {
+  max-width: var(--measure);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* ===========================================================================
+   LAS OTRAS DOS + CIERRE
+   =========================================================================== */
+
+.tp-siblings-title {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.tp-sib-list {
+  margin: var(--space-lg) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.tp-sib {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.tp-sib-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-2xs) var(--space-md);
+  padding-block: var(--space-md);
+  background-image: none;
+  /* El long-press en móvil no debe disparar callout ni arrastre. */
+  user-select: none;
+  transition: padding-inline-start var(--dur-base) var(--ease-expo);
+}
+
+.tp-sib-link:hover,
+.tp-sib-link:focus-visible {
+  padding-inline-start: var(--space-sm);
+}
+
+.tp-sib-eyebrow {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--palette-amber);
+}
+
+.tp-sib-name {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.tp-sib-from {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
+.tp-sib-arrow {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: center;
+  font-size: var(--text-xl);
+  color: var(--color-text-subtle);
+  transition:
+    transform var(--dur-base) var(--ease-expo),
+    color var(--dur-fast) var(--ease-soft);
+}
+
+.tp-sib-link:hover .tp-sib-arrow,
+.tp-sib-link:focus-visible .tp-sib-arrow {
+  transform: translateX(var(--space-2xs));
+  color: var(--palette-amber);
+}
+
+.tp-closing {
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
+  border: var(--border-thin) solid var(--color-border-warm);
+  border-radius: var(--radius-xl);
+  background: color-mix(in oklab, var(--palette-abyss-violet) 40%, transparent);
+}
+
+.tp-closing-title {
+  margin: var(--space-2xs) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-heading);
+  text-wrap: balance;
+}
+
+.tp-closing-body {
+  max-width: var(--measure);
+  margin: var(--space-sm) 0 var(--space-lg);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.tp-closing-cta-arrow {
+  margin-inline-start: var(--space-2xs);
+  transition: transform var(--dur-base) var(--ease-expo);
+}
+
+.tp-closing-cta:hover .tp-closing-cta-arrow {
+  transform: translateY(var(--space-3xs));
+}
+
+/* ===========================================================================
+   RESPONSIVO — se diseña para el RANGO, no para un monitor
+   =========================================================================== */
+
+/* Tablet en adelante: la frontera abre sus dos platillos. */
+@media (min-width: 48em) {
+  .tp-scales {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-2xl);
+  }
+
+  .tp-included-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-2xl);
+  }
+
+  .tp-proof-grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    padding: var(--space-xl);
+  }
+
+  .tp-ticket {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Portátil chico (el punto crítico): la captura se asoma por estribor más allá
+   del contenido y el inventario se reparte en dos columnas para no quedar en
+   una tira de ocho renglones. */
+@media (min-width: 64em) {
+  .tp-shot {
+    margin-inline-end: calc(var(--space-3xl) * -1);
+  }
+
+  .tp-sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-2xl);
+  }
+
+  /* La última fila impar se queda a babor: no se estira para «cuadrar». */
+  .tp-section {
+    align-content: start;
+  }
+}
+
+/* Móvil: la escalera se endereza y la placa deja de cabalgar. */
+@media (max-width: 47.99em) {
+  .tp-ladder {
+    --rung-step: 0%;
+  }
+
+  .tp-plate {
+    width: auto;
+    margin-block-start: var(--space-lg);
+    margin-inline: var(--content-padding);
+    padding: var(--space-md);
+  }
+
+}
+
+/* ===========================================================================
+   REVELADO AL SCROLL — solo cuando el JS «arma» la página (data-armed).
+   Sin JS o con reduce-motion: todo visible desde el inicio.
+   =========================================================================== */
+
+.tp[data-armed] [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity var(--dur-slow) var(--ease-tide),
+    transform var(--dur-slow) var(--ease-tide);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+.tp[data-armed] [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+

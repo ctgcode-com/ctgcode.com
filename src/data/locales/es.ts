@@ -131,6 +131,7 @@ const es: LocaleSchema = {
             status: 'estado',
             stack: 'stack',
             demo: 'Ver demo',
+            detail: 'Ver la plantilla',
             demoSoon: 'demo en preparación',
             shotSoon: 'captura en camino',
             audience: 'pensada para',
@@ -475,6 +476,584 @@ const es: LocaleSchema = {
                     a: 'Sí. Operamos de forma remota tanto a nivel nacional como internacional. Contamos con procesos de comunicación, gestión de proyectos e hitos de entrega optimizados para colaborar sin fricción con clientes de cualquier ubicación o zona horaria.',
                 },
             ],
+        },
+    },
+    templates: {
+        parentCrumb: 'Proyectos',
+        labels: {
+            demo: 'Ver la demo',
+            audience: 'Para quién',
+            stack: 'Construida con',
+            sections: 'Secciones',
+            included: 'Incluido',
+            extras: 'Se cotiza aparte',
+            price: 'Precio',
+            delivery: 'Entrega',
+            visit: 'Visitar el sitio',
+        },
+        included: {
+            idx: '04',
+            eyebrow: 'el encargo',
+            title: 'Qué recibes por ese precio',
+            lead: 'El sitio publicado y funcionando, no un archivo que alguien tiene que subir. Esto es lo que va dentro.',
+            items: [
+                {
+                    title: 'Dominio .com, primer año',
+                    body: 'Lo registramos y lo configuramos a tu nombre. Desde el segundo año la renovación la pagas tú, directo al proveedor y sin comisión nuestra.',
+                },
+                {
+                    title: 'Hosting, primer año',
+                    body: 'Alojamiento del sitio con HTTPS y certificado. Mismo criterio que el dominio: el segundo año lo asumes tú.',
+                },
+                {
+                    title: 'Formulario de contacto conectado',
+                    body: 'Los mensajes llegan a tu correo a través de una cuenta de Formspree configurada con tus datos. Sin servidor que mantener.',
+                },
+                {
+                    title: 'Contacto directo por WhatsApp',
+                    body: 'Un botón que abre la conversación con tu número, disponible desde cualquier punto de la página.',
+                },
+                {
+                    title: 'Carga de tus contenidos',
+                    body: 'Montamos los textos, las fotos y los datos que nos entregues, y te avisamos antes si algo no va a verse bien: una imagen pequeña, un logo sin fondo transparente, un texto que no cabe.',
+                },
+                {
+                    title: 'SEO técnico completo',
+                    body: 'Todo lo que se resuelve desde el código: etiquetas, datos estructurados, sitemap, canónicas, velocidad y accesibilidad.',
+                },
+                {
+                    title: 'Dos rondas de cambios menores',
+                    body: 'Dentro de los primeros treinta días, para afinar lo que se vea distinto una vez publicado.',
+                },
+                {
+                    title: 'Garantía de treinta días',
+                    body: 'Corregimos sin costo cualquier error de programación o de configuración del entorno. Pasado ese plazo, el soporte se puede contratar y es opcional.',
+                },
+            ],
+            extrasLead: 'Y esto no. No porque no lo hagamos, sino porque no siempre hace falta y no queremos cobrártelo de oficio.',
+            extras: [
+                {
+                    title: 'Correo profesional con tu dominio',
+                    body: 'Se cotiza según la complejidad de la configuración que pida tu proveedor.',
+                },
+                {
+                    title: 'Segundo idioma',
+                    body: 'Se cobra el trabajo técnico de dejar el sitio bilingüe —dos versiones, sus URLs y sus etiquetas de idioma—, no la traducción. Los textos traducidos los pones tú.',
+                },
+                {
+                    title: 'Search Console, Bing y perfil de Google',
+                    body: 'Lo que vive fuera del código: registrar, verificar y dejar el sitio conectado a cada herramienta.',
+                },
+                {
+                    title: 'Redacción de los textos',
+                    body: 'Si ya los tienes claros y redactados, montarlos no cuesta nada aparte.',
+                },
+            ],
+        },
+        boundary: {
+            idx: '05',
+            eyebrow: 'la frontera',
+            title: 'Hasta dónde llega una plantilla',
+            lead: 'Una plantilla es una base ya construida para acelerar el trabajo, no un molde rígido. Pero tiene un límite, y preferimos decirlo antes de cotizar que después de empezar.',
+            inLabel: 'Entra en el precio',
+            outLabel: 'Ya es desarrollo a medida',
+            inItems: [
+                'Colores, tipografías y logo',
+                'Todos los textos, de la portada al pie',
+                'Tus fotos, tus iconos y tu favicon',
+                'Reordenar u ocultar las secciones que ya trae',
+                'Cuantos elementos quieras dentro de una sección existente',
+                'Datos de contacto, horarios y redes sociales',
+            ],
+            outItems: [
+                'Una sección que la plantilla no tiene',
+                'Una segunda página: blog, portafolio, fichas de servicio',
+                'Tienda, carrito o pagos en línea',
+                'Reservas, agenda o disponibilidad en tiempo real',
+                'Área privada, inicio de sesión o panel de administración',
+                'Un gestor de contenidos para editar tú mismo',
+                'Integración con un CRM, un ERP o una API externa',
+            ],
+            note: 'Nada de la derecha es un no: es otro presupuesto. Se construye encima de esta misma base, sin tirar lo hecho.',
+        },
+        siblings: {
+            eyebrow: 'las otras dos',
+            title: 'Si esta no es la tuya',
+        },
+        closing: {
+            eyebrow: 'siguiente rumbo',
+            title: '¿La quieres con tu marca?',
+            body: 'Cuéntanos del negocio y te decimos sin rodeos si esta plantilla te sirve o si lo tuyo pide desarrollo a medida. Si te sirve, en el mismo correo va el presupuesto cerrado.',
+            cta: 'Escribir al estudio',
+        },
+        pages: {
+            professionalServices: {
+                slug: 'plantillas/servicios-profesionales',
+                metaTitle: 'Plantilla web para servicios profesionales',
+                metaDescription:
+                    'Landing de una página para consultoras, despachos y firmas: servicios, trayectoria, indicadores y contacto. Astro estático, con dominio y hosting del primer año. Desde $1.400.000 COP, entrega en 4–6 días hábiles.',
+                crumb: 'Plantilla · Servicios profesionales',
+                eyebrow: 'plantilla 01 · servicios profesionales',
+                title: 'La página de quien vende criterio',
+                titleMark: 'criterio',
+                lead: 'Cuando lo que vendes no se ve ni se toca, la página tiene un solo trabajo: explicar qué resuelves, demostrar que sabes hacerlo y dejar el contacto a un clic. Esta base está construida alrededor de eso.',
+                manifest: [
+                    { idx: '01', label: 'Para quién es', href: '#para-quien' },
+                    { idx: '02', label: 'Qué trae por dentro', href: '#por-dentro' },
+                    { idx: '03', label: 'En producción', href: '#en-produccion' },
+                    { idx: '04', label: 'Qué incluye', href: '#incluye' },
+                    { idx: '05', label: 'Hasta dónde llega', href: '#hasta-donde' },
+                    { idx: '06', label: 'Precio y plazo', href: '#precio' },
+                    { idx: '07', label: 'Preguntas', href: '#preguntas' },
+                ],
+                demoUrl: '/plantilla-servicios-profesionales/',
+                facts: [
+                    { label: 'Desde', value: '$1.400.000 COP' },
+                    { label: 'Entrega', value: '4–6 días hábiles' },
+                    { label: 'En producción', value: 'recograscolombia.com' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'para quién es',
+                    title: 'Cinco oficios y la misma dificultad',
+                    lead: 'Todos venden algo que el cliente no puede evaluar antes de contratarlo. Cada perfil llega con su propia versión del problema.',
+                    items: [
+                        {
+                            who: 'Contadores',
+                            pain: 'Te comparan por precio hasta que entienden lo que realmente haces. La estructura te da sitio para explicarlo antes de que pregunten.',
+                        },
+                        {
+                            who: 'Abogados',
+                            pain: 'La confianza se juega en la trayectoria y las credenciales. Van arriba y a la vista, no enterradas en un PDF.',
+                        },
+                        {
+                            who: 'Consultores',
+                            pain: 'Vendes un intangible: la portada te obliga a decir en una línea qué resuelves y para quién.',
+                        },
+                        {
+                            who: 'Asesores financieros',
+                            pain: 'El bloque de indicadores está para poner cifras verificables donde la competencia pone adjetivos.',
+                        },
+                        {
+                            who: 'Arquitectos e ingenieros',
+                            pain: 'La rejilla de servicios aguanta seis líneas de trabajo sin que ninguna quede sepultada bajo las demás.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'qué trae por dentro',
+                    title: 'Siete piezas, una sola página',
+                    lead: 'No hay que decidir qué secciones hacen falta: ya están, en el orden en que un visitante las necesita. Se pueden reordenar u ocultar, pero funcionan tal cual.',
+                    shotAlt: 'Primer pliegue de la demo de la plantilla de servicios profesionales',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Barra de navegación',
+                            body: 'Enlaces a cada sección y un botón de contacto que sigue visible mientras el visitante baja.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Portada',
+                            body: 'Titular, subtítulo y dos botones, con una tarjeta al lado que resume de un vistazo lo que ofreces.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Servicios',
+                            body: 'Una rejilla de hasta seis servicios, cada uno con su icono, su título y la línea que lo explica.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'Nosotros',
+                            body: 'Dos párrafos para contar quién eres y de dónde vienes, más cuatro pilares con lo que te diferencia.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Indicadores',
+                            body: 'Las cifras que dan confianza: años de trayectoria, clientes atendidos, proyectos cerrados, lo que tengas y puedas sostener.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Contacto',
+                            body: 'Formulario conectado a tu correo y los datos directos: teléfono, correo, dirección y horario.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Pie de página',
+                            body: 'Resumen, enlaces de navegación, redes sociales y aviso de derechos.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, sitio estático',
+                        'Tailwind CSS 4',
+                        'Iconos Lucide en SVG, generados en el build',
+                        'Sin framework de JavaScript',
+                    ],
+                },
+                proof: {
+                    idx: '03',
+                    eyebrow: 'en producción',
+                    title: 'Esta base ya navega sola',
+                    body: 'Recogras, gestora ambiental de aceite de cocina usado en Cartagena, salió de esta misma plantilla. Es el mejor argumento que tenemos: enseña hasta dónde cambia una base cuando se le pone la marca, el contenido y las fotos de un negocio real.',
+                    url: 'https://recograscolombia.com/',
+                    urlLabel: 'recograscolombia.com',
+                    metrics: [
+                        { label: 'Rendimiento · móvil', value: '98 – 100' },
+                        { label: 'Rendimiento · escritorio', value: '100' },
+                        { label: 'Accesibilidad', value: '96' },
+                        { label: 'SEO y buenas prácticas', value: '100' },
+                    ],
+                    metricsSource:
+                        'Medido con Lighthouse 13.4.1 sobre recograscolombia.com el 31 de julio de 2026: tres pasadas en móvil y una en escritorio. Se publica el rango observado, no la mejor pasada. El mayor pintado de contenido quedó en 1,5 s en móvil y 0,5 s en escritorio.',
+                },
+                price: {
+                    cop: '$1.400.000 – $2.000.000 COP',
+                    usd: 'USD $560 – $790',
+                    usdNote:
+                        'Referencia al cambio del 31 de julio de 2026, con los costos de transferencia ya incluidos. El precio en pesos es el que rige.',
+                    delivery: '4 – 6 días hábiles',
+                    deliveryNote:
+                        'El plazo empieza a contar cuando se confirma el pago y nos llega todo lo necesario para personalizarla: logo, colores, tipografías, textos, fotos y datos de contacto.',
+                },
+                faq: {
+                    idx: '07',
+                    eyebrow: 'preguntas',
+                    title: 'Lo que preguntan antes de decidirse',
+                    items: [
+                        {
+                            q: '¿Puedo ver esta plantilla funcionando en un cliente real?',
+                            a: 'Sí. recograscolombia.com está construido sobre esta misma base. Compara ese sitio con la demo y verás hasta dónde cambia una plantilla cuando se le pone la marca, el contenido y las fotos de un negocio de verdad.',
+                        },
+                        {
+                            q: '¿Qué pasa con el dominio y el hosting a partir del segundo año?',
+                            a: 'El primer año va incluido y queda registrado a tu nombre. Desde el segundo, la renovación la pagas tú directamente al proveedor: te entregamos los accesos y lo que cuesta. No cobramos comisión por eso ni te obligamos a renovarlo con nosotros.',
+                        },
+                        {
+                            q: '¿Me quedo con el código?',
+                            a: 'Sí. Recibes el proyecto completo con licencia de uso permanente y puedes mantenerlo con quien quieras. No dependes de nosotros para crecer, y ese es un compromiso del estudio, no una concesión de esta plantilla.',
+                        },
+                        {
+                            q: '¿Y si no tengo los textos ni las fotos?',
+                            a: 'Montamos lo que nos entregues, y antes de montarlo te decimos si algo no va a verse bien: una imagen demasiado pequeña, un logo sin fondo transparente, un texto que no cabe donde va. Conseguir o producir las imágenes y redactar los textos no entra en el precio; si ya los tienes listos, montarlos no cuesta nada aparte.',
+                        },
+                        {
+                            q: '¿Puedo añadir una sección más adelante?',
+                            a: 'Sí, pero es otro presupuesto: una sección que la plantilla no trae ya es desarrollo a medida. Se cotiza aparte y se construye sobre el mismo sitio, sin rehacer lo que ya está publicado.',
+                        },
+                        {
+                            q: '¿El sitio queda en español y en inglés?',
+                            a: 'Se entrega en un idioma. Dejarlo bilingüe es un extra: se cobra el trabajo técnico de montar las dos versiones con sus URLs y sus etiquetas de idioma, no la traducción. Los textos traducidos los pones tú, y no hay descuento por entregarlos ya traducidos.',
+                        },
+                    ],
+                },
+            },
+            localBusiness: {
+                slug: 'plantillas/negocio-local',
+                metaTitle: 'Plantilla web para negocios locales',
+                metaDescription:
+                    'Landing de una página para restaurantes, salones, talleres y tiendas: carta o catálogo, galería, horarios, mapa y WhatsApp. Astro estático, con dominio y hosting del primer año. Desde $1.500.000 COP.',
+                crumb: 'Plantilla · Negocio local',
+                eyebrow: 'plantilla 02 · negocios locales',
+                title: 'La página del negocio que se busca desde la calle',
+                titleMark: 'desde la calle',
+                lead: 'Quien te busca está de pie, con una mano, con mala señal y con prisa. Quiere la carta, la dirección y el horario en tres segundos. Esta base pone esas tres cosas donde se ven.',
+                manifest: [
+                    { idx: '01', label: 'Para quién es', href: '#para-quien' },
+                    { idx: '02', label: 'Qué trae por dentro', href: '#por-dentro' },
+                    { idx: '03', label: 'Qué incluye', href: '#incluye' },
+                    { idx: '04', label: 'Hasta dónde llega', href: '#hasta-donde' },
+                    { idx: '05', label: 'Precio y plazo', href: '#precio' },
+                    { idx: '06', label: 'Preguntas', href: '#preguntas' },
+                ],
+                demoUrl: '/plantilla-negocio-local/',
+                facts: [
+                    { label: 'Desde', value: '$1.500.000 COP' },
+                    { label: 'Entrega', value: '5 – 8 días hábiles' },
+                    { label: 'Contacto principal', value: 'WhatsApp' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'para quién es',
+                    title: 'Negocios que viven de que los encuentren cerca',
+                    lead: 'El visitante no llega a comparar proveedores: llega a resolver algo hoy, y casi siempre desde el celular.',
+                    items: [
+                        {
+                            who: 'Restaurantes',
+                            pain: 'La carta, la dirección y el horario son las tres cosas que se buscan. Están arriba, y los precios se leen sin ampliar la pantalla.',
+                        },
+                        {
+                            who: 'Salones de belleza',
+                            pain: 'La galería hace el trabajo que no hace el texto, y el botón de WhatsApp evita la llamada que nadie contesta cuando hay clienta en la silla.',
+                        },
+                        {
+                            who: 'Talleres',
+                            pain: 'El bloque de la carta sirve igual para servicios que para platos: categorías, descripción y precio, sin inventar nada.',
+                        },
+                        {
+                            who: 'Tiendas',
+                            pain: 'Si el negocio vive del barrio, el mapa y el horario valen más que cualquier eslogan de portada.',
+                        },
+                        {
+                            who: 'Gimnasios',
+                            pain: 'Los planes y las mensualidades caben en el mismo bloque del catálogo, y las fotos del local hacen el resto.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'qué trae por dentro',
+                    title: 'Siete piezas pensadas para el pulgar',
+                    lead: 'Todo el recorrido cabe en una página, y cada sección está donde la busca alguien que va con prisa.',
+                    shotAlt: 'Primer pliegue de la demo de la plantilla de negocio local',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Barra de navegación',
+                            body: 'Enlaces a cada sección y un botón de reserva o pedido por WhatsApp siempre visible.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Portada a pantalla completa',
+                            body: 'Una foto grande del local o del producto, el nombre, la promesa en una línea y dos botones: contactar y ver la carta.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Historia',
+                            body: 'Dos párrafos para contar de dónde viene el negocio y tres cifras destacadas junto a una foto: año de apertura, sedes, calificación.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'Carta o catálogo',
+                            body: 'Los productos agrupados por categorías, con descripción y precio, y la opción de destacar uno como favorito de la casa.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Galería',
+                            body: 'Una rejilla de fotos del local, los platos o los trabajos terminados.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Ubicación y horarios',
+                            body: 'Dirección con mapa, el horario día por día y los botones de llamar o escribir por WhatsApp.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Pie de página',
+                            body: 'Datos de contacto, redes sociales y aviso de derechos.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, sitio estático',
+                        'Tailwind CSS 4',
+                        'Iconos Lucide en SVG, generados en el build',
+                        'Sin framework de JavaScript',
+                    ],
+                },
+                proof: {
+                    idx: '',
+                    eyebrow: '',
+                    title: '',
+                    body: '',
+                    url: '',
+                    urlLabel: '',
+                    metrics: [],
+                    metricsSource: '',
+                },
+                price: {
+                    cop: '$1.500.000 – $2.200.000 COP',
+                    usd: 'USD $600 – $870',
+                    usdNote:
+                        'Referencia al cambio del 31 de julio de 2026, con los costos de transferencia ya incluidos. El precio en pesos es el que rige.',
+                    delivery: '5 – 8 días hábiles',
+                    deliveryNote:
+                        'El plazo empieza a contar cuando se confirma el pago y nos llega todo lo necesario para personalizarla: logo, colores, tipografías, textos, fotos, la carta o el catálogo con precios, y los datos de contacto.',
+                },
+                faq: {
+                    idx: '06',
+                    eyebrow: 'preguntas',
+                    title: 'Lo que preguntan antes de decidirse',
+                    items: [
+                        {
+                            q: '¿Puedo cambiar la carta o los precios yo mismo?',
+                            a: 'No desde un panel: la plantilla no trae gestor de contenidos, y justamente por eso es rápida y no exige mantenimiento. Los cambios se hacen sobre el archivo de contenidos del proyecto. Durante los primeros treinta días entran en las dos rondas incluidas; después se pueden contratar como soporte.',
+                        },
+                        {
+                            q: '¿El botón de WhatsApp abre la conversación con mi número?',
+                            a: 'Sí, con tu número y desde cualquier punto de la página. En esta plantilla el WhatsApp es el contacto principal, por delante del formulario: es lo que de verdad usa quien te busca desde la calle.',
+                        },
+                        {
+                            q: '¿Aparecerá mi negocio en Google Maps?',
+                            a: 'El sitio no crea la ficha de Google por sí solo. Lo que sí dejamos hecho es el SEO técnico, con los datos estructurados del negocio —dirección y horario incluidos—, para que la ficha y el sitio se refuercen entre sí. Crear, verificar y configurar el perfil de Google es un trabajo aparte y se cotiza.',
+                        },
+                        {
+                            q: '¿Y si no tengo fotos del negocio?',
+                            a: 'Montamos las que nos entregues y te decimos antes si alguna no va a verse bien por tamaño o calidad. Conseguirlas o producirlas no entra en el precio. En un negocio que se vende por la vista es la parte que más conviene resolver bien antes de empezar: una buena foto de portada cambia la página entera.',
+                        },
+                        {
+                            q: '¿Qué pasa cuando se acaben la garantía y las dos rondas?',
+                            a: 'La garantía cubre treinta días de errores de programación o de configuración del entorno, y las dos rondas de cambios menores viven en ese mismo plazo. Pasado eso, el soporte es opcional y se contrata aparte: ni el sitio deja de funcionar ni quedas atado a nosotros.',
+                        },
+                        {
+                            q: '¿Qué necesitan de mí para empezar?',
+                            a: 'El logo en buena resolución —vectorial si lo tienes—, los colores de la marca si ya están definidos, los textos de cada sección, las fotos, la carta o el catálogo con sus precios, la dirección, el horario día por día y el número de WhatsApp. El plazo de entrega empieza a contar cuando llega todo eso y el pago está confirmado.',
+                        },
+                    ],
+                },
+            },
+            startupProduct: {
+                slug: 'plantillas/producto-startup',
+                metaTitle: 'Plantilla web para productos y startups',
+                metaDescription:
+                    'Landing de una página para SaaS, apps y lanzamientos: problema, funcionalidades, cómo funciona, planes y preguntas frecuentes. Astro estático, con dominio y hosting del primer año. Desde $1.600.000 COP.',
+                crumb: 'Plantilla · Producto y startup',
+                eyebrow: 'plantilla 03 · productos y startups',
+                title: 'La página de lo que todavía hay que explicar',
+                titleMark: 'todavía hay que explicar',
+                lead: 'Un producto nuevo tiene un problema que un restaurante no tiene: nadie sabe qué es. Esta base cuenta el problema antes que la funcionalidad, ordena los planes sin marear y responde las objeciones antes de pedir el registro.',
+                manifest: [
+                    { idx: '01', label: 'Para quién es', href: '#para-quien' },
+                    { idx: '02', label: 'Qué trae por dentro', href: '#por-dentro' },
+                    { idx: '03', label: 'Qué incluye', href: '#incluye' },
+                    { idx: '04', label: 'Hasta dónde llega', href: '#hasta-donde' },
+                    { idx: '05', label: 'Precio y plazo', href: '#precio' },
+                    { idx: '06', label: 'Preguntas', href: '#preguntas' },
+                ],
+                demoUrl: '/plantilla-producto-startup/',
+                facts: [
+                    { label: 'Desde', value: '$1.600.000 COP' },
+                    { label: 'Entrega', value: '5 – 8 días hábiles' },
+                    { label: 'Incluye', value: 'Planes y preguntas frecuentes' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'para quién es',
+                    title: 'Cuando el producto aún no se explica solo',
+                    lead: 'El visitante no viene buscando tu categoría: viene con un problema y hay que enseñarle que esto lo resuelve.',
+                    items: [
+                        {
+                            who: 'SaaS',
+                            pain: 'La estructura te obliga a poner el problema antes que la lista de características. Es el orden que convierte.',
+                        },
+                        {
+                            who: 'Aplicaciones móviles',
+                            pain: 'Los pasos de «cómo funciona» quitan de encima la pregunta que frena la descarga: qué pasa después de instalarla.',
+                        },
+                        {
+                            who: 'Lanzamientos',
+                            pain: 'Hay un bloque de prueba social arriba para lo poco o mucho que tengas: usuarios, lista de espera, un medio que te mencionó.',
+                        },
+                        {
+                            who: 'Productos digitales',
+                            pain: 'El bloque de precios ordena los planes sin marear, y las preguntas frecuentes resuelven la objeción justo antes del registro.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'qué trae por dentro',
+                    title: 'Ocho piezas en el orden que convence',
+                    lead: 'El recorrido está pensado como un argumento: primero el problema, luego la solución, después la prueba y al final el precio.',
+                    shotAlt: 'Primer pliegue de la demo de la plantilla de producto y startup',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Barra de navegación',
+                            body: 'Enlaces a cada sección y el botón de registro o prueba siempre a mano.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Portada con prueba social',
+                            body: 'Titular con una parte acentuada, subtítulo, dos botones y una línea de prueba social justo debajo.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Funcionalidades',
+                            body: 'Una rejilla con icono, título y explicación por funcionalidad, escrita en clave de qué resuelve y no de qué hace.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'Cómo funciona',
+                            body: 'Los pasos numerados, del registro al primer resultado útil.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Precios',
+                            body: 'Los planes lado a lado, con lo que incluye cada uno y uno destacado como recomendado.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Preguntas frecuentes',
+                            body: 'Un acordeón con las objeciones típicas resueltas antes de pedir el registro.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Cierre',
+                            body: 'Un último bloque de llamada a la acción para quien llegó leyendo hasta abajo.',
+                        },
+                        {
+                            idx: '08',
+                            name: 'Pie de página',
+                            body: 'Enlaces, redes sociales y aviso de derechos.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, sitio estático',
+                        'Tailwind CSS 4',
+                        'Iconos Lucide en SVG, generados en el build',
+                        'Sin framework de JavaScript',
+                    ],
+                },
+                proof: {
+                    idx: '',
+                    eyebrow: '',
+                    title: '',
+                    body: '',
+                    url: '',
+                    urlLabel: '',
+                    metrics: [],
+                    metricsSource: '',
+                },
+                price: {
+                    cop: '$1.600.000 – $2.400.000 COP',
+                    usd: 'USD $640 – $950',
+                    usdNote:
+                        'Referencia al cambio del 31 de julio de 2026, con los costos de transferencia ya incluidos. El precio en pesos es el que rige.',
+                    delivery: '5 – 8 días hábiles',
+                    deliveryNote:
+                        'El plazo empieza a contar cuando se confirma el pago y nos llega todo lo necesario para personalizarla: logo, colores, tipografías, textos, capturas del producto, los planes con sus precios y los datos de contacto.',
+                },
+                faq: {
+                    idx: '06',
+                    eyebrow: 'preguntas',
+                    title: 'Lo que preguntan antes de decidirse',
+                    items: [
+                        {
+                            q: '¿El bloque de precios se conecta a una pasarela de pago?',
+                            a: 'No. Los planes se muestran y el botón de cada uno lleva a donde tú digas: un registro, un correo, un WhatsApp o tu propia aplicación. Conectar una pasarela de pago y cobrar desde la página es desarrollo a medida y se cotiza aparte.',
+                        },
+                        {
+                            q: '¿Puedo poner logos de clientes o de medios en la prueba social?',
+                            a: 'Sí, siempre que tengas permiso para usarlos. Es la única parte de la página cuyo contenido no depende solo de ti, así que conviene resolverla antes de empezar. Si todavía no hay logos, el bloque funciona igual con una cifra o una frase.',
+                        },
+                        {
+                            q: '¿Cuántos planes caben en la sección de precios?',
+                            a: 'Tres se leen cómodos y es lo que recomendamos. Con cuatro empieza a apretar en pantallas pequeñas. Si necesitas más planes, o una tabla comparativa de características, ya es desarrollo a medida.',
+                        },
+                        {
+                            q: '¿Y si el producto todavía no existe?',
+                            a: 'No es un problema: la plantilla está pensada justo para eso, para explicar algo que aún hay que explicar, validar interés o recoger una lista de espera. Lo que sí necesitas tener claro es qué problema resuelves y para quién; sin eso, ninguna página funciona.',
+                        },
+                        {
+                            q: '¿Y si no tengo los textos ni capturas del producto?',
+                            a: 'Montamos lo que nos entregues, y te avisamos antes si algo no va a verse bien: una captura de baja resolución, un texto que no cabe donde va. Producir las capturas y redactar los textos no entra en el precio; si ya los tienes listos, montarlos no cuesta nada aparte.',
+                        },
+                        {
+                            q: '¿Puedo migrar después a algo más grande?',
+                            a: 'Sí. Es un sitio estático en Astro, sin ataduras: cuando el producto pida una aplicación, un panel o un blog, se construye encima sin tirar lo que ya tienes. Y si prefieres hacerlo con otro equipo, el código es tuyo desde el día de la entrega.',
+                        },
+                    ],
+                },
+            },
         },
     },
     legal: {

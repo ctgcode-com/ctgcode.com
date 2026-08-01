@@ -131,6 +131,7 @@ const en: LocaleSchema = {
             status: 'status',
             stack: 'stack',
             demo: 'View demo',
+            detail: 'View the template',
             demoSoon: 'demo in the works',
             shotSoon: 'screenshot on the way',
             audience: 'built for',
@@ -475,6 +476,584 @@ const en: LocaleSchema = {
                     a: 'Yes. We operate remotely both nationally and internationally. We have streamlined communication, project management, and milestone delivery processes to collaborate seamlessly with clients from any location or time zone.',
                 },
             ],
+        },
+    },
+    templates: {
+        parentCrumb: 'Projects',
+        labels: {
+            demo: 'View the demo',
+            audience: 'Who for',
+            stack: 'Built with',
+            sections: 'Sections',
+            included: 'Included',
+            extras: 'Quoted separately',
+            price: 'Price',
+            delivery: 'Delivery',
+            visit: 'Visit the site',
+        },
+        included: {
+            idx: '04',
+            eyebrow: 'the engagement',
+            title: 'What you get for that price',
+            lead: 'The site published and running, not a folder somebody still has to upload. This is what goes in.',
+            items: [
+                {
+                    title: '.com domain, first year',
+                    body: 'We register and configure it in your name. From the second year the renewal is yours, paid straight to the provider with no commission from us.',
+                },
+                {
+                    title: 'Hosting, first year',
+                    body: 'Hosting with HTTPS and certificate. Same rule as the domain: the second year is on you.',
+                },
+                {
+                    title: 'Contact form, connected',
+                    body: 'Messages reach your inbox through a Formspree account set up with your details. No server to maintain.',
+                },
+                {
+                    title: 'Direct WhatsApp contact',
+                    body: 'A button that opens a conversation with your number, reachable from anywhere on the page.',
+                },
+                {
+                    title: 'We load your content',
+                    body: 'We place the copy, photos and details you send us, and we tell you beforehand if something will not look right: an image too small, a logo without a transparent background, a line that will not fit.',
+                },
+                {
+                    title: 'Full technical SEO',
+                    body: 'Everything that is solved in the code: tags, structured data, sitemap, canonicals, speed and accessibility.',
+                },
+                {
+                    title: 'Two rounds of minor changes',
+                    body: 'Within the first thirty days, to tune whatever reads differently once it is live.',
+                },
+                {
+                    title: 'Thirty-day warranty',
+                    body: 'We fix any programming or environment-configuration error at no cost. After that, support is optional and can be contracted.',
+                },
+            ],
+            extrasLead: 'And this is not included. Not because we do not do it, but because it is not always needed and we would rather not charge for it by default.',
+            extras: [
+                {
+                    title: 'Professional email on your domain',
+                    body: 'Quoted according to how involved the setup your provider requires turns out to be.',
+                },
+                {
+                    title: 'A second language',
+                    body: 'What we charge for is the technical work of making the site bilingual — two versions, their URLs and their language tags — not the translation. You supply the translated copy.',
+                },
+                {
+                    title: 'Search Console, Bing and Google Business Profile',
+                    body: 'The part that lives outside the code: registering, verifying and wiring the site into each tool.',
+                },
+                {
+                    title: 'Copywriting',
+                    body: 'If you already have the copy written and settled, placing it costs nothing extra.',
+                },
+            ],
+        },
+        boundary: {
+            idx: '05',
+            eyebrow: 'the boundary',
+            title: 'How far a template goes',
+            lead: 'A template is a base already built to speed the work up, not a rigid mould. But it has a limit, and we would rather state it before quoting than after starting.',
+            inLabel: 'Included in the price',
+            outLabel: 'Now it is custom development',
+            inItems: [
+                'Colours, typefaces and logo',
+                'All the copy, from the header to the footer',
+                'Your photos, your icons and your favicon',
+                'Reordering or hiding the sections it already ships with',
+                'As many items as you like inside an existing section',
+                'Contact details, opening hours and social profiles',
+            ],
+            outItems: [
+                'A section the template does not have',
+                'A second page: blog, portfolio, service detail pages',
+                'A shop, cart or online payments',
+                'Bookings, scheduling or real-time availability',
+                'A private area, login or admin panel',
+                'A content manager so you can edit it yourself',
+                'Integration with a CRM, an ERP or an external API',
+            ],
+            note: 'Nothing on the right is a no: it is a separate quote. It gets built on top of this same base, without throwing away what is done.',
+        },
+        siblings: {
+            eyebrow: 'the other two',
+            title: 'If this one is not yours',
+        },
+        closing: {
+            eyebrow: 'next heading',
+            title: 'Want it with your brand on it?',
+            body: 'Tell us about the business and we will say plainly whether this template fits or whether what you need is custom development. If it fits, the closed quote comes in the same reply.',
+            cta: 'Write to the studio',
+        },
+        pages: {
+            professionalServices: {
+                slug: 'templates/professional-services',
+                metaTitle: 'Professional services website template',
+                metaDescription:
+                    'One-page site for consultancies, firms and practices: services, track record, indicators and contact. Static Astro, domain and hosting for the first year. From USD $560, delivered in 4–6 business days.',
+                crumb: 'Template · Professional services',
+                eyebrow: 'template 01 · professional services',
+                title: 'The site for people who sell judgement',
+                titleMark: 'judgement',
+                lead: 'When what you sell cannot be seen or touched, the page has one job: explain what you solve, show you can do it, and keep the contact one click away. This base is built around that.',
+                manifest: [
+                    { idx: '01', label: 'Who it is for', href: '#who-for' },
+                    { idx: '02', label: 'What is inside', href: '#inside' },
+                    { idx: '03', label: 'In production', href: '#in-production' },
+                    { idx: '04', label: "What's included", href: '#included' },
+                    { idx: '05', label: 'How far it goes', href: '#boundary' },
+                    { idx: '06', label: 'Price and timing', href: '#price' },
+                    { idx: '07', label: 'Questions', href: '#questions' },
+                ],
+                demoUrl: '/en/template-professional-services/',
+                facts: [
+                    { label: 'From', value: 'USD $560' },
+                    { label: 'Delivery', value: '4–6 business days' },
+                    { label: 'In production', value: 'recograscolombia.com' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'who it is for',
+                    title: 'Five trades, one shared difficulty',
+                    lead: 'They all sell something the client cannot assess before hiring it. Each profile arrives with its own version of the problem.',
+                    items: [
+                        {
+                            who: 'Accountants',
+                            pain: 'You get compared on price until people understand what you actually do. The structure gives you room to explain it before they ask.',
+                        },
+                        {
+                            who: 'Lawyers',
+                            pain: 'Trust is won on track record and credentials. They sit near the top, in plain sight, not buried in a PDF.',
+                        },
+                        {
+                            who: 'Consultants',
+                            pain: 'You sell an intangible: the header forces you to say in one line what you solve and for whom.',
+                        },
+                        {
+                            who: 'Financial advisers',
+                            pain: 'The indicators block exists to put verifiable numbers where the competition puts adjectives.',
+                        },
+                        {
+                            who: 'Architects and engineers',
+                            pain: 'The services grid carries six lines of work without any of them getting buried under the rest.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'what is inside',
+                    title: 'Seven pieces, a single page',
+                    lead: 'There is nothing to decide about which sections you need: they are there, in the order a visitor needs them. They can be reordered or hidden, but they work as they come.',
+                    shotAlt: 'First fold of the professional services template demo',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Navigation bar',
+                            body: 'Links to every section plus a contact button that stays visible as the visitor scrolls.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Header',
+                            body: 'Headline, subhead and two buttons, with a card alongside that sums up your offer at a glance.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Services',
+                            body: 'A grid of up to six services, each with its icon, its title and the line that explains it.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'About',
+                            body: 'Two paragraphs to say who you are and where you come from, plus four pillars covering what sets you apart.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Indicators',
+                            body: 'The numbers that build trust: years in business, clients served, projects closed — whatever you have and can stand behind.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Contact',
+                            body: 'A form wired to your inbox and the direct details: phone, email, address and hours.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Footer',
+                            body: 'Summary, navigation links, social profiles and copyright notice.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, static output',
+                        'Tailwind CSS 4',
+                        'Lucide icons as SVG, generated at build time',
+                        'No JavaScript framework',
+                    ],
+                },
+                proof: {
+                    idx: '03',
+                    eyebrow: 'in production',
+                    title: 'This base already sails on its own',
+                    body: 'Recogras, a used-cooking-oil environmental manager in Cartagena, came out of this very template. It is the best argument we have: it shows how far a base travels once it carries a real business’s brand, content and photography.',
+                    url: 'https://recograscolombia.com/',
+                    urlLabel: 'recograscolombia.com',
+                    metrics: [
+                        { label: 'Performance · mobile', value: '98 – 100' },
+                        { label: 'Performance · desktop', value: '100' },
+                        { label: 'Accessibility', value: '96' },
+                        { label: 'SEO and best practices', value: '100' },
+                    ],
+                    metricsSource:
+                        'Measured with Lighthouse 13.4.1 against recograscolombia.com on 31 July 2026: three mobile runs and one desktop run. We publish the observed range, not the best run. Largest contentful paint came in at 1.5 s on mobile and 0.5 s on desktop.',
+                },
+                price: {
+                    cop: '$1,400,000 – $2,000,000 COP',
+                    usd: 'USD $560 – $790',
+                    usdNote:
+                        'Converted at the 31 July 2026 rate, transfer costs already included. The price in Colombian pesos is the governing one.',
+                    delivery: '4 – 6 business days',
+                    deliveryNote:
+                        'The clock starts when payment is confirmed and everything needed to customise it has reached us: logo, colours, typefaces, copy, photos and contact details.',
+                },
+                faq: {
+                    idx: '07',
+                    eyebrow: 'questions',
+                    title: 'What people ask before deciding',
+                    items: [
+                        {
+                            q: 'Can I see this template running for a real client?',
+                            a: 'Yes. recograscolombia.com is built on this very base. Compare that site with the demo and you will see how far a template travels once it carries a real business’s brand, content and photography.',
+                        },
+                        {
+                            q: 'What happens with the domain and hosting from the second year?',
+                            a: 'The first year is included and registered in your name. From the second year the renewal is yours, paid directly to the provider: we hand over the credentials and what it costs. We take no commission on it and we do not require you to renew through us.',
+                        },
+                        {
+                            q: 'Do I keep the code?',
+                            a: 'Yes. You receive the complete project with a permanent licence to use it, and you can maintain it with whoever you like. You do not depend on us to grow, and that is a studio commitment, not a concession of this template.',
+                        },
+                        {
+                            q: 'What if I do not have the copy or the photos?',
+                            a: 'We place whatever you send us, and before placing it we tell you if something will not look right: an image too small, a logo without a transparent background, a line that will not fit where it goes. Sourcing or producing the images and writing the copy are not included in the price; if you already have them ready, placing them costs nothing extra.',
+                        },
+                        {
+                            q: 'Can I add a section later?',
+                            a: 'Yes, but it is a separate quote: a section the template does not ship with is custom development. It gets quoted apart and built onto the same site, without redoing what is already live.',
+                        },
+                        {
+                            q: 'Does the site come in both Spanish and English?',
+                            a: 'It ships in one language. Making it bilingual is an add-on: what we charge for is the technical work of building both versions with their URLs and language tags, not the translation. You supply the translated copy, and there is no discount for handing it over already translated.',
+                        },
+                    ],
+                },
+            },
+            localBusiness: {
+                slug: 'templates/local-business',
+                metaTitle: 'Local business website template',
+                metaDescription:
+                    'One-page site for restaurants, salons, workshops and shops: menu or catalogue, gallery, opening hours, map and WhatsApp. Static Astro, domain and hosting for the first year. From USD $600.',
+                crumb: 'Template · Local business',
+                eyebrow: 'template 02 · local business',
+                title: 'The site for a business people look up from the street',
+                titleMark: 'from the street',
+                lead: 'Whoever is looking for you is standing up, one-handed, on a weak signal and in a hurry. They want the menu, the address and the hours in three seconds. This base puts those three where they can be seen.',
+                manifest: [
+                    { idx: '01', label: 'Who it is for', href: '#who-for' },
+                    { idx: '02', label: 'What is inside', href: '#inside' },
+                    { idx: '03', label: "What's included", href: '#included' },
+                    { idx: '04', label: 'How far it goes', href: '#boundary' },
+                    { idx: '05', label: 'Price and timing', href: '#price' },
+                    { idx: '06', label: 'Questions', href: '#questions' },
+                ],
+                demoUrl: '/en/template-local-business/',
+                facts: [
+                    { label: 'From', value: 'USD $600' },
+                    { label: 'Delivery', value: '5–8 business days' },
+                    { label: 'Primary contact', value: 'WhatsApp' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'who it is for',
+                    title: 'Businesses that live on being found nearby',
+                    lead: 'The visitor is not here to compare suppliers: they are here to sort something out today, and almost always from a phone.',
+                    items: [
+                        {
+                            who: 'Restaurants',
+                            pain: 'The menu, the address and the hours are the three things people look for. They sit at the top, and the prices read without pinching to zoom.',
+                        },
+                        {
+                            who: 'Hair and beauty salons',
+                            pain: 'The gallery does the work the copy cannot, and the WhatsApp button spares you the call nobody answers with a client in the chair.',
+                        },
+                        {
+                            who: 'Workshops',
+                            pain: 'The menu block works just as well for services as for dishes: categories, description and price, nothing invented.',
+                        },
+                        {
+                            who: 'Shops',
+                            pain: 'If the business lives off the neighbourhood, the map and the opening hours are worth more than any headline.',
+                        },
+                        {
+                            who: 'Gyms',
+                            pain: 'Plans and monthly fees fit in the same catalogue block, and photographs of the place do the rest.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'what is inside',
+                    title: 'Seven pieces designed for the thumb',
+                    lead: 'The whole journey fits on one page, and every section sits where somebody in a hurry would look for it.',
+                    shotAlt: 'First fold of the local business template demo',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Navigation bar',
+                            body: 'Links to every section plus a booking or ordering button on WhatsApp, always visible.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Full-screen header',
+                            body: 'A large photo of the place or the product, the name, the promise in one line and two buttons: get in touch and see the menu.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Story',
+                            body: 'Two paragraphs on where the business comes from and three highlighted figures beside a photo: year opened, locations, rating.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'Menu or catalogue',
+                            body: 'Products grouped by category, with description and price, and the option to flag one as the house favourite.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Gallery',
+                            body: 'A grid of photographs of the place, the dishes or the finished work.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Location and hours',
+                            body: 'Address with a map, the hours day by day, and buttons to call or message on WhatsApp.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Footer',
+                            body: 'Contact details, social profiles and copyright notice.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, static output',
+                        'Tailwind CSS 4',
+                        'Lucide icons as SVG, generated at build time',
+                        'No JavaScript framework',
+                    ],
+                },
+                proof: {
+                    idx: '',
+                    eyebrow: '',
+                    title: '',
+                    body: '',
+                    url: '',
+                    urlLabel: '',
+                    metrics: [],
+                    metricsSource: '',
+                },
+                price: {
+                    cop: '$1,500,000 – $2,200,000 COP',
+                    usd: 'USD $600 – $870',
+                    usdNote:
+                        'Converted at the 31 July 2026 rate, transfer costs already included. The price in Colombian pesos is the governing one.',
+                    delivery: '5 – 8 business days',
+                    deliveryNote:
+                        'The clock starts when payment is confirmed and everything needed to customise it has reached us: logo, colours, typefaces, copy, photos, the menu or catalogue with prices, and contact details.',
+                },
+                faq: {
+                    idx: '06',
+                    eyebrow: 'questions',
+                    title: 'What people ask before deciding',
+                    items: [
+                        {
+                            q: 'Can I change the menu or the prices myself?',
+                            a: 'Not from a dashboard: the template ships without a content manager, and that is precisely why it is fast and needs no maintenance. Changes are made in the project’s content file. During the first thirty days they fall under the two included rounds; after that they can be contracted as support.',
+                        },
+                        {
+                            q: 'Does the WhatsApp button open a chat with my number?',
+                            a: 'Yes, with your number and from anywhere on the page. In this template WhatsApp is the primary contact, ahead of the form: it is what people actually use when they are looking you up from the street.',
+                        },
+                        {
+                            q: 'Will my business show up on Google Maps?',
+                            a: 'The site does not create the Google listing on its own. What we do leave done is the technical SEO, with the business’s structured data — address and opening hours included — so that the listing and the site reinforce each other. Creating, verifying and configuring the Google profile is separate work and is quoted apart.',
+                        },
+                        {
+                            q: 'What if I do not have photos of the business?',
+                            a: 'We place the ones you send us and tell you beforehand if any will not look right for size or quality. Sourcing or producing them is not included in the price. In a business that sells on looks this is the part most worth settling before we start: one good header photo changes the entire page.',
+                        },
+                        {
+                            q: 'What happens once the warranty and the two rounds run out?',
+                            a: 'The warranty covers thirty days of programming or environment-configuration errors, and the two rounds of minor changes live inside that same window. After that, support is optional and contracted separately: the site does not stop working and you are not tied to us.',
+                        },
+                        {
+                            q: 'What do you need from me to start?',
+                            a: 'The logo in good resolution — vector if you have it —, the brand colours if they are already defined, the copy for each section, the photos, the menu or catalogue with prices, the address, the hours day by day and the WhatsApp number. The delivery clock starts when all of that arrives and payment is confirmed.',
+                        },
+                    ],
+                },
+            },
+            startupProduct: {
+                slug: 'templates/startup-product',
+                metaTitle: 'Startup and product website template',
+                metaDescription:
+                    'One-page site for SaaS, apps and launches: problem, features, how it works, plans and frequently asked questions. Static Astro, domain and hosting for the first year. From USD $640.',
+                crumb: 'Template · Startup and product',
+                eyebrow: 'template 03 · startups and products',
+                title: 'The site for what still needs explaining',
+                titleMark: 'still needs explaining',
+                lead: 'A new product has a problem a restaurant does not: nobody knows what it is. This base tells the problem before the feature, orders the plans without confusing anyone, and answers the objections before asking for a sign-up.',
+                manifest: [
+                    { idx: '01', label: 'Who it is for', href: '#who-for' },
+                    { idx: '02', label: 'What is inside', href: '#inside' },
+                    { idx: '03', label: "What's included", href: '#included' },
+                    { idx: '04', label: 'How far it goes', href: '#boundary' },
+                    { idx: '05', label: 'Price and timing', href: '#price' },
+                    { idx: '06', label: 'Questions', href: '#questions' },
+                ],
+                demoUrl: '/en/template-startup-product/',
+                facts: [
+                    { label: 'From', value: 'USD $640' },
+                    { label: 'Delivery', value: '5–8 business days' },
+                    { label: 'Includes', value: 'Plans and FAQ' },
+                ],
+                audience: {
+                    idx: '01',
+                    eyebrow: 'who it is for',
+                    title: 'When the product does not explain itself yet',
+                    lead: 'The visitor is not searching for your category: they arrive with a problem, and you have to show them this solves it.',
+                    items: [
+                        {
+                            who: 'SaaS',
+                            pain: 'The structure forces you to put the problem ahead of the feature list. That is the order that converts.',
+                        },
+                        {
+                            who: 'Mobile apps',
+                            pain: 'The “how it works” steps clear away the question that stalls the download: what happens after installing it.',
+                        },
+                        {
+                            who: 'Launches',
+                            pain: 'There is a social-proof block near the top for however much you have: users, a waiting list, an outlet that mentioned you.',
+                        },
+                        {
+                            who: 'Digital products',
+                            pain: 'The pricing block orders the plans without confusion, and the FAQ settles the objection right before the sign-up.',
+                        },
+                    ],
+                },
+                inside: {
+                    idx: '02',
+                    eyebrow: 'what is inside',
+                    title: 'Eight pieces in the order that convinces',
+                    lead: 'The journey is built as an argument: first the problem, then the solution, then the proof, and the price last.',
+                    shotAlt: 'First fold of the startup and product template demo',
+                    sections: [
+                        {
+                            idx: '01',
+                            name: 'Navigation bar',
+                            body: 'Links to every section and the sign-up or trial button always within reach.',
+                        },
+                        {
+                            idx: '02',
+                            name: 'Header with social proof',
+                            body: 'A headline with an accented fragment, subhead, two buttons and a line of social proof right below them.',
+                        },
+                        {
+                            idx: '03',
+                            name: 'Features',
+                            body: 'A grid with icon, title and explanation per feature, written in terms of what it solves rather than what it does.',
+                        },
+                        {
+                            idx: '04',
+                            name: 'How it works',
+                            body: 'Numbered steps, from sign-up to the first useful result.',
+                        },
+                        {
+                            idx: '05',
+                            name: 'Pricing',
+                            body: 'Plans side by side, with what each one includes and one flagged as recommended.',
+                        },
+                        {
+                            idx: '06',
+                            name: 'Frequently asked questions',
+                            body: 'An accordion settling the usual objections before asking for the sign-up.',
+                        },
+                        {
+                            idx: '07',
+                            name: 'Closing call to action',
+                            body: 'One last block for whoever read all the way down.',
+                        },
+                        {
+                            idx: '08',
+                            name: 'Footer',
+                            body: 'Links, social profiles and copyright notice.',
+                        },
+                    ],
+                    stack: [
+                        'Astro 5, static output',
+                        'Tailwind CSS 4',
+                        'Lucide icons as SVG, generated at build time',
+                        'No JavaScript framework',
+                    ],
+                },
+                proof: {
+                    idx: '',
+                    eyebrow: '',
+                    title: '',
+                    body: '',
+                    url: '',
+                    urlLabel: '',
+                    metrics: [],
+                    metricsSource: '',
+                },
+                price: {
+                    cop: '$1,600,000 – $2,400,000 COP',
+                    usd: 'USD $640 – $950',
+                    usdNote:
+                        'Converted at the 31 July 2026 rate, transfer costs already included. The price in Colombian pesos is the governing one.',
+                    delivery: '5 – 8 business days',
+                    deliveryNote:
+                        'The clock starts when payment is confirmed and everything needed to customise it has reached us: logo, colours, typefaces, copy, product screenshots, the plans with their prices and contact details.',
+                },
+                faq: {
+                    idx: '06',
+                    eyebrow: 'questions',
+                    title: 'What people ask before deciding',
+                    items: [
+                        {
+                            q: 'Does the pricing block connect to a payment gateway?',
+                            a: 'No. The plans are displayed and each button goes wherever you say: a sign-up, an email, a WhatsApp chat or your own application. Connecting a payment gateway and charging from the page is custom development and is quoted separately.',
+                        },
+                        {
+                            q: 'Can I put client or press logos in the social proof?',
+                            a: 'Yes, as long as you have permission to use them. It is the only part of the page whose content does not depend on you alone, so it is worth settling before we start. If there are no logos yet, the block works just as well with a figure or a sentence.',
+                        },
+                        {
+                            q: 'How many plans fit in the pricing section?',
+                            a: 'Three read comfortably and that is what we recommend. At four it starts to squeeze on small screens. If you need more plans, or a comparison table of features, that is custom development.',
+                        },
+                        {
+                            q: 'What if the product does not exist yet?',
+                            a: 'That is not a problem: the template is meant for exactly that — explaining something that still needs explaining, validating interest or collecting a waiting list. What you do need to be clear on is what problem you solve and for whom; without that, no page works.',
+                        },
+                        {
+                            q: 'What if I do not have the copy or product screenshots?',
+                            a: 'We place whatever you send us, and we tell you beforehand if something will not look right: a low-resolution screenshot, a line that will not fit where it goes. Producing the screenshots and writing the copy are not included in the price; if you already have them ready, placing them costs nothing extra.',
+                        },
+                        {
+                            q: 'Can I move to something bigger later?',
+                            a: 'Yes. It is a static Astro site with no strings attached: when the product calls for an application, a dashboard or a blog, it gets built on top without throwing away what you have. And if you would rather do it with another team, the code is yours from the day it ships.',
+                        },
+                    ],
+                },
+            },
         },
     },
     legal: {

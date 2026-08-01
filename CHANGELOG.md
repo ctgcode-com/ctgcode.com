@@ -705,3 +705,17 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - `follow` y no `nofollow` a propósito: la demo enlaza de vuelta al sitio y ese enlace debe seguir contando. El prop `noindex` que ya tenían las plantillas sigue emitiendo `noindex, nofollow` para el caso de un sitio de cliente.
 - Comprobado construyendo cada plantilla en los dos modos: con `PUBLIC_DEMO` salen `noindex, follow`, cero bloques `ld+json` y cero sitemaps; sin la variable, sin `robots`, dos bloques `ld+json` y dos sitemaps.
+
+## [0.31.0] - 2026-07-31
+
+### Añadido
+
+- **Una página dedicada por plantilla, en los dos idiomas** (`/plantillas/…` y `/en/templates/…`, seis rutas reales). Las demos son ahora la prueba, no la vitrina: quedaron fuera del índice, y hacía falta algo que sí posicione, se comparta y pueda citar un asistente. Cada página abre la plantilla entera: para quién es, el inventario real de sus secciones, hasta dónde llega la personalización antes de ser desarrollo a medida, qué incluye el encargo y qué se cotiza aparte, precio en pesos y dólares, plazo, y seis preguntas frecuentes propias.
+- El prefijo `plantillas` / `templates` es deliberado: no puede confundirse con la URL de la demo (`/plantilla-negocio-local/`).
+- **La de servicios profesionales publica su caso en producción**: Recogras nació de esa misma base. Sus cifras se citan con herramienta y fecha (`metricsSource`), y se publica el **rango observado** en tres pasadas, no la mejor.
+
+### Técnico
+
+- Un solo componente (`components/pages/Template/`) sirve las seis rutas: el idioma llega por `lang` y la plantilla por una clave estable del locale, no por segmento dinámico.
+- Las tres invariantes silenciosas, cubiertas: caso en `pageSlug()` para los tres `pageName` nuevos, seis imágenes OG con su builder (`scripts/builders/templates-og.ts`) enganchado al `prebuild`, y toda la copia en `LocaleSchema`. `ViewHero` gana una miga intermedia opcional: estas páginas cuelgan de la bitácora, no del inicio.
+- El sitemap las recoge solo, por ser rutas reales. Verificado sobre `dist/`: canónica autorreferencial, `hreflang` recíproco más `x-default`, y títulos y descripciones únicos frente a las otras once páginas del sitio.

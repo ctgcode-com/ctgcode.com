@@ -50,6 +50,11 @@ Estas reglas mantienen el árbol predecible sin documentar cada archivo nuevo: b
 - **Scripts de cliente.** El comportamiento propio de un componente se queda en el componente (Vite lo empaqueta y deduplica por página). `scripts/` en la raíz es **solo** tooling de build (Node, prebuild).
 - **Escenografía de fondo.** Los elementos decorativos del «descenso» (cosmos, cirros, sol, mar, arena) son componentes propios y reutilizables en `components/backdrop/`, aislados y `aria-hidden`; cada sección monta su fondo importándolos, sin CSS duplicado.
 - **Páginas delgadas.** Las rutas en `src/pages/` solo importan y renderizan su componente de `components/pages/`; los textos visibles siempre salen de `data/locales/{es,en}.ts`.
+- **Una página nueva son cuatro piezas, no una.** Añadir la ruta no basta: hay tres cosas que **fallan en silencio** si se olvidan, porque ninguna rompe el build.
+  1. Su caso en el `switch` de `pageSlug()` (`data/i18n.ts`). El `default` devuelve el `pageName` tal cual, así que un nombre no contemplado genera canónicas y `hreflang` hacia rutas que no existen.
+  2. Su par de imágenes OG en `public/images/og/{es,en}/<pageName>.png`, con su builder en `scripts/builders/` enganchado a `scripts/run-builders.ts`. El Layout construye la URL por plantilla de cadena: si el PNG falta, se publica un `og:image` roto.
+  3. Su sección en `LocaleSchema` (`data/i18n.ts`) y en los dos locales. El tipado obliga a traducir; el texto hardcodeado no.
+  Y si la página aporta nodos nuevos al `@graph` (`data/schema.ts`), todo `@id` referenciado tiene que existir en ese mismo grafo.
 
 ---
 

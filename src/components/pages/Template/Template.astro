@@ -1,0 +1,540 @@
+---
+/**
+ * Template (PÁGINA) — la ficha dedicada de UNA plantilla.
+ *
+ * Sirve a las seis rutas (`/plantillas/...` y `/en/templates/...`) con un solo
+ * componente: el idioma llega por `lang` y la plantilla por `template`, que es
+ * una clave estable del locale, no un segmento de ruta.
+ *
+ * POR QUÉ EXISTE. Las demos salieron del índice —simulan negocios que no
+ * existen— así que hacía falta algo que sí posicione, se comparta y pueda
+ * citar un asistente. La demo sigue siendo la prueba y se enlaza desde aquí;
+ * esto es la explicación.
+ *
+ * NO clona a `/proyectos/`: allí cada plantilla ocupa una tarjeta corta que
+ * ahora enlaza aquí. Tampoco clona el atardecer del Home. Hereda el mar del
+ * sitio (Seascape) y se ordena por composición:
+ *
+ *   · una PLACA de datos que cabalga la costura entre el cielo y el cuerpo,
+ *     desplazada a babor (no centrada) y con la salida a la demo;
+ *   · la escalera de perfiles, que se desplaza un peldaño por ítem;
+ *   · el inventario de secciones bajo la captura del primer pliegue, que se
+ *     asoma por estribor más allá del contenido;
+ *   · la frontera en dos columnas de peso desigual — lo que entra pesa más que
+ *     lo que no, y así se lee.
+ *
+ * El bloque «en producción» solo se pinta si la plantilla tiene un caso real
+ * (hoy, únicamente servicios profesionales con Recogras). No se inventa.
+ */
+import Layout from "../../../layouts/Layout.astro";
+import Navbar from "../../global/Navbar/Navbar.astro";
+import Footer from "../../global/Footer/Footer.astro";
+import LangNotice from "../../global/LangNotice/LangNotice.astro";
+import CTA from "../../ui/CTA/CTA.astro";
+import Seascape from "../../backdrop/Seascape/Seascape.astro";
+import ViewHero from "../../sections/ViewHero/ViewHero.astro";
+import SectionHead from "../../sections/SectionHead/SectionHead.astro";
+import { locales, localizedPath, pageSlug } from "../../../data/i18n";
+import "./Template.css";
+
+/* Capturas de página completa, en la cadena de respaldo del sitio
+   (AVIF → WebP → PNG). Ya vienen optimizadas: se emiten tal cual. */
+import tplServAvif from "../../../assets/plantilla_web_servicios_profesionales.avif";
+import tplServWebp from "../../../assets/plantilla_web_servicios_profesionales.webp";
+import tplServPng from "../../../assets/plantilla_web_servicios_profesionales.png";
+import tplLocalAvif from "../../../assets/plantilla_web_negocio_local.avif";
+import tplLocalWebp from "../../../assets/plantilla_web_negocio_local.webp";
+import tplLocalPng from "../../../assets/plantilla_web_negocio_local.png";
+import tplStartupAvif from "../../../assets/plantilla_web_startup.avif";
+import tplStartupWebp from "../../../assets/plantilla_web_startup.webp";
+import tplStartupPng from "../../../assets/plantilla_web_startup.png";
+
+/** Las tres claves del locale. El orden fija el de la sección «las otras dos». */
+export type TemplateKey =
+  | "professionalServices"
+  | "localBusiness"
+  | "startupProduct";
+
+interface Props {
+  lang: keyof typeof locales;
+  template: TemplateKey;
+}
+
+const { lang, template } = Astro.props;
+
+/* clave → pageName interno. De él salen la canónica (vía pageSlug), los
+   hreflang y la ruta de la imagen OG, así que tiene que existir su caso en el
+   switch de pageSlug() y su PNG en public/images/og/{es,en}/. */
+const PAGE_NAMES: Record<TemplateKey, string> = {
+  professionalServices: "template-professional-services",
+  localBusiness: "template-local-business",
+  startupProduct: "template-startup-product",
+};
+
+type Shot = { avif: ImageMetadata; webp: ImageMetadata; png: ImageMetadata };
+
+const SHOTS: Record<TemplateKey, Shot> = {
+  professionalServices: {
+    avif: tplServAvif,
+    webp: tplServWebp,
+    png: tplServPng,
+  },
+  localBusiness: { avif: tplLocalAvif, webp: tplLocalWebp, png: tplLocalPng },
+  startupProduct: {
+    avif: tplStartupAvif,
+    webp: tplStartupWebp,
+    png: tplStartupPng,
+  },
+};
+
+const ORDER: TemplateKey[] = [
+  "professionalServices",
+  "localBusiness",
+  "startupProduct",
+];
+
+const T = locales[lang].templates;
+const t = T.pages[template];
+const L = T.labels;
+const shot = SHOTS[template];
+const pageName = PAGE_NAMES[template];
+
+/** Con caso real en producción, se pinta el tramo; sin él, ni se menciona. */
+const hasProof = t.proof.title !== "";
+
+/* Los ids de sección SALEN del índice de la portada, en el MISMO orden en que
+   se renderizan más abajo. Así el ancla y su entrada en el manifiesto no
+   pueden desincronizarse al traducir. Si añades una sección, añádela también
+   al manifiesto del locale y a esta lista, en su sitio. */
+const ids = t.manifest.map((m) => m.href.replace(/^#/, ""));
+const [
+  idAudience,
+  idInside,
+  ...rest
+] = ids;
+const [idProof, idIncluded, idBoundary, idPrice, idFaq] = hasProof
+  ? rest
+  : ["", ...rest];
+
+/** Las otras dos plantillas, en el orden fijo del catálogo. */
+const siblings = ORDER.filter((key) => key !== template).map((key) => ({
+  key,
+  page: T.pages[key],
+  href: localizedPath(lang, pageSlug(lang, PAGE_NAMES[key])),
+}));
+
+/** La bitácora: de ella cuelgan las tres páginas (miga intermedia). */
+const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
+---
+
+<Layout
+  title={`${t.metaTitle} — CTG Code`}
+  description={t.metaDescription}
+  pageName={pageName}
+  lang={lang}
+>
+  <Navbar lang={lang} pageName="projects" />
+
+  <main class="tp">
+    <!-- El fondo compartido del sitio: cielo en la franja del hero, mar en el
+         cuerpo. Vive en <Seascape> para que todas las vistas compartan
+         exactamente el mismo mar. -->
+    <Seascape variant="full" />
+
+    <!-- ══ PORTADA ═══════════════════════════════════════════════════════ -->
+    <ViewHero
+      lang={lang}
+      crumb={t.crumb}
+      parent={{ label: T.parentCrumb, href: projectsHref }}
+      eyebrow={t.eyebrow}
+      title={t.title}
+      titleMark={t.titleMark}
+      lead={t.lead}
+      manifest={t.manifest}
+    />
+
+    <!-- ══ LA PLACA — datos de inventario + salida a la demo ═════════════
+         Cabalga la costura entre el cielo y el mar, desplazada a babor. Es la
+         ficha técnica de la pieza: lo primero que mira quien ya sabe lo que
+         busca. -->
+    <aside class="tp-plate" aria-label={t.crumb}>
+      <dl class="tp-facts">
+        {
+          t.facts.map((fact) => (
+            <div class="tp-fact">
+              <dt class="tp-fact-label">{fact.label}</dt>
+              <dd class="tp-fact-value">{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <a class="tp-demo" href={t.demoUrl}>
+        {L.demo}
+        <span class="tp-demo-arrow" aria-hidden="true">↗</span>
+      </a>
+    </aside>
+
+    <!-- ══ 01 · PARA QUIÉN ES ════════════════════════════════════════════ -->
+    <section id={idAudience} class="tp-who" aria-labelledby="tp-who-title">
+      <div class="tp-wrap">
+        <SectionHead
+          idx={t.audience.idx}
+          eyebrow={t.audience.eyebrow}
+          title={t.audience.title}
+          lead={t.audience.lead}
+          id="tp-who-title"
+        />
+
+        <!-- La escalera: cada perfil baja un peldaño a estribor. El
+             desequilibrio se compensa con la regla vertical de la izquierda,
+             que mantiene el eje. -->
+        <ol class="tp-ladder" role="list">
+          {
+            t.audience.items.map((item, i) => (
+              <li class="tp-rung" data-reveal style={`--i:${i}; --step:${i}`}>
+                <h3 class="tp-rung-who">{item.who}</h3>
+                <p class="tp-rung-pain">{item.pain}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══ 02 · QUÉ TRAE POR DENTRO ══════════════════════════════════════ -->
+    <section id={idInside} class="tp-inside" aria-labelledby="tp-inside-title">
+      <div class="tp-wrap">
+        <SectionHead
+          idx={t.inside.idx}
+          eyebrow={t.inside.eyebrow}
+          title={t.inside.title}
+          lead={t.inside.lead}
+          id="tp-inside-title"
+        />
+
+        <div class="tp-inside-grid">
+          <!-- La captura es el PRIMER PLIEGUE de la demo (1905×771, apaisada),
+               así que se tumba a lo ancho en vez de meterse en una columna: se
+               asoma por estribor más allá del contenido, que es el gesto de
+               sangrado que ya usa la bitácora. -->
+          <figure class="tp-shot">
+            <a href={t.demoUrl} tabindex="-1" aria-hidden="true">
+              <picture>
+                <source srcset={shot.avif.src} type="image/avif" />
+                <source srcset={shot.webp.src} type="image/webp" />
+                <img
+                  src={shot.png.src}
+                  width={shot.png.width}
+                  height={shot.png.height}
+                  alt={t.inside.shotAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </a>
+          </figure>
+
+          <div class="tp-inside-copy">
+            <p class="tp-mini-label">{L.sections}</p>
+            <ol class="tp-sections" role="list">
+              {
+                t.inside.sections.map((sec, i) => (
+                  <li class="tp-section" data-reveal style={`--i:${i}`}>
+                    <p class="tp-section-idx" aria-hidden="true">
+                      {sec.idx}
+                    </p>
+                    <div class="tp-section-copy">
+                      <h3 class="tp-section-name">{sec.name}</h3>
+                      <p class="tp-section-body">{sec.body}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+
+            <p class="tp-mini-label tp-stack-label">{L.stack}</p>
+            <ul class="tp-stack" role="list">
+              {t.inside.stack.map((tech) => <li class="tp-tech">{tech}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 03 · EN PRODUCCIÓN (solo si hay caso real) ════════════════════ -->
+    {
+      hasProof && (
+        <section
+          id={idProof}
+          class="tp-proof"
+          aria-labelledby="tp-proof-title"
+        >
+          <div class="tp-wrap">
+            <div class="tp-proof-grid" data-reveal>
+              <div class="tp-proof-copy">
+                <p class="eyebrow tp-proof-eyebrow">
+                  <span class="tp-proof-idx">{t.proof.idx}</span>
+                  <span class="tp-proof-sep">/</span>
+                  {t.proof.eyebrow}
+                </p>
+                <h2 id="tp-proof-title" class="tp-proof-title">
+                  {t.proof.title}
+                </h2>
+                <p class="tp-proof-body">{t.proof.body}</p>
+
+                <a
+                  class="tp-visit"
+                  href={t.proof.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {L.visit}
+                  <span class="tp-visit-label">{t.proof.urlLabel}</span>
+                  <span class="tp-visit-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              </div>
+
+              <div class="tp-proof-metrics">
+                <dl class="tp-metrics">
+                  {t.proof.metrics.map((m) => (
+                    <div class="tp-metric">
+                      <dt class="tp-metric-label">{m.label}</dt>
+                      <dd class="tp-metric-value">{m.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p class="tp-source">{t.proof.metricsSource}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ══ QUÉ INCLUYE EL ENCARGO ════════════════════════════════════════ -->
+    <section
+      id={idIncluded}
+      class="tp-included"
+      aria-labelledby="tp-included-title"
+    >
+      <div class="tp-wrap">
+        <SectionHead
+          idx={T.included.idx}
+          eyebrow={T.included.eyebrow}
+          title={T.included.title}
+          lead={T.included.lead}
+          id="tp-included-title"
+        />
+
+        <div class="tp-included-grid">
+          <ul class="tp-includes" role="list">
+            {
+              T.included.items.map((item, i) => (
+                <li class="tp-include" data-reveal style={`--i:${i}`}>
+                  <h3 class="tp-include-title">{item.title}</h3>
+                  <p class="tp-include-body">{item.body}</p>
+                </li>
+              ))
+            }
+          </ul>
+
+          <!-- Los extras pesan menos a propósito: son la columna estrecha, en
+               voz apagada. No son la oferta, son la letra clara. -->
+          <aside class="tp-extras" data-reveal>
+            <p class="tp-mini-label">{L.extras}</p>
+            <p class="tp-extras-lead">{T.included.extrasLead}</p>
+            <ul class="tp-extra-list" role="list">
+              {
+                T.included.extras.map((item) => (
+                  <li class="tp-extra">
+                    <h3 class="tp-extra-title">{item.title}</h3>
+                    <p class="tp-extra-body">{item.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ HASTA DÓNDE LLEGA — la frontera ═══════════════════════════════ -->
+    <section
+      id={idBoundary}
+      class="tp-boundary"
+      aria-labelledby="tp-boundary-title"
+    >
+      <div class="tp-wrap">
+        <SectionHead
+          idx={T.boundary.idx}
+          eyebrow={T.boundary.eyebrow}
+          title={T.boundary.title}
+          lead={T.boundary.lead}
+          id="tp-boundary-title"
+        />
+
+        <div class="tp-scales">
+          <!-- Peso desigual deliberado: lo que ENTRA ocupa más ancho que lo que
+               no. La página se lee antes de leerse. -->
+          <div class="tp-scale tp-scale--in" data-reveal style="--i:0">
+            <h3 class="tp-scale-label tp-scale-label--in">
+              {T.boundary.inLabel}
+            </h3>
+            <ul class="tp-scale-list" role="list">
+              {T.boundary.inItems.map((line) => <li class="tp-in">{line}</li>)}
+            </ul>
+          </div>
+
+          <div class="tp-scale tp-scale--out" data-reveal style="--i:1">
+            <h3 class="tp-scale-label tp-scale-label--out">
+              {T.boundary.outLabel}
+            </h3>
+            <ul class="tp-scale-list" role="list">
+              {
+                T.boundary.outItems.map((line) => <li class="tp-out">{line}</li>)
+              }
+            </ul>
+          </div>
+        </div>
+
+        <p class="tp-boundary-note" data-reveal>{T.boundary.note}</p>
+      </div>
+    </section>
+
+    <!-- ══ PRECIO Y PLAZO ════════════════════════════════════════════════ -->
+    <section id={idPrice} class="tp-price" aria-labelledby="tp-price-title">
+      <div class="tp-wrap">
+        <div class="tp-ticket" data-reveal>
+          <h2 id="tp-price-title" class="tp-sr-title">
+            {L.price} · {L.delivery}
+          </h2>
+
+          <div class="tp-ticket-row">
+            <p class="tp-mini-label">{L.price}</p>
+            <p class="tp-price-cop">{t.price.cop}</p>
+            <p class="tp-price-usd">{t.price.usd}</p>
+            <p class="tp-price-note">{t.price.usdNote}</p>
+          </div>
+
+          <div class="tp-ticket-row">
+            <p class="tp-mini-label">{L.delivery}</p>
+            <p class="tp-price-delivery">{t.price.delivery}</p>
+            <p class="tp-price-note">{t.price.deliveryNote}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PREGUNTAS ═════════════════════════════════════════════════════ -->
+    <section id={idFaq} class="tp-faq" aria-labelledby="tp-faq-title">
+      <div class="tp-wrap">
+        <SectionHead
+          idx={t.faq.idx}
+          eyebrow={t.faq.eyebrow}
+          title={t.faq.title}
+          id="tp-faq-title"
+        />
+
+        <!-- Estas preguntas y respuestas son EXACTAMENTE las que se publican
+             como FAQPage en el grafo de esta URL (ver data/schema.ts): lo que
+             lee una persona y lo que lee un robot son el mismo texto. -->
+        <div class="tp-faq-list">
+          {
+            t.faq.items.map((item) => (
+              <details class="tp-q" name="tp-faq">
+                <summary class="tp-q-head">
+                  <span class="tp-q-text">{item.q}</span>
+                  <span class="tp-q-sign" aria-hidden="true" />
+                </summary>
+                <div class="tp-q-body">
+                  <p class="tp-q-answer">{item.a}</p>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LAS OTRAS DOS + CIERRE ════════════════════════════════════════
+         Este enlace lateral es lo que sustituye a un índice de plantillas: no
+         hace falta una página que solo liste tres cosas. -->
+    <section class="tp-siblings" aria-labelledby="tp-siblings-title">
+      <div class="tp-wrap">
+        <p class="eyebrow tp-siblings-eyebrow">{T.siblings.eyebrow}</p>
+        <h2 id="tp-siblings-title" class="tp-siblings-title">
+          {T.siblings.title}
+        </h2>
+
+        <ul class="tp-sib-list" role="list">
+          {
+            siblings.map((sib, i) => (
+              <li class="tp-sib" data-reveal style={`--i:${i}`}>
+                <a class="tp-sib-link" href={sib.href}>
+                  <span class="tp-sib-eyebrow">{sib.page.eyebrow}</span>
+                  <span class="tp-sib-name">{sib.page.title}</span>
+                  <span class="tp-sib-from">
+                    {sib.page.facts[0]?.label} {sib.page.facts[0]?.value}
+                  </span>
+                  <span class="tp-sib-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <aside class="tp-closing" data-reveal aria-labelledby="tp-closing-title">
+          <p class="eyebrow tp-closing-eyebrow">{T.closing.eyebrow}</p>
+          <h2 id="tp-closing-title" class="tp-closing-title">
+            {T.closing.title}
+          </h2>
+          <p class="tp-closing-body">{T.closing.body}</p>
+          <CTA href="#contact" class="tp-closing-cta">
+            {T.closing.cta}
+            <span class="tp-closing-cta-arrow" aria-hidden="true">↓</span>
+          </CTA>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+
+  <LangNotice lang={lang} />
+</Layout>
+
+<script>
+  /**
+   * Revelado escalonado al entrar en viewport, misma mecánica que la bitácora:
+   * el JS «arma» la página (data-armed) y cada [data-reveal] sube y aparece al
+   * cruzar el umbral, con un pequeño retardo por --i. Sin JS o con
+   * prefers-reduced-motion no se arma nada: todo se ve desde el inicio.
+   */
+  const page = document.querySelector<HTMLElement>(".tp");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (page && !reduceMotion.matches) {
+    page.setAttribute("data-armed", "");
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    page
+      .querySelectorAll<HTMLElement>("[data-reveal]")
+      .forEach((el) => io.observe(el));
+  }
+</script>

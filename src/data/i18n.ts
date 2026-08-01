@@ -16,6 +16,105 @@ export type LegalDocument = {
     }[];
 };
 
+/**
+ * Una de las tres PÁGINAS DEDICADAS a una plantilla (`/plantillas/...` y su
+ * gemela `/en/templates/...`).
+ *
+ * Existen porque las demos salieron del índice: simulan negocios que no
+ * existen y un buscador podría tomarlas por fichas legítimas. La demo sigue
+ * siendo la prueba —se enlaza desde aquí—, pero quien posiciona, se comparte y
+ * puede citar un asistente es esta página.
+ *
+ * NO repite a `/proyectos/`: allí cada plantilla ocupa una tarjeta corta; aquí
+ * se abre entera (qué trae dentro, hasta dónde llega, qué incluye el encargo,
+ * precio, plazo y sus propias preguntas).
+ */
+export type TemplatePage = {
+    /**
+     * Slug REAL y localizado, con su carpeta: `plantillas/negocio-local` en
+     * español, `templates/local-business` en inglés (a este último
+     * `localizedPath` le antepone `/en`). De aquí lo toma `pageSlug`, así que
+     * canónica, hreflang y sitemap salen todos del mismo sitio. El prefijo es
+     * `plantillas`/`templates` a propósito: no puede confundirse con la URL de
+     * la demo (`/plantilla-negocio-local/`).
+     */
+    slug: string;
+    /** Título y descripción PROPIOS (nunca los del home: penaliza SEO). */
+    metaTitle: string;
+    metaDescription: string;
+    /** Nombre corto para la última miga de pan. */
+    crumb: string;
+    eyebrow: string;
+    title: string;
+    /** Trozo del título que recibe el acento (gradiente de atardecer). */
+    titleMark: string;
+    lead: string;
+    /** Índice de la portada: cada tramo con su ancla en la página. */
+    manifest: { idx: string; label: string; href: string }[];
+    /** Ruta de la demo desplegada. Fuera del índice, pero enlazable. */
+    demoUrl: string;
+    /** Ficha rápida al margen de la portada (voz mono). */
+    facts: { label: string; value: string }[];
+    /** Para quién es: cada perfil con la objeción concreta que trae. */
+    audience: {
+        idx: string;
+        eyebrow: string;
+        title: string;
+        lead: string;
+        items: { who: string; pain: string }[];
+    };
+    /** Qué trae por dentro: el inventario REAL de secciones de la plantilla. */
+    inside: {
+        idx: string;
+        eyebrow: string;
+        title: string;
+        lead: string;
+        /** Texto alternativo de la captura de página completa. */
+        shotAlt: string;
+        sections: { idx: string; name: string; body: string }[];
+        /** Tecnologías de la plantilla, en texto (no son las del sitio). */
+        stack: string[];
+    };
+    /**
+     * El respaldo. Con `url` y `metrics` llenos se pinta el caso real en
+     * producción; vacíos, solo el texto. No se inventan casos: hoy únicamente
+     * la de servicios profesionales tiene uno (Recogras).
+     */
+    proof: {
+        idx: string;
+        eyebrow: string;
+        title: string;
+        body: string;
+        url: string;
+        urlLabel: string;
+        metrics: { label: string; value: string }[];
+        /** Procedencia y fecha de las cifras: se citan, no se afirman. */
+        metricsSource: string;
+    };
+    /** Precio y plazo. El precio en pesos es el que rige; el dólar es referencia. */
+    price: {
+        cop: string;
+        usd: string;
+        /** Nota sobre la conversión y su fecha. */
+        usdNote: string;
+        delivery: string;
+        /** Desde cuándo cuenta el plazo (pago confirmado + materiales). */
+        deliveryNote: string;
+    };
+    /**
+     * Preguntas frecuentes PROPIAS de esta plantilla. Alimentan a la vez el
+     * acordeón y el nodo `FAQPage` de ESTA URL (ver data/schema.ts): lo que
+     * lee una persona y lo que lee un robot son el mismo texto. No repiten las
+     * del inicio, y son compromisos reales.
+     */
+    faq: {
+        idx: string;
+        eyebrow: string;
+        title: string;
+        items: { q: string; a: string }[];
+    };
+};
+
 export type LocaleSchema = {
     nav: {
         home: string;
@@ -130,6 +229,12 @@ export type LocaleSchema = {
             stack: string;
             /** Enlace a la demo desplegada. */
             demo: string;
+            /**
+             * Enlace a la PÁGINA dedicada de una plantilla. Las fichas de
+             * plantilla ya no llevan a la demo: llevan aquí, y la demo se
+             * enlaza desde dentro.
+             */
+            detail: string;
             /** Sustituto del enlace mientras la demo no exista. */
             demoSoon: string;
             /** Rótulo del hueco reservado a la captura. */
@@ -318,6 +423,65 @@ export type LocaleSchema = {
             cta: string;
         };
     };
+    /**
+     * Las tres páginas dedicadas a las plantillas. Lo COMERCIAL es común a las
+     * tres —el encargo se contrata igual sea cual sea la base—, así que vive
+     * una sola vez aquí; lo que cambia de una plantilla a otra vive en `pages`.
+     */
+    templates: {
+        /** Miga intermedia: las tres cuelgan de la bitácora (/proyectos/). */
+        parentCrumb: string;
+        /** Rótulos mono compartidos. */
+        labels: {
+            demo: string;
+            audience: string;
+            stack: string;
+            sections: string;
+            included: string;
+            extras: string;
+            price: string;
+            delivery: string;
+            visit: string;
+        };
+        /** Qué incluye el encargo, y qué se cotiza aparte. */
+        included: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            items: { title: string; body: string }[];
+            extrasLead: string;
+            extras: { title: string; body: string }[];
+        };
+        /** Hasta dónde llega la plantilla antes de ser desarrollo a medida. */
+        boundary: {
+            idx: string;
+            eyebrow: string;
+            title: string;
+            lead: string;
+            inLabel: string;
+            outLabel: string;
+            inItems: string[];
+            outItems: string[];
+            /** El matiz: lo de la derecha no es un no, es otro presupuesto. */
+            note: string;
+        };
+        /** Enlace lateral a las otras dos: sustituye a un índice propio. */
+        siblings: { eyebrow: string; title: string };
+        /** El cierre: la salida hacia el formulario del pie (#contact). */
+        closing: {
+            eyebrow: string;
+            title: string;
+            body: string;
+            cta: string;
+        };
+        /** Las tres plantillas. La clave es estable; el slug lo da `pageSlug`. */
+        pages: {
+            localBusiness: TemplatePage;
+            professionalServices: TemplatePage;
+            startupProduct: TemplatePage;
+        };
+    };
     legal: {
         /** Etiqueta mono sobre el título del documento. */
         eyebrow: string;
@@ -437,6 +601,15 @@ export function pageSlug(
             return locales[lang].projects.indexSlug;
         case 'services':
             return locales[lang].services.indexSlug;
+        // Las tres páginas de plantillas. Sin estos casos el `default` de abajo
+        // devolvería el pageName tal cual y las canónicas apuntarían a
+        // /template-local-business/, que no existe.
+        case 'template-local-business':
+            return locales[lang].templates.pages.localBusiness.slug;
+        case 'template-professional-services':
+            return locales[lang].templates.pages.professionalServices.slug;
+        case 'template-startup-product':
+            return locales[lang].templates.pages.startupProduct.slug;
         default:
             return pageName;
     }
