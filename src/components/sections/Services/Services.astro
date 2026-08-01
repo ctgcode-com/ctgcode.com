@@ -17,7 +17,11 @@ import { locales, localizedPath } from "../../../data/i18n";
 import "./Services.css";
 
 /**
- * Logotipos del stack. Se importan con `?url` —y se pintan con <img>— a
+ * Registro de tecnologías compartido. Esta sección mantenía su propia copia y
+ * ya había divergido —no conocía `tailwind`—, así que un mismo logotipo podía
+ * salir aquí y no en las páginas de plantilla.
+ *
+ * Los logotipos se importan allí con `?url` —y se pintan con <img>— a
  * PROPÓSITO, no por comodidad: incrustarlos en línea rompería el diseño.
  * postgresql, rest-api y rust traen su propia hoja `<style>` con clases
  * genéricas (.st0, .st1) y python define degradados con ids `A`/`B`; al
@@ -25,36 +29,7 @@ import "./Services.css";
  * entre sí. Dentro de un <img> cada SVG es un documento aparte y no se
  * contamina con los demás.
  */
-import astroUrl from "../../../assets/astro.svg?url";
-import cssUrl from "../../../assets/css.svg?url";
-import fastapiUrl from "../../../assets/fastapi.svg?url";
-import htmxUrl from "../../../assets/htmx.svg?url";
-import javascriptUrl from "../../../assets/javascript.svg?url";
-import jinjaUrl from "../../../assets/jinja.svg?url";
-import postgresqlUrl from "../../../assets/postgresql.svg?url";
-import pythonUrl from "../../../assets/python.svg?url";
-import restApiUrl from "../../../assets/rest-api.svg?url";
-import rustUrl from "../../../assets/rust.svg?url";
-import typescriptUrl from "../../../assets/typescript.svg?url";
-
-/**
- * Registro de tecnologías: clave → logotipo y nombre de marca. Los locales
- * solo guardan las CLAVES (ver data/i18n.ts); los nombres viven aquí porque
- * son marcas registradas y no se traducen.
- */
-const TECH: Record<string, { src: string; name: string }> = {
-  astro: { src: astroUrl, name: "Astro" },
-  css: { src: cssUrl, name: "CSS" },
-  fastapi: { src: fastapiUrl, name: "FastAPI" },
-  htmx: { src: htmxUrl, name: "htmx" },
-  javascript: { src: javascriptUrl, name: "JavaScript" },
-  jinja: { src: jinjaUrl, name: "Jinja" },
-  postgresql: { src: postgresqlUrl, name: "PostgreSQL" },
-  python: { src: pythonUrl, name: "Python" },
-  "rest-api": { src: restApiUrl, name: "REST API" },
-  rust: { src: rustUrl, name: "Rust" },
-  typescript: { src: typescriptUrl, name: "TypeScript" },
-};
+import { TECH } from "../../../data/tech";
 
 /** Resuelve las claves de un servicio, descartando en silencio las que no
  *  existan en el registro (así una clave mal escrita no rompe la página). */

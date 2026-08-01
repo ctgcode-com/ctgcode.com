@@ -2,11 +2,9 @@
  * Registro de tecnologías: clave estable → logotipo y nombre de marca.
  *
  * Vive aquí y no dentro de un componente porque lo consumen varios: la
- * bitácora (vía `StackList`) y las páginas de plantilla.
- *
- * `sections/Services` mantiene todavía su propia copia, y ya divergía —no
- * conoce `tailwind`—. Migrarla es trivial pero cambia una página del inicio,
- * así que se deja para su propio commit.
+ * bitácora (vía `StackList`), las páginas de plantilla y `sections/Services`.
+ * Es la única fuente: no hagas copias locales — la que había en `Services`
+ * acabó divergiendo y no conocía `tailwind`.
  *
  * Los nombres NO se traducen: son marcas. Por eso el registro no vive en los
  * locales, y por eso los locales guardan la CLAVE (`astro`) y no el texto.

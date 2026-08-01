@@ -768,3 +768,9 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Corregido
 
 - **Los logotipos del stack no seguían el formato del sitio**: se pintaban como píldoras con el nombre escrito al lado, cuando en el resto del sitio —la bitácora y la carta de servicios— un logotipo es un chip cuadrado de 2.5rem con fondo arena y el nombre en un globo que solo aparece al pasar el cursor. Se copia esa variante en vez de inventar una tercera. Comprobado propiedad a propiedad contra el chip de la bitácora: idénticos en las nueve que definen la pieza.
+
+## [0.31.4] - 2026-08-01
+
+### Técnico
+
+- **`sections/Services` deja de tener su propio registro de tecnologías** y usa el compartido de `data/tech.ts`, que ya consumían la bitácora y las páginas de plantilla. La copia había divergido —no conocía `tailwind`—, así que un mismo logotipo podía salir en una página y faltar en otra. El comentario de `data/tech.ts` pasa a decir que es la única fuente, para que no vuelva a copiarse. Verificado comparando el HTML construido antes y después: los 16 logotipos del inicio salen idénticos, mismo orden y mismos archivos.
