@@ -762,3 +762,9 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Tres trampas del arrastre. `:has()` hereda la especificidad de su argumento, así que los cuatro grados de tirón necesitan un prefijo común o la regla general le gana al elemento señalado y este se queda quieto. Lightningcss —el minificador del build— rompe la compilación entera ante un combinador inicial suelto (`:has(+ x)`), de ahí el `:scope` explícito, que es la forma larga de lo mismo. Y el peldaño y su revelado al scroll tienen que vivir en dos elementos distintos: ambos animan `transform` y la regla del revelado, más específica, dejaba el arrastre en cero.
 - Las redirecciones se declaran en `astro.config.mjs` y no en Cloudflare: Astro emite una página con `meta refresh`, `noindex` y canónica al destino, y el sitemap la ignora. Para una ruta sin enlaces entrantes es equivalente en la práctica, y la regla queda versionada con el código.
 - Verificado en las seis páginas: Lighthouse **100 en accesibilidad, prácticas recomendadas, SEO y navegación agéntica**, con 0 auditorías fallidas; 100 de rendimiento en escritorio y 94–98 en móvil, en línea con `/proyectos/`. LCP 0,5 s en escritorio y 2,1 s en móvil, CLS 0. Cero scroll horizontal en 8 páginas × 5 anchos.
+
+## [0.31.3] - 2026-07-31
+
+### Corregido
+
+- **Los logotipos del stack no seguían el formato del sitio**: se pintaban como píldoras con el nombre escrito al lado, cuando en el resto del sitio —la bitácora y la carta de servicios— un logotipo es un chip cuadrado de 2.5rem con fondo arena y el nombre en un globo que solo aparece al pasar el cursor. Se copia esa variante en vez de inventar una tercera. Comprobado propiedad a propiedad contra el chip de la bitácora: idénticos en las nueve que definen la pieza.
