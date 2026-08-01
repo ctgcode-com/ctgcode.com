@@ -36,66 +36,13 @@ export default defineConfig({
        */
       filter: (page) => !(legalDataPending && LEGAL_URLS.has(page)),
 
-      customPages: [
-        "https://ctgcode.com/plantilla-negocio-local/",
-        "https://ctgcode.com/en/template-local-business/",
-        "https://ctgcode.com/plantilla-servicios-profesionales/",
-        "https://ctgcode.com/en/template-professional-services/",
-        "https://ctgcode.com/plantilla-producto-startup/",
-        "https://ctgcode.com/en/template-startup-product/",
-      ],
-      serialize(item) {
-        // Asignar hreflang cruzado para la plantilla de negocio local
-        if (
-          item.url === "https://ctgcode.com/plantilla-negocio-local/" ||
-          item.url === "https://ctgcode.com/en/template-local-business/"
-        ) {
-          item.links = [
-            { url: "https://ctgcode.com/plantilla-negocio-local/", lang: "es" },
-            {
-              url: "https://ctgcode.com/en/template-local-business/",
-              lang: "en",
-            },
-          ];
-        }
-
-        // Asignar hreflang cruzado para la plantilla de servicios profesionales
-        if (
-          item.url ===
-            "https://ctgcode.com/plantilla-servicios-profesionales/" ||
-          item.url === "https://ctgcode.com/en/template-professional-services/"
-        ) {
-          item.links = [
-            {
-              url: "https://ctgcode.com/plantilla-servicios-profesionales/",
-              lang: "es",
-            },
-            {
-              url: "https://ctgcode.com/en/template-professional-services/",
-              lang: "en",
-            },
-          ];
-        }
-
-        // Asignar hreflang cruzado para la plantilla de producto startup
-        if (
-          item.url === "https://ctgcode.com/plantilla-producto-startup/" ||
-          item.url === "https://ctgcode.com/en/template-startup-product/"
-        ) {
-          item.links = [
-            {
-              url: "https://ctgcode.com/plantilla-producto-startup/",
-              lang: "es",
-            },
-            {
-              url: "https://ctgcode.com/en/template-startup-product/",
-              lang: "en",
-            },
-          ];
-        }
-
-        return item;
-      },
+      /**
+       * Las seis URL de las demos NO se listan aquí. Se construyen con
+       * `PUBLIC_DEMO` y salen con `noindex`: simulan negocios que no existen y
+       * un buscador podría tomarlas por fichas legítimas. Quien pide indexarse
+       * es la página dedicada de cada plantilla en /plantillas/ (y su gemela en
+       * /en/templates/), que son rutas reales y las recoge la integración sola.
+       */
     }),
   ],
 });

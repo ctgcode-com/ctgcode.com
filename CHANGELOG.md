@@ -693,3 +693,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - Las URL se derivan de los mismos slugs que usan el Layout y el pie (`footer.privacySlug` / `footer.termsSlug` de cada idioma), no se escriben a mano en la configuración.
 - Comprobado en los dos estados: con los datos completos el sitemap lista 16 URL; con el interruptor activo, 12.
+
+## [0.30.0] - 2026-07-31
+
+### Cambiado
+
+- **Las tres demos de plantilla salen del índice**: cada demo simula un negocio que no existe —un asadero en Bogotá, una consultora, un SaaS de facturación— con su nombre, su dirección y su teléfono. Un buscador podía tomarlas por fichas legítimas de negocios reales. Ahora se construyen con `PUBLIC_DEMO=true` (ver el `deploy.yml`) y esa variable, en cada repositorio de plantilla, hace tres cosas: emite `<meta name="robots" content="noindex, follow">`, **omite el JSON-LD del negocio** (`Restaurant`, `ProfessionalService`, `SoftwareApplication`) y no genera sitemap propio.
+- **`astro.config.mjs` deja de inyectar las seis URL de las demos en el sitemap**: desaparecen el bloque `customPages` y la función `serialize` entera, que existía solo para asignarles `hreflang` cruzado. El sitio pedía indexar en el sitemap justo lo que ahora se prohíbe indexar en la propia página.
+
+### Técnico
+
+- `follow` y no `nofollow` a propósito: la demo enlaza de vuelta al sitio y ese enlace debe seguir contando. El prop `noindex` que ya tenían las plantillas sigue emitiendo `noindex, nofollow` para el caso de un sitio de cliente.
+- Comprobado construyendo cada plantilla en los dos modos: con `PUBLIC_DEMO` salen `noindex, follow`, cero bloques `ld+json` y cero sitemaps; sin la variable, sin `robots`, dos bloques `ld+json` y dos sitemaps.

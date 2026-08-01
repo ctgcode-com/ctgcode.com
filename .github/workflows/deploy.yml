@@ -39,6 +39,10 @@ jobs:
           bun install --frozen-lockfile
           bun run build
 
+      # Las tres plantillas se construyen con PUBLIC_DEMO="true": son muestras
+      # que simulan negocios inexistentes, así que salen con `noindex, follow`,
+      # sin el JSON-LD del negocio y sin sitemap propio. Quien posiciona es la
+      # página dedicada de cada plantilla en /plantillas/.
       - name: Checkout plantilla-negocio-local
         uses: actions/checkout@v4
         with:
@@ -51,9 +55,9 @@ jobs:
           mkdir -p dist/en
           cd templates/plantilla-negocio-local
           bun install
-          BASE_PATH="/plantilla-negocio-local" PUBLIC_LOCALE="es" bun run build
+          BASE_PATH="/plantilla-negocio-local" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/plantilla-negocio-local
-          BASE_PATH="/en/template-local-business" PUBLIC_LOCALE="en" bun run build
+          BASE_PATH="/en/template-local-business" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/en/template-local-business
           cd ../..
 
@@ -69,9 +73,9 @@ jobs:
           mkdir -p dist/en
           cd templates/plantilla-servicios-profesionales
           bun install
-          BASE_PATH="/plantilla-servicios-profesionales" PUBLIC_LOCALE="es" bun run build
+          BASE_PATH="/plantilla-servicios-profesionales" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/plantilla-servicios-profesionales
-          BASE_PATH="/en/template-professional-services" PUBLIC_LOCALE="en" bun run build
+          BASE_PATH="/en/template-professional-services" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/en/template-professional-services
           cd ../..
 
@@ -87,9 +91,9 @@ jobs:
           mkdir -p dist/en
           cd templates/plantilla-producto-startup
           bun install
-          BASE_PATH="/plantilla-producto-startup" PUBLIC_LOCALE="es" bun run build
+          BASE_PATH="/plantilla-producto-startup" PUBLIC_LOCALE="es" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/plantilla-producto-startup
-          BASE_PATH="/en/template-startup-product" PUBLIC_LOCALE="en" bun run build
+          BASE_PATH="/en/template-startup-product" PUBLIC_LOCALE="en" PUBLIC_DEMO="true" bun run build
           cp -r dist ../../dist/en/template-startup-product
           cd ../..
 
