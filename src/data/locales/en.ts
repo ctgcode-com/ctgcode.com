@@ -698,11 +698,11 @@ const en: LocaleSchema = {
                     metrics: [
                         { label: 'Performance · mobile', value: '98 – 100' },
                         { label: 'Performance · desktop', value: '100' },
-                        { label: 'Accessibility', value: '96' },
+                        { label: 'Accessibility', value: '100' },
                         { label: 'SEO and best practices', value: '100' },
                     ],
                     metricsSource:
-                        'Measured with Lighthouse 13.4.1 against recograscolombia.com on 31 July 2026: three mobile runs and one desktop run. We publish the observed range, not the best run. Largest contentful paint came in at 1.5 s on mobile and 0.5 s on desktop.',
+                        'Measured with Lighthouse 13.4.1 against recograscolombia.com on 1 August 2026: three mobile runs and three desktop runs, discarding a warm-up pass. We publish the observed range, not the best run. Largest contentful paint came in at 1.4 s on mobile and 0.4–0.7 s on desktop.',
                 },
                 price: {
                     cop: '$1,400,000 – $2,000,000 COP',
@@ -758,10 +758,11 @@ const en: LocaleSchema = {
                 manifest: [
                     { idx: '01', label: 'Who it is for', href: '#who-for' },
                     { idx: '02', label: 'What is inside', href: '#inside' },
-                    { idx: '03', label: "What's included", href: '#included' },
-                    { idx: '04', label: 'How far it goes', href: '#boundary' },
-                    { idx: '05', label: 'Price and timing', href: '#price' },
-                    { idx: '06', label: 'Questions', href: '#questions' },
+                    { idx: '03', label: 'Measured', href: '#measured' },
+                    { idx: '04', label: "What's included", href: '#included' },
+                    { idx: '05', label: 'How far it goes', href: '#boundary' },
+                    { idx: '06', label: 'Price and timing', href: '#price' },
+                    { idx: '07', label: 'Questions', href: '#questions' },
                 ],
                 demoUrl: '/en/template-local-business/',
                 facts: [
@@ -845,14 +846,20 @@ const en: LocaleSchema = {
                         'Static output: the site compiles to HTML and is served as is, with no JavaScript framework in the browser. Icons are generated as SVG at build time, so they cost no request.',
                 },
                 proof: {
-                    idx: '',
-                    eyebrow: '',
-                    title: '',
-                    body: '',
-                    url: '',
-                    urlLabel: '',
-                    metrics: [],
-                    metricsSource: '',
+                    idx: '03',
+                    eyebrow: 'measured',
+                    title: 'What it scores before you touch it',
+                    body: 'This template does not have a business in production yet, and we are not going to invent one. What gets measured here is its own demo: the same code you receive, with the full-screen cover, the gallery and the map already loaded. A real business photography will weigh differently, but this is the starting point.',
+                    url: 'https://ctgcode.com/plantilla-negocio-local/',
+                    urlLabel: 'See the demo',
+                    metrics: [
+                        { label: 'Performance · mobile', value: '93 – 98' },
+                        { label: 'Performance · desktop', value: '99' },
+                        { label: 'Accessibility', value: '100' },
+                        { label: 'Best practices', value: '100' },
+                    ],
+                    metricsSource:
+                        'Measured with Lighthouse 13.4.1 against the demo on 1 August 2026: three mobile runs and three desktop runs, discarding a warm-up pass. We publish the observed range, not the best run. Largest contentful paint came in at 2.2–2.8 s on mobile and 0.8–0.9 s on desktop. The SEO score is left out because the demo ships with noindex on purpose — it simulates a business that does not exist — and Lighthouse penalises it for that alone; every other SEO audit passes.',
                 },
                 price: {
                     cop: '$1,500,000 – $2,200,000 COP',
@@ -864,7 +871,7 @@ const en: LocaleSchema = {
                         'The clock starts when payment is confirmed and everything needed to customise it has reached us: logo, colours, typefaces, copy, photos, the menu or catalogue with prices, and contact details.',
                 },
                 faq: {
-                    idx: '06',
+                    idx: '07',
                     eyebrow: 'questions',
                     title: 'What people ask before deciding',
                     items: [
@@ -908,10 +915,11 @@ const en: LocaleSchema = {
                 manifest: [
                     { idx: '01', label: 'Who it is for', href: '#who-for' },
                     { idx: '02', label: 'What is inside', href: '#inside' },
-                    { idx: '03', label: "What's included", href: '#included' },
-                    { idx: '04', label: 'How far it goes', href: '#boundary' },
-                    { idx: '05', label: 'Price and timing', href: '#price' },
-                    { idx: '06', label: 'Questions', href: '#questions' },
+                    { idx: '03', label: 'Measured', href: '#measured' },
+                    { idx: '04', label: "What's included", href: '#included' },
+                    { idx: '05', label: 'How far it goes', href: '#boundary' },
+                    { idx: '06', label: 'Price and timing', href: '#price' },
+                    { idx: '07', label: 'Questions', href: '#questions' },
                 ],
                 demoUrl: '/en/template-startup-product/',
                 facts: [
@@ -996,14 +1004,20 @@ const en: LocaleSchema = {
                         'Static output: the site compiles to HTML and is served as is, with no JavaScript framework in the browser. Icons are generated as SVG at build time, so they cost no request.',
                 },
                 proof: {
-                    idx: '',
-                    eyebrow: '',
-                    title: '',
-                    body: '',
-                    url: '',
-                    urlLabel: '',
-                    metrics: [],
-                    metricsSource: '',
+                    idx: '03',
+                    eyebrow: 'measured',
+                    title: 'What it scores before you touch it',
+                    body: 'This template does not have a product in production yet, and we are not going to invent one. What gets measured here is its own demo: the same code you receive, with the eight sections, the pricing table and the questions accordion. A real product content will change the words, not the base.',
+                    url: 'https://ctgcode.com/plantilla-producto-startup/',
+                    urlLabel: 'See the demo',
+                    metrics: [
+                        { label: 'Performance · mobile', value: '92 – 97' },
+                        { label: 'Performance · desktop', value: '96 – 100' },
+                        { label: 'Accessibility', value: '100' },
+                        { label: 'Best practices', value: '100' },
+                    ],
+                    metricsSource:
+                        'Measured with Lighthouse 13.4.1 against the demo on 1 August 2026: three mobile runs and three desktop runs, discarding a warm-up pass. We publish the observed range, not the best run. Largest contentful paint came in at 1.9–2.9 s on mobile and 0.6–1.3 s on desktop. The SEO score is left out because the demo ships with noindex on purpose — it simulates a product that does not exist — and Lighthouse penalises it for that alone; every other SEO audit passes.',
                 },
                 price: {
                     cop: '$1,600,000 – $2,400,000 COP',
@@ -1015,7 +1029,7 @@ const en: LocaleSchema = {
                         'The clock starts when payment is confirmed and everything needed to customise it has reached us: logo, colours, typefaces, copy, product screenshots, the plans with their prices and contact details.',
                 },
                 faq: {
-                    idx: '06',
+                    idx: '07',
                     eyebrow: 'questions',
                     title: 'What people ask before deciding',
                     items: [

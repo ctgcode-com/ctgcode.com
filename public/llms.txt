@@ -28,7 +28,7 @@ Existen demos navegables de las tres, enlazadas desde cada página. Están delib
 ## Proyectos
 
 - [Proyectos — la bitácora completa](https://ctgcode.com/proyectos/): sitios en producción, Helio (producto propio: sistema de gestión para talleres), las tres plantillas web y tres automatizaciones listas para adaptar.
-- [Recogras — recograscolombia.com](https://recograscolombia.com/): sitio corporativo para una gestora ambiental de aceite de cocina usado en Cartagena. Astro estático, construido sobre la plantilla de servicios profesionales. Medido con Lighthouse 13.4.1 el 31 de julio de 2026: rendimiento 98–100 en móvil y 100 en escritorio, accesibilidad 96, SEO y buenas prácticas 100.
+- [Recogras — recograscolombia.com](https://recograscolombia.com/): sitio corporativo para una gestora ambiental de aceite de cocina usado en Cartagena. Astro estático, construido sobre la plantilla de servicios profesionales. Medido con Lighthouse 13.4.1 el 1 de agosto de 2026: rendimiento 98–100 en móvil y 100 en escritorio, accesibilidad 100, SEO y buenas prácticas 100.
 
 ## Contacto
 

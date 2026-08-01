@@ -698,11 +698,11 @@ const es: LocaleSchema = {
                     metrics: [
                         { label: 'Rendimiento · móvil', value: '98 – 100' },
                         { label: 'Rendimiento · escritorio', value: '100' },
-                        { label: 'Accesibilidad', value: '96' },
+                        { label: 'Accesibilidad', value: '100' },
                         { label: 'SEO y buenas prácticas', value: '100' },
                     ],
                     metricsSource:
-                        'Medido con Lighthouse 13.4.1 sobre recograscolombia.com el 31 de julio de 2026: tres pasadas en móvil y una en escritorio. Se publica el rango observado, no la mejor pasada. El mayor pintado de contenido quedó en 1,5 s en móvil y 0,5 s en escritorio.',
+                        'Medido con Lighthouse 13.4.1 sobre recograscolombia.com el 1 de agosto de 2026: tres pasadas en móvil y tres en escritorio, descartando una previa de calentamiento. Se publica el rango observado, no la mejor pasada. El mayor pintado de contenido quedó en 1,4 s en móvil y 0,4–0,7 s en escritorio.',
                 },
                 price: {
                     cop: '$1.400.000 – $2.000.000 COP',
@@ -758,10 +758,11 @@ const es: LocaleSchema = {
                 manifest: [
                     { idx: '01', label: 'Para quién es', href: '#para-quien' },
                     { idx: '02', label: 'Qué trae por dentro', href: '#por-dentro' },
-                    { idx: '03', label: 'Qué incluye', href: '#incluye' },
-                    { idx: '04', label: 'Hasta dónde llega', href: '#hasta-donde' },
-                    { idx: '05', label: 'Precio y plazo', href: '#precio' },
-                    { idx: '06', label: 'Preguntas', href: '#preguntas' },
+                    { idx: '03', label: 'Medido', href: '#medido' },
+                    { idx: '04', label: 'Qué incluye', href: '#incluye' },
+                    { idx: '05', label: 'Hasta dónde llega', href: '#hasta-donde' },
+                    { idx: '06', label: 'Precio y plazo', href: '#precio' },
+                    { idx: '07', label: 'Preguntas', href: '#preguntas' },
                 ],
                 demoUrl: '/plantilla-negocio-local/',
                 facts: [
@@ -845,14 +846,20 @@ const es: LocaleSchema = {
                         'Salida estática: el sitio se compila a HTML y se sirve tal cual, sin framework de JavaScript en el navegador. Los iconos se generan como SVG en el build, así que no cuestan una petición.',
                 },
                 proof: {
-                    idx: '',
-                    eyebrow: '',
-                    title: '',
-                    body: '',
-                    url: '',
-                    urlLabel: '',
-                    metrics: [],
-                    metricsSource: '',
+                    idx: '03',
+                    eyebrow: 'medido',
+                    title: 'Lo que marca antes de tocarla',
+                    body: 'Esta plantilla todavía no tiene un negocio en producción, y no vamos a inventar uno. Lo que se mide aquí es su propia demo: el mismo código que recibes, con la portada a pantalla completa, la galería y el mapa ya cargados. Las fotos de un negocio real pesarán distinto, pero el punto de partida es este.',
+                    url: 'https://ctgcode.com/plantilla-negocio-local/',
+                    urlLabel: 'Ver la demo',
+                    metrics: [
+                        { label: 'Rendimiento · móvil', value: '93 – 98' },
+                        { label: 'Rendimiento · escritorio', value: '99' },
+                        { label: 'Accesibilidad', value: '100' },
+                        { label: 'Buenas prácticas', value: '100' },
+                    ],
+                    metricsSource:
+                        'Medido con Lighthouse 13.4.1 sobre la demo el 1 de agosto de 2026: tres pasadas en móvil y tres en escritorio, descartando una previa de calentamiento. Se publica el rango observado, no la mejor pasada. El mayor pintado de contenido quedó en 2,2–2,8 s en móvil y 0,8–0,9 s en escritorio. No se publica la nota de SEO porque la demo lleva noindex a propósito —simula un negocio que no existe— y Lighthouse la penaliza solo por eso; el resto de sus auditorías de SEO pasan.',
                 },
                 price: {
                     cop: '$1.500.000 – $2.200.000 COP',
@@ -864,7 +871,7 @@ const es: LocaleSchema = {
                         'El plazo empieza a contar cuando se confirma el pago y nos llega todo lo necesario para personalizarla: logo, colores, tipografías, textos, fotos, la carta o el catálogo con precios, y los datos de contacto.',
                 },
                 faq: {
-                    idx: '06',
+                    idx: '07',
                     eyebrow: 'preguntas',
                     title: 'Lo que preguntan antes de decidirse',
                     items: [
@@ -908,10 +915,11 @@ const es: LocaleSchema = {
                 manifest: [
                     { idx: '01', label: 'Para quién es', href: '#para-quien' },
                     { idx: '02', label: 'Qué trae por dentro', href: '#por-dentro' },
-                    { idx: '03', label: 'Qué incluye', href: '#incluye' },
-                    { idx: '04', label: 'Hasta dónde llega', href: '#hasta-donde' },
-                    { idx: '05', label: 'Precio y plazo', href: '#precio' },
-                    { idx: '06', label: 'Preguntas', href: '#preguntas' },
+                    { idx: '03', label: 'Medido', href: '#medido' },
+                    { idx: '04', label: 'Qué incluye', href: '#incluye' },
+                    { idx: '05', label: 'Hasta dónde llega', href: '#hasta-donde' },
+                    { idx: '06', label: 'Precio y plazo', href: '#precio' },
+                    { idx: '07', label: 'Preguntas', href: '#preguntas' },
                 ],
                 demoUrl: '/plantilla-producto-startup/',
                 facts: [
@@ -996,14 +1004,20 @@ const es: LocaleSchema = {
                         'Salida estática: el sitio se compila a HTML y se sirve tal cual, sin framework de JavaScript en el navegador. Los iconos se generan como SVG en el build, así que no cuestan una petición.',
                 },
                 proof: {
-                    idx: '',
-                    eyebrow: '',
-                    title: '',
-                    body: '',
-                    url: '',
-                    urlLabel: '',
-                    metrics: [],
-                    metricsSource: '',
+                    idx: '03',
+                    eyebrow: 'medido',
+                    title: 'Lo que marca antes de tocarla',
+                    body: 'Esta plantilla todavía no tiene un producto en producción, y no vamos a inventar uno. Lo que se mide aquí es su propia demo: el mismo código que recibes, con las ocho secciones, la tabla de precios y el acordeón de preguntas. El contenido de un producto real cambiará los textos, no la base.',
+                    url: 'https://ctgcode.com/plantilla-producto-startup/',
+                    urlLabel: 'Ver la demo',
+                    metrics: [
+                        { label: 'Rendimiento · móvil', value: '92 – 97' },
+                        { label: 'Rendimiento · escritorio', value: '96 – 100' },
+                        { label: 'Accesibilidad', value: '100' },
+                        { label: 'Buenas prácticas', value: '100' },
+                    ],
+                    metricsSource:
+                        'Medido con Lighthouse 13.4.1 sobre la demo el 1 de agosto de 2026: tres pasadas en móvil y tres en escritorio, descartando una previa de calentamiento. Se publica el rango observado, no la mejor pasada. El mayor pintado de contenido quedó en 1,9–2,9 s en móvil y 0,6–1,3 s en escritorio. No se publica la nota de SEO porque la demo lleva noindex a propósito —simula un producto que no existe— y Lighthouse la penaliza solo por eso; el resto de sus auditorías de SEO pasan.',
                 },
                 price: {
                     cop: '$1.600.000 – $2.400.000 COP',
@@ -1015,7 +1029,7 @@ const es: LocaleSchema = {
                         'El plazo empieza a contar cuando se confirma el pago y nos llega todo lo necesario para personalizarla: logo, colores, tipografías, textos, capturas del producto, los planes con sus precios y los datos de contacto.',
                 },
                 faq: {
-                    idx: '06',
+                    idx: '07',
                     eyebrow: 'preguntas',
                     title: 'Lo que preguntan antes de decidirse',
                     items: [

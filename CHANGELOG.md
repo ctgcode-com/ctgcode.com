@@ -774,3 +774,22 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Técnico
 
 - **`sections/Services` deja de tener su propio registro de tecnologías** y usa el compartido de `data/tech.ts`, que ya consumían la bitácora y las páginas de plantilla. La copia había divergido —no conocía `tailwind`—, así que un mismo logotipo podía salir en una página y faltar en otra. El comentario de `data/tech.ts` pasa a decir que es la única fuente, para que no vuelva a copiarse. Verificado comparando el HTML construido antes y después: los 16 logotipos del inicio salen idénticos, mismo orden y mismos archivos.
+
+## [0.31.5] - 2026-08-01
+
+### Añadido
+
+- **Las tres plantillas publican sus cifras medidas.** La de servicios profesionales ya enseñaba las de Recogras; ahora negocio local y producto/startup tienen su propio tramo. Como esas dos no tienen todavía un cliente en producción, el bloque no finge uno: dice explícitamente que lo medido es su demo —el mismo código que recibe el cliente— y enlaza a ella. Se publica el rango observado de tres pasadas en móvil y tres en escritorio, no la mejor.
+
+### Corregido
+
+- **Las dos páginas sin tramo «en producción» se numeraban mal.** Los índices de «Qué incluye» y «Hasta dónde llega» salen de un objeto compartido y estaban fijados en 04 y 05, pensados para la página de servicios, que sí tiene un tercer tramo. En las otras dos se leía 01, 02, 04, 05 —sin 03— mientras el índice de portada decía otra cosa. Al añadirles el tramo medido la secuencia cuadra sola, y la FAQ pasa de 06 a 07.
+
+### Cambiado
+
+- **Recogras sube a 100 de accesibilidad** (venía de 96) tras corregir en su repositorio el contraste de los textos pequeños del pie y el de la insignia de economía circular. Se actualizan su bloque de cifras en los dos idiomas y su línea en `llms.txt`, con la fecha de la nueva medición.
+
+### Técnico
+
+- La nota de procedencia de las dos plantillas nuevas explica por qué NO se publica su puntuación de SEO: la demo lleva `noindex` a propósito —simula un negocio que no existe— y Lighthouse la deja en 66-69 solo por `is-crawlable`; el resto de sus auditorías de SEO pasan. Publicar un 100 ahí sería falso y publicar el 69 sin contexto, engañoso. El bloque de servicios sí la conserva porque mide Recogras, que sí se indexa.
+- Verificado sobre `dist/`: 18 páginas, títulos y descripciones únicos, canónica autorreferencial (salvo las dos redirecciones, que apuntan a su destino por diseño), hreflang recíproco con `x-default`, JSON-LD válido con los 49 `@id` cerrados, las ocho FAQ del grafo idénticas a las del acordeón y los seis PNG de OG de plantilla. En navegador contra `bun run preview`: cero scroll horizontal en 390, 768, 1280, 1366 y 1920, y 100 en accesibilidad, prácticas recomendadas, SEO y navegación agéntica, con 0 auditorías fallidas.
