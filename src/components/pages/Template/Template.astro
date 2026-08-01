@@ -17,7 +17,8 @@
  *
  *   · una PLACA de datos que cabalga la costura entre el cielo y el cuerpo,
  *     desplazada a babor (no centrada) y con la salida a la demo;
- *   · la escalera de perfiles, que se desplaza un peldaño por ítem;
+ *   · la lista de perfiles, todos a la misma sangría, encadenados por un
+ *     arrastre que al señalar uno tira también de los vecinos;
  *   · el inventario de secciones bajo la captura del primer pliegue, que se
  *     asoma por estribor más allá del contenido;
  *   · la frontera en dos columnas de peso desigual — lo que entra pesa más que
@@ -35,6 +36,7 @@ import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import ViewHero from "../../sections/ViewHero/ViewHero.astro";
 import SectionHead from "../../sections/SectionHead/SectionHead.astro";
 import { locales, localizedPath, pageSlug } from "../../../data/i18n";
+import { TECH, techKey } from "../../../data/tech";
 import "./Template.css";
 
 /* Capturas de página completa, en la cadena de respaldo del sitio
@@ -133,7 +135,10 @@ const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
   pageName={pageName}
   lang={lang}
 >
-  <Navbar lang={lang} pageName="projects" />
+  <!-- El `pageName` REAL, no el de la bitácora: es lo único que usa el switch
+       de idioma para traducir el slug. Con "projects" aquí, cambiar de idioma
+       te sacaba de la plantilla y te dejaba en /en/projects/. -->
+  <Navbar lang={lang} pageName={pageName} />
 
   <main class="tp">
     <!-- El fondo compartido del sitio: cielo en la franja del hero, mar en el
@@ -186,15 +191,23 @@ const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
           id="tp-who-title"
         />
 
-        <!-- La escalera: cada perfil baja un peldaño a estribor. El
-             desequilibrio se compensa con la regla vertical de la izquierda,
-             que mantiene el eje. -->
+        <!-- Los cinco perfiles, todos a la MISMA sangría: son oficios
+             distintos con la misma dificultad, no una lista de opciones
+             subordinadas. La regla vertical de la izquierda los enhebra y el
+             arrastre al señalar es lo que los encadena.
+
+             Dos elementos por peldaño y dos responsabilidades: el <li> lleva el
+             arrastre; el <div> de dentro, el revelado al scroll. Juntos no
+             pueden ir, porque ambos animan `transform` y la regla del revelado
+             —más específica— dejaba el arrastre en 0. -->
         <ol class="tp-ladder" role="list">
           {
             t.audience.items.map((item, i) => (
-              <li class="tp-rung" data-reveal style={`--i:${i}; --step:${i}`}>
-                <h3 class="tp-rung-who">{item.who}</h3>
-                <p class="tp-rung-pain">{item.pain}</p>
+              <li class="tp-rung">
+                <div class="tp-rung-body" data-reveal style={`--i:${i}`}>
+                  <h3 class="tp-rung-who">{item.who}</h3>
+                  <p class="tp-rung-pain">{item.pain}</p>
+                </div>
               </li>
             ))
           }
@@ -253,10 +266,34 @@ const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
               }
             </ol>
 
+            <!-- Logotipos, no nombres escritos: misma voz que la bitácora y
+                 la carta de servicios. Lo que no es una marca con logo (la
+                 salida estática, el no llevar framework) se dice en la nota de
+                 debajo, para no colar palabras sueltas entre las placas. -->
             <p class="tp-mini-label tp-stack-label">{L.stack}</p>
             <ul class="tp-stack" role="list">
-              {t.inside.stack.map((tech) => <li class="tp-tech">{tech}</li>)}
+              {
+                t.inside.stack.map((key) => {
+                  const tech = TECH[techKey(key)];
+                  return tech ? (
+                    <li class="tp-tech">
+                      <img
+                        src={tech.src}
+                        alt={tech.name}
+                        width="24"
+                        height="24"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span class="tp-tech-name" aria-hidden="true">
+                        {tech.name}
+                      </span>
+                    </li>
+                  ) : null;
+                })
+              }
             </ul>
+            <p class="tp-stack-note">{t.inside.stackNote}</p>
           </div>
         </div>
       </div>
@@ -400,7 +437,15 @@ const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
           </div>
         </div>
 
-        <p class="tp-boundary-note" data-reveal>{T.boundary.note}</p>
+        <!-- Dos redacciones, una sola visible: en pantallas anchas los dos
+             platillos van lado a lado y la frase puede decir «la derecha»; al
+             apilarse, no hay derecha que valga. El CSS enseña la que
+             corresponde, y la oculta con `display:none`, que además la saca
+             del árbol de accesibilidad (no se lee dos veces). -->
+        <div class="tp-boundary-note" data-reveal>
+          <p class="tp-note-side">{T.boundary.note}</p>
+          <p class="tp-note-stacked">{T.boundary.noteStacked}</p>
+        </div>
       </div>
     </section>
 

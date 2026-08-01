@@ -738,3 +738,27 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Los importes del `AggregateOffer` se **parsean** de la cadena ya formateada en vez de duplicarse como números en el locale: dos copias del mismo dato acaban divergiendo en silencio. Si el formato cambiara y dejara de haber dos importes, esa oferta no se emite en lugar de publicar una falsa.
 - Verificado sobre `dist/`: JSON-LD válido en las seis, 7 nodos y 0 `@id` colgando en cada una, y las preguntas y respuestas del grafo idénticas carácter a carácter a las del acordeón.
 - Lighthouse sobre el build servido: **100 en accesibilidad, SEO y prácticas recomendadas** en las seis páginas nuevas, y sin regresión en `/proyectos/`. Cero scroll horizontal en 8 páginas × 5 anchos (390, 768, 1280, 1366, 1920).
+
+## [0.31.2] - 2026-07-31
+
+### Corregido
+
+- **Cambiar de idioma sacaba de la plantilla (`Template.astro`)**: al `Navbar` se le pasaba `pageName="projects"` para que la barra se leyera dentro de la bitácora, pero ese identificador es justo lo que usa el switch de idioma para traducir el slug. Pulsar «EN» en `/plantillas/negocio-local/` te dejaba en `/en/projects/` en vez de en la ficha en inglés. Ahora recibe el `pageName` real, que es el único uso que le da el componente.
+- **La nota de la frontera hablaba de «la derecha» en móvil**: los dos platillos se ponen lado a lado desde 48em y uno debajo del otro por debajo, donde no hay derecha que valga. Hay dos redacciones y el CSS enseña la que corresponde a la disposición real; la que sobra se oculta con `display:none`, que además la saca del árbol de accesibilidad para que no se lea dos veces.
+
+### Cambiado
+
+- **Los perfiles de «para quién es» van todos a la misma sangría**: estaban escalonados, y el escalón se leía como jerarquía —como si «Abogados» dependiera de «Contadores»—. Son oficios distintos con la misma dificultad y ahora se presentan en pie de igualdad.
+- **Arrastre al señalar un perfil**: en vez del hover clásico que mueve solo el elemento apuntado, el señalado se desplaza y TIRA de los vecinos con fuerza decreciente (8 / 12 / 24 / 12 / 8 px). El gesto es lo que comunica que la lista es una cadena, ahora que la sangría ya no lo insinúa.
+- **El stack de cada plantilla se pinta con logotipos** (Astro, Tailwind, Lucide) en lugar de nombres escritos, con la misma voz que la bitácora. Lo que no es una marca con logo —la salida estática, no llevar framework— pasa a una nota debajo, para no colar palabras sueltas entre las placas.
+
+### Añadido
+
+- **`/plantillas/` y `/en/templates/` dejan de dar 404**: redirigen a la sección de plantillas de la bitácora. No los enlaza nadie ni están en el sitemap, pero quien recorte la URL a mano ya no se queda sin salida.
+
+### Técnico
+
+- El registro de tecnologías sale de `StackList` a `data/tech.ts`, que ahora comparten la bitácora y las páginas de plantilla. `sections/Services` conserva su copia —y ya divergía, no conoce `tailwind`—; migrarla toca una página del inicio y se deja para su propio commit.
+- Tres trampas del arrastre. `:has()` hereda la especificidad de su argumento, así que los cuatro grados de tirón necesitan un prefijo común o la regla general le gana al elemento señalado y este se queda quieto. Lightningcss —el minificador del build— rompe la compilación entera ante un combinador inicial suelto (`:has(+ x)`), de ahí el `:scope` explícito, que es la forma larga de lo mismo. Y el peldaño y su revelado al scroll tienen que vivir en dos elementos distintos: ambos animan `transform` y la regla del revelado, más específica, dejaba el arrastre en cero.
+- Las redirecciones se declaran en `astro.config.mjs` y no en Cloudflare: Astro emite una página con `meta refresh`, `noindex` y canónica al destino, y el sitemap la ignora. Para una ruta sin enlaces entrantes es equivalente en la práctica, y la regla queda versionada con el código.
+- Verificado en las seis páginas: Lighthouse **100 en accesibilidad, prácticas recomendadas, SEO y navegación agéntica**, con 0 auditorías fallidas; 100 de rendimiento en escritorio y 94–98 en móvil, en línea con `/proyectos/`. LCP 0,5 s en escritorio y 2,1 s en móvil, CLS 0. Cero scroll horizontal en 8 páginas × 5 anchos.

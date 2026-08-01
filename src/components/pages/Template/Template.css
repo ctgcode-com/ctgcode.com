@@ -7,9 +7,9 @@
 
      · La PLACA cabalga la costura cielo/mar, desplazada a babor. Ni centrada
        ni pegada al hero: es una etiqueta clavada en el canto.
-     · La ESCALERA de perfiles baja un peldaño por ítem; la regla vertical de
-       la izquierda sostiene el eje para que el desequilibrio no quede cojo.
-     · El INVENTARIO ancla la captura mientras la lista corre.
+     · Los PERFILES van todos a la misma sangría —son iguales, no una jerarquía—
+       enhebrados por una regla vertical, y se encadenan por el arrastre.
+     · El INVENTARIO tumba la captura a lo ancho y reparte las secciones debajo.
      · La FRONTERA reparte el ancho de forma desigual a propósito: lo que entra
        ocupa más que lo que no, y así se lee antes de leerse.
 
@@ -174,22 +174,82 @@ main.tp {
 }
 
 /* ===========================================================================
-   01 · LA ESCALERA DE PERFILES
+   01 · LOS PERFILES
    =========================================================================== */
 
 .tp-ladder {
-  --rung-step: 3.5%;
   margin: var(--space-xl) 0 0;
   padding: 0;
   list-style: none;
   border-inline-start: var(--border-thin) solid var(--color-border);
 }
 
+/* Todos los perfiles arrancan en la MISMA sangría. Se probó escalonarlos y el
+   efecto era el contrario del que se busca: parecían opciones subordinadas,
+   como si «Abogados» dependiera de «Contadores». Son cinco oficios distintos
+   con la misma dificultad, y así deben leerse: en pie de igualdad. El ritmo lo
+   pone el arrastre, no la sangría. */
 .tp-rung {
   position: relative;
   padding: var(--space-md) 0 var(--space-md) var(--space-lg);
-  /* El peldaño: cada perfil baja y se desplaza a estribor. */
-  margin-inline-start: calc(var(--step, 0) * var(--rung-step));
+  /* El arrastre (ver abajo): el desplazamiento vive en una variable para que
+     una sola transición sirva a los cuatro grados de tirón. */
+  --pull: 0rem;
+  transform: translateX(var(--pull));
+  transition: transform var(--dur-base) var(--ease-tide);
+}
+
+/* ---- El arrastre --------------------------------------------------------
+   La lista se lee como una cadena, no como opciones sueltas: al señalar un
+   peldaño no se mueve solo él, TIRA de los demás con fuerza decreciente. El
+   vecino inmediato lo sigue de cerca, el siguiente menos, y el resto apenas
+   acusa el tirón. Es el gesto —y no la sangría— el que comunica que están
+   encadenados, y lo hace sin insinuar que unos dependan de otros; un hover
+   aislado diría lo contrario.
+
+   Los hermanos ANTERIORES se alcanzan con `:has()` (mirando hacia adelante
+   desde cada uno); los posteriores, con los combinadores de siempre. El
+   `:scope` dentro de `:has()` es la forma explícita de lo que el selector
+   relativo ya implica, y es obligatoria aquí: lightningcss —el minificador del
+   build— rechaza el combinador inicial suelto (`:has(+ x)`) y rompe la
+   compilación entera.
+
+   Los cuatro grados comparten además el prefijo `.tp-ladder:has(.tp-rung:hover)`
+   a propósito: `:has()` hereda la especificidad de su argumento, así que sin
+   ese prefijo común la regla general (que lleva `:has()`) le ganaba al peldaño
+   señalado (que no lo lleva) y el señalado se quedaba quieto. */
+
+/* Grado 0 — toda la escalera acusa el tirón. */
+.tp-ladder:has(.tp-rung:hover) .tp-rung {
+  --pull: var(--space-3xs);
+}
+
+/* Grado 2 — a dos peldaños de distancia. */
+.tp-ladder:has(.tp-rung:hover) .tp-rung:has(:scope + .tp-rung + .tp-rung:hover),
+.tp-ladder:has(.tp-rung:hover) .tp-rung:hover + .tp-rung + .tp-rung {
+  --pull: var(--space-2xs);
+}
+
+/* Grado 1 — el vecino inmediato. */
+.tp-ladder:has(.tp-rung:hover) .tp-rung:has(:scope + .tp-rung:hover),
+.tp-ladder:has(.tp-rung:hover) .tp-rung:hover + .tp-rung {
+  --pull: var(--space-xs);
+}
+
+/* Grado 3 — el señalado. */
+.tp-ladder:has(.tp-rung:hover) .tp-rung:hover {
+  --pull: var(--space-md);
+}
+
+/* El arrastre es puro gesto: sin movimiento no aporta nada y molesta. Se
+   neutraliza el `transform` y no la variable: los grados de tirón tienen
+   especificidades distintas y apagarlos uno a uno pedía repetir los cuatro
+   selectores; el `transform` vive en una sola regla y basta con ganarle por
+   orden de aparición. */
+@media (prefers-reduced-motion: reduce) {
+  .tp-rung {
+    transform: none;
+  }
 }
 
 /* La marca del peldaño sobre la regla vertical. */
@@ -301,7 +361,12 @@ main.tp {
   list-style: none;
 }
 
+/* Placa con logotipo: el nombre acompaña al icono, y va `aria-hidden` porque
+   el `alt` de la imagen ya lo dice (si no, el lector lo leería dos veces). */
 .tp-tech {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
   padding: var(--space-3xs) var(--space-xs);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-pill);
@@ -309,6 +374,21 @@ main.tp {
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-wide);
   color: var(--color-text-muted);
+}
+
+.tp-tech img {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.tp-stack-note {
+  max-width: var(--measure);
+  margin: var(--space-sm) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-subtle);
+  text-wrap: pretty;
 }
 
 /* ===========================================================================
@@ -610,6 +690,16 @@ main.tp {
   text-wrap: pretty;
 }
 
+.tp-boundary-note p {
+  margin: 0;
+}
+
+/* Por defecto (platillos apilados) manda la redacción sin «derecha»; el
+   breakpoint que los pone lado a lado, más abajo, invierte el par. */
+.tp-note-side {
+  display: none;
+}
+
 /* ===========================================================================
    PRECIO Y PLAZO — un renglón de inventario, no una tarjeta de SaaS
    =========================================================================== */
@@ -883,6 +973,17 @@ main.tp {
     gap: var(--space-2xl);
   }
 
+  /* Aquí SÍ hay derecha: se cambia la redacción de la nota. El breakpoint es
+     el mismo que abre los dos platillos, arriba: si uno se mueve, el otro
+     también, o la frase mentiría. */
+  .tp-note-side {
+    display: block;
+  }
+
+  .tp-note-stacked {
+    display: none;
+  }
+
   .tp-included-grid {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: var(--space-2xl);
@@ -918,12 +1019,8 @@ main.tp {
   }
 }
 
-/* Móvil: la escalera se endereza y la placa deja de cabalgar. */
+/* Móvil: la placa deja de cabalgar la costura. */
 @media (max-width: 47.99em) {
-  .tp-ladder {
-    --rung-step: 0%;
-  }
-
   .tp-plate {
     width: auto;
     margin-block-start: var(--space-lg);

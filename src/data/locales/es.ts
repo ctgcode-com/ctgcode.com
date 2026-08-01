@@ -575,6 +575,7 @@ const es: LocaleSchema = {
                 'Integración con un CRM, un ERP o una API externa',
             ],
             note: 'Nada de la derecha es un no: es otro presupuesto. Se construye encima de esta misma base, sin tirar lo hecho.',
+            noteStacked: 'Nada de esa segunda lista es un no: es otro presupuesto. Se construye encima de esta misma base, sin tirar lo hecho.',
         },
         siblings: {
             eyebrow: 'las otras dos',
@@ -683,12 +684,9 @@ const es: LocaleSchema = {
                             body: 'Resumen, enlaces de navegación, redes sociales y aviso de derechos.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, sitio estático',
-                        'Tailwind CSS 4',
-                        'Iconos Lucide en SVG, generados en el build',
-                        'Sin framework de JavaScript',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Salida estática: el sitio se compila a HTML y se sirve tal cual, sin framework de JavaScript en el navegador. Los iconos se generan como SVG en el build, así que no cuestan una petición.',
                 },
                 proof: {
                     idx: '03',
@@ -842,12 +840,9 @@ const es: LocaleSchema = {
                             body: 'Datos de contacto, redes sociales y aviso de derechos.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, sitio estático',
-                        'Tailwind CSS 4',
-                        'Iconos Lucide en SVG, generados en el build',
-                        'Sin framework de JavaScript',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Salida estática: el sitio se compila a HTML y se sirve tal cual, sin framework de JavaScript en el navegador. Los iconos se generan como SVG en el build, así que no cuestan una petición.',
                 },
                 proof: {
                     idx: '',
@@ -996,12 +991,9 @@ const es: LocaleSchema = {
                             body: 'Enlaces, redes sociales y aviso de derechos.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, sitio estático',
-                        'Tailwind CSS 4',
-                        'Iconos Lucide en SVG, generados en el build',
-                        'Sin framework de JavaScript',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Salida estática: el sitio se compila a HTML y se sirve tal cual, sin framework de JavaScript en el navegador. Los iconos se generan como SVG en el build, así que no cuestan una petición.',
                 },
                 proof: {
                     idx: '',

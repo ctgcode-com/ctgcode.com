@@ -15,8 +15,32 @@ const LEGAL_URLS = new Set([
   `https://ctgcode.com/en/${en.footer.termsSlug}/`,
 ]);
 
+/**
+ * `/plantillas/` y `/en/templates/` a secas no son páginas: solo el prefijo del
+ * que cuelgan las tres fichas. No los enlaza nadie y no están en el sitemap,
+ * pero quien recorte la URL a mano llegaría a un 404 sin salida. Se resuelven
+ * llevándolo a la sección de plantillas de la bitácora, que es donde vive el
+ * índice real.
+ *
+ * En SSG, Astro emite una página con `meta refresh` y su canónica al destino
+ * (GitHub Pages no sabe responder un 301). Google la trata como redirección y
+ * consolida, así que para una ruta sin enlaces entrantes basta y sobra —y a
+ * cambio la regla vive versionada aquí, no en un panel aparte.
+ *
+ * Las anclas salen del `manifest` de cada idioma; no se escriben a mano.
+ */
+const templatesHubAnchor = (locale) =>
+  locale.projectsPage.manifest.find((m) => m.href === "#plantillas")?.href ??
+  locale.projectsPage.manifest.find((m) => m.href === "#templates")?.href ??
+  "";
+
 export default defineConfig({
   output: "static",
+
+  redirects: {
+    "/plantillas": `/${es.projects.indexSlug}/${templatesHubAnchor(es)}`,
+    "/en/templates": `/en/${en.projects.indexSlug}/${templatesHubAnchor(en)}`,
+  },
 
   site: "https://ctgcode.com",
   integrations: [

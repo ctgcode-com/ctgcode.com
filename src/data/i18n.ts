@@ -72,8 +72,19 @@ export type TemplatePage = {
         /** Texto alternativo de la captura de página completa. */
         shotAlt: string;
         sections: { idx: string; name: string; body: string }[];
-        /** Tecnologías de la plantilla, en texto (no son las del sitio). */
+        /**
+         * CLAVES del registro de tecnologías (`data/tech.ts`), no texto
+         * suelto: cada una resuelve a su logotipo y a su nombre de marca. Los
+         * nombres no se traducen —son marcas—, así que ambos idiomas listan lo
+         * mismo. Ojo: si una clave no existe en el registro, la lista entera
+         * cae a etiquetas de texto (nunca un logo suelto junto a palabras).
+         *
+         * Son las tecnologías DE LA PLANTILLA, que no son las del sitio: aquí
+         * sí hay Tailwind, y es correcto.
+         */
         stack: string[];
+        /** Lo que no es una marca con logotipo y sí conviene decir. */
+        stackNote: string;
     };
     /**
      * El respaldo. Con `url` y `metrics` llenos se pinta el caso real en
@@ -463,8 +474,17 @@ export type LocaleSchema = {
             outLabel: string;
             inItems: string[];
             outItems: string[];
-            /** El matiz: lo de la derecha no es un no, es otro presupuesto. */
+            /**
+             * El matiz: lo que no entra no es un no, es otro presupuesto.
+             *
+             * Hay DOS redacciones porque los dos platillos se colocan uno al
+             * lado del otro en pantallas anchas y uno debajo del otro en
+             * estrechas: en móvil no existe «la derecha». El componente pinta
+             * las dos y el CSS enseña la que corresponde a la disposición real.
+             */
             note: string;
+            /** La misma frase para cuando los platillos van apilados. */
+            noteStacked: string;
         };
         /** Enlace lateral a las otras dos: sustituye a un índice propio. */
         siblings: { eyebrow: string; title: string };

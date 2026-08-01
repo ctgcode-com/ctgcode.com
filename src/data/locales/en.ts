@@ -575,6 +575,7 @@ const en: LocaleSchema = {
                 'Integration with a CRM, an ERP or an external API',
             ],
             note: 'Nothing on the right is a no: it is a separate quote. It gets built on top of this same base, without throwing away what is done.',
+            noteStacked: 'Nothing in that second list is a no: it is a separate quote. It gets built on top of this same base, without throwing away what is done.',
         },
         siblings: {
             eyebrow: 'the other two',
@@ -683,12 +684,9 @@ const en: LocaleSchema = {
                             body: 'Summary, navigation links, social profiles and copyright notice.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, static output',
-                        'Tailwind CSS 4',
-                        'Lucide icons as SVG, generated at build time',
-                        'No JavaScript framework',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Static output: the site compiles to HTML and is served as is, with no JavaScript framework in the browser. Icons are generated as SVG at build time, so they cost no request.',
                 },
                 proof: {
                     idx: '03',
@@ -842,12 +840,9 @@ const en: LocaleSchema = {
                             body: 'Contact details, social profiles and copyright notice.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, static output',
-                        'Tailwind CSS 4',
-                        'Lucide icons as SVG, generated at build time',
-                        'No JavaScript framework',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Static output: the site compiles to HTML and is served as is, with no JavaScript framework in the browser. Icons are generated as SVG at build time, so they cost no request.',
                 },
                 proof: {
                     idx: '',
@@ -996,12 +991,9 @@ const en: LocaleSchema = {
                             body: 'Links, social profiles and copyright notice.',
                         },
                     ],
-                    stack: [
-                        'Astro 5, static output',
-                        'Tailwind CSS 4',
-                        'Lucide icons as SVG, generated at build time',
-                        'No JavaScript framework',
-                    ],
+                    stack: ['astro', 'tailwind', 'lucide'],
+                    stackNote:
+                        'Static output: the site compiles to HTML and is served as is, with no JavaScript framework in the browser. Icons are generated as SVG at build time, so they cost no request.',
                 },
                 proof: {
                     idx: '',
