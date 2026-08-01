@@ -28,7 +28,7 @@ import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import ViewHero from "../../sections/ViewHero/ViewHero.astro";
 import SectionHead from "../../sections/SectionHead/SectionHead.astro";
 import StackList from "./StackList.astro";
-import { locales } from "../../../data/i18n";
+import { locales, localizedPath, pageSlug } from "../../../data/i18n";
 import "./Projects.css";
 
 /* La captura del sitio del cliente, en la cadena de respaldo del proyecto
@@ -85,6 +85,23 @@ const TEMPLATE_SHOTS: Record<string, Shot> = {
     webp: tplStartupWebp,
     png: tplStartupPng,
   },
+};
+
+/**
+ * slug de la ficha → `pageName` de la PÁGINA dedicada de esa plantilla.
+ *
+ * Desde que las demos salieron del índice, la ficha corta ya no enlaza a la
+ * demo: enlaza a la página que explica la plantilla, y es esa página la que
+ * lleva a la demo. Si un slug no estuviera aquí, la ficha cae de vuelta a su
+ * `demoUrl` en vez de romperse.
+ */
+const TEMPLATE_PAGE_NAMES: Record<string, string | undefined> = {
+  "servicios-profesionales": "template-professional-services",
+  "professional-services": "template-professional-services",
+  "negocios-locales": "template-local-business",
+  "local-business": "template-local-business",
+  "startups-productos": "template-startup-product",
+  "startups-products": "template-startup-product",
 };
 
 interface Props {
@@ -388,6 +405,12 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
           {
             t.templates.items.map((item, i) => {
               const shot = TEMPLATE_SHOTS[item.slug];
+              /* El destino de la ficha: su página dedicada. La demo se enlaza
+                 desde allí, no desde aquí. */
+              const pageName = TEMPLATE_PAGE_NAMES[item.slug];
+              const href = pageName
+                ? localizedPath(lang, pageSlug(lang, pageName))
+                : item.demoUrl;
               return (
                 <li
                   class="bt-tpl"
@@ -397,8 +420,8 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                 >
                   {shot ? (
                     <figure class="bt-frame bt-frame--shot">
-                      {item.demoUrl ? (
-                        <a href={item.demoUrl} tabindex="-1" aria-hidden="true">
+                      {href ? (
+                        <a href={href} tabindex="-1" aria-hidden="true">
                           <picture>
                             <source srcset={shot.avif.src} type="image/avif" />
                             <source srcset={shot.webp.src} type="image/webp" />
@@ -448,11 +471,11 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                       ))}
                     </ul>
 
-                    {item.demoUrl ? (
-                      <a class="bt-demo" href={item.demoUrl}>
-                        {L.demo}
+                    {href ? (
+                      <a class="bt-demo" href={href}>
+                        {L.detail}
                         <span class="bt-demo-arrow" aria-hidden="true">
-                          ↗
+                          →
                         </span>
                       </a>
                     ) : (

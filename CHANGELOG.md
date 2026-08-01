@@ -719,3 +719,22 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Un solo componente (`components/pages/Template/`) sirve las seis rutas: el idioma llega por `lang` y la plantilla por una clave estable del locale, no por segmento dinámico.
 - Las tres invariantes silenciosas, cubiertas: caso en `pageSlug()` para los tres `pageName` nuevos, seis imágenes OG con su builder (`scripts/builders/templates-og.ts`) enganchado al `prebuild`, y toda la copia en `LocaleSchema`. `ViewHero` gana una miga intermedia opcional: estas páginas cuelgan de la bitácora, no del inicio.
 - El sitemap las recoge solo, por ser rutas reales. Verificado sobre `dist/`: canónica autorreferencial, `hreflang` recíproco más `x-default`, y títulos y descripciones únicos frente a las otras once páginas del sitio.
+
+## [0.31.1] - 2026-07-31
+
+### Cambiado
+
+- **Las fichas de plantilla de la bitácora llevan a su página, no a la demo**: tanto la captura como el enlace de `/proyectos/` apuntan ahora a la página dedicada, que es la que enlaza la demo. El rótulo pasa de «Ver demo» a «Ver la plantilla».
+- **El `ItemList` de la bitácora deja de apuntar a anclas de sí misma**: las tres plantillas se declaraban con `#slug`, así que el inventario estructurado señalaba a un trozo de `/proyectos/` en vez de a la URL que queremos que se indexe y se cite.
+- **`llms.txt` gana su sección de plantillas** y se repasa entero: las tres páginas con su alcance, precio y plazo, las condiciones comunes del encargo, los enlaces en inglés, y una advertencia explícita de que las demos están fuera del índice y no deben citarse como negocios reales. Las cifras de Recogras se actualizan a lo medido hoy.
+
+### Añadido
+
+- **`FAQPage` por URL y nodo `Service` con su oferta**: hasta ahora el grafo solo emitía FAQ en el inicio. Cada página de plantilla declara las suyas —las mismas seis que lee una persona en el acordeón, palabra por palabra— y un `Service` con dos `AggregateOffer`, una por moneda. Se usa `Service` y no `Product` porque lo que se contrata es un encargo, no un artículo con existencias.
+- **Migas de tres niveles**: `breadcrumb()` solo sabía hacer inicio → página. Las páginas de plantilla cuelgan de la bitácora, y ahora la miga lo dice igual que el hero.
+
+### Técnico
+
+- Los importes del `AggregateOffer` se **parsean** de la cadena ya formateada en vez de duplicarse como números en el locale: dos copias del mismo dato acaban divergiendo en silencio. Si el formato cambiara y dejara de haber dos importes, esa oferta no se emite en lugar de publicar una falsa.
+- Verificado sobre `dist/`: JSON-LD válido en las seis, 7 nodos y 0 `@id` colgando en cada una, y las preguntas y respuestas del grafo idénticas carácter a carácter a las del acordeón.
+- Lighthouse sobre el build servido: **100 en accesibilidad, SEO y prácticas recomendadas** en las seis páginas nuevas, y sin regresión en `/proyectos/`. Cero scroll horizontal en 8 páginas × 5 anchos (390, 768, 1280, 1366, 1920).

@@ -11,10 +11,24 @@ CTG Code es el estudio de David Serrano. Trabaja en remoto a nivel nacional e in
 - [Desarrollo Web de Alto Rendimiento](https://ctgcode.com/servicios/): sitios corporativos y landing pages optimizados al 100% en PageSpeed, enfocados en conversión, velocidad de carga y SEO. Stack: Astro, TypeScript, HTMX, Jinja.
 - [Automatizaciones e Integraciones](https://ctgcode.com/servicios/): integraciones a la medida e interfaces API para automatizar flujos operativos recurrentes y reducir tareas manuales. Stack: Python, FastAPI, REST API, PostgreSQL.
 
+## Plantillas web
+
+Tres bases construidas por el estudio para los encargos que más se repiten. No son plantillas de catálogo compradas: se adaptan a la marca, el contenido y la forma de vender de cada cliente. Cada página explica qué trae la plantilla, hasta dónde llega la personalización, qué incluye el encargo, el precio y el plazo.
+
+Condiciones comunes a las tres: dominio y hosting del primer año incluidos (la renovación del segundo año corre por cuenta del cliente, sin comisión del estudio), formulario de contacto conectado, contacto directo por WhatsApp, SEO técnico completo, dos rondas de cambios menores y 30 días de garantía. El plazo empieza a contar cuando se confirma el pago y llegan los materiales de personalización. El cliente se queda con el código.
+
+- [Plantilla para servicios profesionales](https://ctgcode.com/plantillas/servicios-profesionales/): para consultoras, despachos, contadores, abogados y firmas de ingeniería. Siete secciones: navegación, portada con tarjeta, rejilla de servicios, nosotros, indicadores, contacto y pie. Desde $1.400.000 COP (USD $560), entrega en 4–6 días hábiles. Esta base está en producción en recograscolombia.com.
+- [Plantilla para negocios locales](https://ctgcode.com/plantillas/negocio-local/): para restaurantes, salones de belleza, talleres, tiendas y gimnasios. Siete secciones: navegación, portada a pantalla completa, historia, carta o catálogo con precios, galería, ubicación con mapa y horarios, y pie. Desde $1.500.000 COP (USD $600), entrega en 5–8 días hábiles.
+- [Plantilla para productos y startups](https://ctgcode.com/plantillas/producto-startup/): para SaaS, apps, lanzamientos y productos digitales. Ocho secciones: navegación, portada con prueba social, funcionalidades, cómo funciona, precios, preguntas frecuentes, cierre y pie. Desde $1.600.000 COP (USD $640), entrega en 5–8 días hábiles.
+
+Las tres están construidas con Astro 5 (salida estática), Tailwind CSS 4 e iconos Lucide generados en el build, sin framework de JavaScript. Los precios en dólares son una conversión de referencia con los costos de transferencia incluidos; el precio en pesos es el que rige.
+
+Existen demos navegables de las tres, enlazadas desde cada página. Están deliberadamente FUERA del índice (`noindex`): simulan negocios que no existen y no deben confundirse con fichas de negocios reales. La información citable es la de las páginas de arriba, no la de las demos.
+
 ## Proyectos
 
-- [Proyectos — la bitácora completa](https://ctgcode.com/proyectos/): sitios en producción, Helio (producto propio: sistema de gestión para talleres), tres plantillas web y tres automatizaciones listas para adaptar.
-- [Recogras — recograscolombia.com](https://recograscolombia.com/): sitio corporativo para una gestora ambiental de aceite de cocina usado en Cartagena. Astro estático. PageSpeed: 100 escritorio / 98 móvil, SEO 100, Accesibilidad 96.
+- [Proyectos — la bitácora completa](https://ctgcode.com/proyectos/): sitios en producción, Helio (producto propio: sistema de gestión para talleres), las tres plantillas web y tres automatizaciones listas para adaptar.
+- [Recogras — recograscolombia.com](https://recograscolombia.com/): sitio corporativo para una gestora ambiental de aceite de cocina usado en Cartagena. Astro estático, construido sobre la plantilla de servicios profesionales. Medido con Lighthouse 13.4.1 el 31 de julio de 2026: rendimiento 98–100 en móvil y 100 en escritorio, accesibilidad 96, SEO y buenas prácticas 100.
 
 ## Contacto
 
@@ -26,6 +40,7 @@ CTG Code es el estudio de David Serrano. Trabaja en remoto a nivel nacional e in
 ## Optional
 
 - [Inicio (EN)](https://ctgcode.com/en/) · [Services (EN)](https://ctgcode.com/en/services/) · [Projects (EN)](https://ctgcode.com/en/projects/)
+- Plantillas en inglés: [Professional services](https://ctgcode.com/en/templates/professional-services/) · [Local business](https://ctgcode.com/en/templates/local-business/) · [Startup and product](https://ctgcode.com/en/templates/startup-product/)
 - [Política de Privacidad](https://ctgcode.com/privacidad/) · [Privacy Policy (EN)](https://ctgcode.com/en/privacy/)
 - [Términos y Condiciones](https://ctgcode.com/terminos/) · [Terms (EN)](https://ctgcode.com/en/terms/)
 - [Mapa del sitio (sitemap)](https://ctgcode.com/sitemap-index.xml)

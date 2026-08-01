@@ -36,6 +36,43 @@ const KNOWS_ABOUT = [
   'Integraciones y APIs',
 ];
 
+/**
+ * `pageName` → clave de la plantilla en el locale. Es lo que permite al grafo
+ * saber que una página es la ficha de una plantilla (y no una vista suelta):
+ * de ahí salen su FAQ, su oferta y su miga de tres niveles.
+ */
+const TEMPLATE_PAGES = {
+  'template-professional-services': 'professionalServices',
+  'template-local-business': 'localBusiness',
+  'template-startup-product': 'startupProduct',
+} as const;
+
+type TemplatePageName = keyof typeof TEMPLATE_PAGES;
+
+/**
+ * Slug de la ficha corta en `/proyectos/` → `pageName` de su página dedicada,
+ * en los dos idiomas (los slugs viven en `projectsPage.templates.items`). Sin
+ * este puente, el ItemList de la bitácora seguiría apuntando a anclas de sí
+ * misma en vez de a las URL que queremos que se indexen y se citen. Si un slug
+ * no está aquí, quien llama vuelve al ancla: se degrada, no se rompe.
+ */
+const TEMPLATE_SLUG_TO_PAGE: Record<string, TemplatePageName | undefined> = {
+  'servicios-profesionales': 'template-professional-services',
+  'professional-services': 'template-professional-services',
+  'negocios-locales': 'template-local-business',
+  'local-business': 'template-local-business',
+  'startups-productos': 'template-startup-product',
+  'startups-products': 'template-startup-product',
+};
+
+function isTemplatePage(pageName: string): pageName is TemplatePageName {
+  return pageName in TEMPLATE_PAGES;
+}
+
+function templateOf(lang: keyof typeof locales, pageName: TemplatePageName) {
+  return locales[lang].templates.pages[TEMPLATE_PAGES[pageName]];
+}
+
 interface PageSchemaInput {
   lang: keyof typeof locales;
   pageName: string;
@@ -139,18 +176,21 @@ function siteNavigation(lang: keyof typeof locales) {
  * a los motores generativos respuestas atribuibles sobre plazos, costos,
  * stack, soporte y cobertura, en lugar de dejar que las improvisen.
  */
-function faqPage(lang: keyof typeof locales, canonicalUrl: string) {
-  const t = locales[lang].services;
-
+function faqPage(
+  lang: keyof typeof locales,
+  canonicalUrl: string,
+  name: string,
+  items: { q: string; a: string }[],
+) {
   return {
     '@type': 'FAQPage',
     '@id': `${canonicalUrl}#faq`,
     url: canonicalUrl,
-    name: t.faq.title,
+    name,
     inLanguage: lang === 'es' ? 'es-CO' : 'en',
     isPartOf: { '@id': SITE_ID },
     about: { '@id': ORG_ID },
-    mainEntity: t.faq.items.map((item) => ({
+    mainEntity: items.map((item) => ({
       '@type': 'Question',
       name: item.q,
       acceptedAnswer: {
@@ -158,6 +198,71 @@ function faqPage(lang: keyof typeof locales, canonicalUrl: string) {
         text: item.a,
       },
     })),
+  };
+}
+
+/**
+ * Extrae los importes de una cadena de precio ya formateada («$1.400.000 –
+ * $2.000.000 COP»). Se PARSEA en vez de duplicar los números en el locale a
+ * propósito: dos copias del mismo dato acaban divergiendo en silencio, y aquí
+ * la cadena visible es la única fuente. Si el formato cambia y deja de haber
+ * dos importes, quien llama se queda sin oferta en vez de publicar una falsa.
+ */
+function priceRange(formatted: string): [number, number] | null {
+  const amounts = (formatted.match(/\d[\d.,]*/g) ?? [])
+    .map((token) => Number(token.replace(/[.,]/g, '')))
+    .filter((n) => Number.isFinite(n) && n > 0);
+
+  if (amounts.length < 2) return null;
+  return [Math.min(...amounts), Math.max(...amounts)];
+}
+
+/**
+ * La plantilla como SERVICIO con su oferta. `Service` y no `Product` porque lo
+ * que se contrata es un encargo —montar y publicar el sitio—, no un artículo
+ * con existencias.
+ *
+ * Se declaran DOS ofertas, una por moneda, porque el precio en pesos es el que
+ * rige y el de dólares es la conversión que también se publica. Si alguna
+ * cadena dejara de tener dos importes, esa oferta simplemente no se emite.
+ */
+function templateService(
+  lang: keyof typeof locales,
+  pageName: TemplatePageName,
+  canonicalUrl: string,
+) {
+  const t = templateOf(lang, pageName);
+  const cop = priceRange(t.price.cop);
+  const usd = priceRange(t.price.usd);
+
+  const offers = [
+    cop ? { currency: 'COP', range: cop } : null,
+    usd ? { currency: 'USD', range: usd } : null,
+  ]
+    .filter((o) => o !== null)
+    .map((o) => ({
+      '@type': 'AggregateOffer',
+      priceCurrency: o.currency,
+      lowPrice: o.range[0],
+      highPrice: o.range[1],
+      availability: 'https://schema.org/InStock',
+      seller: { '@id': ORG_ID },
+    }));
+
+  return {
+    '@type': 'Service',
+    '@id': `${canonicalUrl}#service`,
+    name: t.metaTitle,
+    description: t.metaDescription,
+    serviceType: t.crumb,
+    url: canonicalUrl,
+    provider: { '@id': ORG_ID },
+    areaServed: [
+      { '@type': 'Country', name: 'Colombia' },
+      { '@type': 'Place', name: 'Worldwide' },
+    ],
+    availableLanguage: ['es', 'en'],
+    ...(offers.length ? { offers } : {}),
   };
 }
 
@@ -181,11 +286,18 @@ function projectsItemList(
       url: featured.url,
     },
     { name: t.helio.name, description: t.helio.tagline },
-    ...t.templates.items.map((item) => ({
-      name: item.name,
-      description: item.body,
-      url: `${canonicalUrl}#${item.slug}`,
-    })),
+    // Las plantillas ya NO apuntan a un ancla de esta misma página: cada una
+    // tiene su URL propia, que es la que debe listarse y citarse.
+    ...t.templates.items.map((item) => {
+      const pageName = TEMPLATE_SLUG_TO_PAGE[item.slug];
+      return {
+        name: item.name,
+        description: item.body,
+        url: pageName
+          ? `${siteConfig.url}${localizedPath(lang, pageSlug(lang, pageName))}`
+          : `${canonicalUrl}#${item.slug}`,
+      };
+    }),
     ...t.automations.items.map((item) => ({
       name: item.name,
       description: item.body,
@@ -245,23 +357,41 @@ function breadcrumb(
   // quiere el nombre de la página («Proyectos»), no la coletilla de la marca.
   const crumbName = title.split(' — ')[0];
 
+  /* Las páginas de plantilla NO cuelgan del inicio: viven bajo la bitácora, y
+     así lo dice también el hero. La miga tiene tres niveles y el del medio
+     tiene que existir de verdad. */
+  const t = locales[lang];
+  const middle = isTemplatePage(pageName)
+    ? {
+        '@type': 'ListItem',
+        position: 2,
+        name: t.templates.parentCrumb,
+        item: `${siteConfig.url}${localizedPath(lang, pageSlug(lang, 'projects'))}`,
+      }
+    : null;
+
+  const trail = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: t.nav.home,
+      item: `${siteConfig.url}${localizedPath(lang)}`,
+    },
+    ...(middle ? [middle] : []),
+    {
+      '@type': 'ListItem',
+      position: middle ? 3 : 2,
+      name: isTemplatePage(pageName)
+        ? templateOf(lang, pageName).crumb
+        : crumbName,
+      item: canonicalUrl,
+    },
+  ];
+
   return {
     '@type': 'BreadcrumbList',
     '@id': `${canonicalUrl}#breadcrumb`,
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: locales[lang].nav.home,
-        item: `${siteConfig.url}${localizedPath(lang)}`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: crumbName,
-        item: canonicalUrl,
-      },
-    ],
+    itemListElement: trail,
   };
 }
 
@@ -310,9 +440,24 @@ export function buildSchema({
 
   if (crumbs) graph.push(crumbs);
 
-  // Las FAQ solo existen en la Home: declararlas en otra URL sería describir
-  // un contenido que allí no está.
-  if (pageName === 'home') graph.push(faqPage(lang, canonicalUrl));
+  /* Las FAQ se declaran SOLO donde el acordeón existe de verdad, y con el
+     mismo texto que lee una persona: la Home (las del Home) y cada página de
+     plantilla (las suyas). Declararlas en otra URL sería describir un
+     contenido que allí no está. */
+  if (pageName === 'home') {
+    const faq = locales[lang].services.faq;
+    graph.push(faqPage(lang, canonicalUrl, faq.title, faq.items));
+  }
+
+  if (isTemplatePage(pageName)) {
+    const tpl = templateOf(lang, pageName);
+    const faq = faqPage(lang, canonicalUrl, tpl.faq.title, tpl.faq.items);
+    const service = templateService(lang, pageName, canonicalUrl);
+
+    // Lo que la página describe es la plantilla; la FAQ es contenido suyo.
+    page.mainEntity = { '@id': service['@id'] };
+    graph.push(service, faq);
+  }
 
   // El inventario solo existe en la bitácora.
   if (pageName === 'projects') {
