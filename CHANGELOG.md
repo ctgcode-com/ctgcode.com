@@ -806,3 +806,22 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Salen con `PUBLIC_DEMO=true`, así que llevan `noindex, follow` y no entran en ningún sitemap: simulan negocios que no existen y un buscador podría tomarlas por fichas legítimas. A diferencia de las plantillas, aquí no hay página dedicada que posicione en su lugar —quien lo hace es la propia sección de automatizaciones de `/proyectos`, que es la que las enlaza—. `llms.txt` gana la nota equivalente a la que ya tenían las demos de plantilla.
 - Estas demos **sí llevan un framework de JavaScript**, a diferencia de las plantillas: Astro 5 con Tailwind 4, shadcn/ui y una isla de React 19 para el panel. Son ~85 KB comprimidos que las plantillas no pagan. Es una decisión deliberada —un panel con estado compartido entre tarjetas, tabla y bitácora es justo lo que React resuelve bien—, pero conviene tenerla presente antes de comparar sus cifras con las de las plantillas.
 - El comentario del filtro del sitemap en `astro.config.mjs` pasa de seis a doce URL de demo y separa las dos familias.
+
+## [0.33.0] - 2026-08-05
+
+### Añadido
+
+- **Systemslab entra en la bitácora.** El asiento «01 · Entregado» deja de ser una ficha suelta y pasa a ser una lista: un asiento por sitio en producción, alternando el lado de la captura (Recogras a estribor, Systemslab a babor) para que la sección baje en zigzag como el resto de la página. La ficha del nuevo cliente explica que el sitio se entregó con un panel de administración propio —categorías, productos y las cintas de la portada, con republicación en un clic—, y ese renglón vive aparte del resumen a propósito: **la URL del panel no se publica**, solo lo que el cliente hace con él. `llms.txt` y el `ItemList` de datos estructurados ganan su entrada.
+
+### Cambiado
+
+- **Recogras sube a 100 en las cuatro cifras** (rendimiento móvil venía de 98). Se actualizan el bloque de cifras en los dos idiomas, la fecha de la medición —PageSpeed Insights, 5 de agosto de 2026— y su línea en `llms.txt`.
+- **El stack se enseña igual en todo el sitio.** La sección de proyectos del inicio era la única pieza que lo pintaba como etiquetas de texto mientras el resto usaba placas de logotipo. Ahora las tres vistas comparten `<StackList>` (`ui/StackList`), que ya existía dentro de la bitácora y sube a componente compartido con su propia hoja. Se retiran las copias de `.pj-stack` y `.bt-stack`.
+- **Las capturas caen a JPG progresivo** en el último eslabón de la cadena de respaldo (AVIF → WebP → JPG), en lugar de PNG: mismo píxel a la vista y una quinta parte del peso para el navegador que no entienda ninguno de los dos primeros. Los PNG salen del repositorio.
+- **La bitácora enseña el primer pliegue recortado en origen**, no la página entera recortada por CSS. Antes servía la captura completa —3,4 MB de alto larguísimo— y tiraba el 90% con un `object-fit`; ahora carga un recorte de la cabecera del sitio de menos de 100 kB y lo enseña con su proporción real.
+
+### Técnico
+
+- `projects.featured` y `projects.testimonial` se funden en `projects.delivered[]`, una lista de sitios entregados con su reseña dentro (opcional: hay clientes contentos que no dejan una pública). El inicio enseña el primero, la bitácora los abre todos y el JSON-LD los recorre: una cifra corregida se corrige en un único sitio.
+- El registro de tecnologías (`data/tech.ts`) gana `mysql`, `php` y `shadcn`.
+- Las clases de `<StackList>` llevan prefijo `techstack-` y no `stack-`: `.stack` ya existe en `styles/layout.css` como utilidad de apilado vertical y, al no declarar la hoja nueva su propio `flex-direction`, ganaba la de allí y las placas salían en columna.

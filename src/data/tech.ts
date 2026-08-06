@@ -16,10 +16,13 @@ import htmxUrl from '../assets/htmx.svg?url';
 import javascriptUrl from '../assets/javascript.svg?url';
 import jinjaUrl from '../assets/jinja.svg?url';
 import lucideUrl from '../assets/lucide.svg?url';
+import mysqlUrl from '../assets/mysql.svg?url';
+import phpUrl from '../assets/php.svg?url';
 import postgresqlUrl from '../assets/postgresql.svg?url';
 import pythonUrl from '../assets/python.svg?url';
 import restApiUrl from '../assets/rest-api.svg?url';
 import rustUrl from '../assets/rust.svg?url';
+import shadcnUrl from '../assets/shadcn.svg?url';
 import tailwindUrl from '../assets/tailwind.svg?url';
 import typescriptUrl from '../assets/typescript.svg?url';
 
@@ -33,10 +36,13 @@ export const TECH: Record<string, Tech> = {
     javascript: { src: javascriptUrl, name: 'JavaScript' },
     jinja: { src: jinjaUrl, name: 'Jinja' },
     lucide: { src: lucideUrl, name: 'Lucide' },
+    mysql: { src: mysqlUrl, name: 'MySQL' },
+    php: { src: phpUrl, name: 'PHP' },
     postgresql: { src: postgresqlUrl, name: 'PostgreSQL' },
     python: { src: pythonUrl, name: 'Python' },
     'rest-api': { src: restApiUrl, name: 'REST API' },
     rust: { src: rustUrl, name: 'Rust' },
+    shadcn: { src: shadcnUrl, name: 'Shadcn/ui' },
     tailwind: { src: tailwindUrl, name: 'Tailwind' },
     typescript: { src: typescriptUrl, name: 'TypeScript' },
 };

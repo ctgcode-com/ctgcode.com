@@ -244,91 +244,8 @@ main.log {
   color: var(--color-text-subtle);
 }
 
-/* ---- Stack en LOGOTIPOS (mismo tratamiento que la sección de servicios del
-   Home): placas cuadradas con el logo y un rótulo mono que asoma al pasar. Lo
-   que no tiene logo (una técnica como «SSG») cae a una placa de texto, de la
-   misma altura, para que la fila no se rompa. */
-.bt-stack {
-  margin-top: var(--space-md);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-  padding: 0;
-  list-style: none;
-}
-
-.bt-tech {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.4rem;
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: color-mix(in oklab, var(--palette-sand) 90%, transparent);
-  transition:
-    transform var(--dur-base) var(--ease-expo),
-    box-shadow var(--dur-base) var(--ease-tide);
-}
-
-.bt-tech img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.bt-tech:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  z-index: 4;
-}
-
-/* Placa de texto para lo que no tiene logo: misma altura, ancho al contenido */
-.bt-tech--label {
-  width: auto;
-  padding-inline: var(--space-sm);
-  background: transparent;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-text-subtle);
-}
-
-.bt-tech--label:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: var(--color-border-strong);
-}
-
-/* El rótulo del logo: voz mono sobre superficie de noche, asoma al pasar */
-.bt-tech-name {
-  position: absolute;
-  bottom: calc(100% + 0.5rem);
-  left: 50%;
-  z-index: 5;
-  padding: 0.2rem 0.5rem;
-  border: var(--border-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-xs);
-  background: var(--color-surface-sunk);
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  opacity: 0;
-  transform: translate(-50%, 4px);
-  pointer-events: none;
-  transition:
-    opacity var(--dur-fast) var(--ease-soft),
-    transform var(--dur-fast) var(--ease-soft);
-}
-
-.bt-tech:hover .bt-tech-name {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
+/* El stack en LOGOTIPOS lo pinta <StackList> (ui/StackList) con su propia
+   hoja: la bitácora, el Home y los servicios comparten ahora una sola placa. */
 
 /* Enlace a la demo. Mientras no exista, el MISMO renglón se vuelve un aviso
    apagado: el hueco se ve, pero no invita a pulsar nada que no lleve a sitio. */
@@ -403,6 +320,12 @@ main.log {
   .bt-metrics-and-quote .pj-quote {
     margin-top: 0;
   }
+
+  /* Sin reseña (hay clientes contentos que no dejan una pública), las cifras
+     no se quedan encogidas en media fila: se toman la fila entera. */
+  .bt-metrics-and-quote:not(:has(.pj-quote)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ===========================================================================
@@ -431,7 +354,9 @@ main.log {
 
 /* ===========================================================================
    01 · ENTREGADO
-   La captura sale a sangre por ESTRIBOR; el texto se queda a babor.
+   Un asiento por sitio entregado. La captura sale a sangre por ESTRIBOR y el
+   texto se queda a babor; el siguiente asiento cruza los lados, de modo que la
+   lista baja en zigzag en vez de caer en columna.
    =========================================================================== */
 .bt-shipped {
   overflow-x: clip;
@@ -443,16 +368,41 @@ main.log {
   gap: var(--space-lg);
 }
 
+/* La flota: los asientos, uno debajo de otro, con aire entre ellos. */
+.bt-fleet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bt-delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
 .bt-shipped-text {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
 }
 
-/* ---- La captura: un recorte del sitio, no el sitio entero -------------------
-   El PNG es una captura de página COMPLETA (larguísima). Se recorta a su PRIMER
-   PLIEGUE con un alto fijo (aspect-ratio) + object-fit y se funde por abajo: se
-   lee «esto sigue», que es la verdad, en vez de mostrar la página entera. */
+/* La columna de estribor: la captura arriba y, debajo, lo entregado además del
+   sitio. Que ese texto viva aquí y no en el cuerpo del asiento reparte la
+   altura entre las dos columnas en vez de cargarla toda en una. */
+.bt-shot-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ---- La captura: el primer pliegue del sitio, no el sitio entero ------------
+   Ya viene recortada en origen (la cabecera del sitio y nada más), así que se
+   enseña con su proporción real —sin `object-fit` que tire píxeles— y solo se
+   funde en el último tramo: se lee «esto sigue», que es la verdad. */
 .bt-shot {
   display: flex;
   flex-direction: column-reverse; /* la barra de URL, encima de la captura */
@@ -464,19 +414,44 @@ main.log {
   box-shadow: var(--shadow-lg);
 }
 
-.bt-shot picture {
+.bt-shot img {
   display: block;
-  aspect-ratio: 16 / 11;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
 
-.bt-shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
+/* ---- Lo entregado detrás de la puerta (el panel del cliente) ----------------
+   No es parte del resumen porque no se puede visitar: la URL del panel no se
+   publica. Vive bajo la captura y se marca con el filo del atardecer para que
+   se lea como el pie de la ventana —lo que hay detrás de lo que se ve— y no
+   como un segundo párrafo del caso. */
+.bt-extra {
+  position: relative;
+  padding-left: var(--space-md);
+}
+
+.bt-extra::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.35rem 0.35rem;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-cta);
+}
+
+.bt-extra .bt-mini-label {
+  margin-top: 0;
+}
+
+.bt-extra-body {
+  margin-top: var(--space-2xs);
+  text-wrap: pretty;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
 }
 
 /* La barra: la URL en voz mono, con el semáforo de la ventana del hero */
@@ -618,9 +593,9 @@ main.log {
 
 @media (min-width: 64rem) {
   /* Texto a babor, captura a estribor, ambas centradas verticalmente: la
-     captura es un recorte de alto FIJO (su primer pliegue), así que si el texto
+     captura es un recorte apaisado (su primer pliegue), así que si el texto
      pesa más, la imagen queda centrada a su lado en vez de estirarse. */
-  .bt-shipped-wrap {
+  .bt-delivery {
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     column-gap: var(--space-2xl);
@@ -636,8 +611,31 @@ main.log {
     border-end-end-radius: 0;
   }
 
-  .bt-shot picture {
-    aspect-ratio: 16 / 12;
+  /* El asiento par cruza los lados: la captura se va a BABOR y se asoma por el
+     borde izquierdo. El orden del DOM no cambia (el texto sigue leyéndose
+     primero); solo se reordenan las columnas. */
+  .bt-delivery:nth-child(even) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .bt-delivery:nth-child(even) .bt-shipped-text {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bt-delivery:nth-child(even) .bt-shot-col {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .bt-delivery:nth-child(even) .bt-shot {
+    margin-inline: calc(var(--content-padding) * -1) 0;
+    border-inline-start: 0;
+    border-inline-end: var(--border-thin) solid var(--color-border-strong);
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    border-start-end-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
   }
 }
 
@@ -645,6 +643,10 @@ main.log {
   /* En pantallas anchas la captura se asoma de verdad (más allá del padding) */
   .bt-shot {
     margin-inline-end: min(-6vw, -3rem);
+  }
+
+  .bt-delivery:nth-child(even) .bt-shot {
+    margin-inline: min(-6vw, -3rem) 0;
   }
 }
 

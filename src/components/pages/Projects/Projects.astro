@@ -27,30 +27,40 @@ import CTA from "../../ui/CTA/CTA.astro";
 import Seascape from "../../backdrop/Seascape/Seascape.astro";
 import ViewHero from "../../sections/ViewHero/ViewHero.astro";
 import SectionHead from "../../sections/SectionHead/SectionHead.astro";
-import StackList from "./StackList.astro";
+import StackList from "../../ui/StackList/StackList.astro";
 import { locales, localizedPath, pageSlug } from "../../../data/i18n";
 import "./Projects.css";
 
-/* La captura del sitio del cliente, en la cadena de respaldo del proyecto
-   (AVIF → WebP → PNG). Ya vienen optimizadas: se emiten tal cual. */
-import deskAvif from "../../../assets/recograscolombia_escritorio.avif";
-import deskWebp from "../../../assets/recograscolombia_escritorio.webp";
-import deskPng from "../../../assets/recograscolombia_escritorio.png";
+/* El PRIMER PLIEGUE del sitio de cada cliente. Aquí la ficha solo enseña la
+   cabecera del sitio, así que se recorta en origen en vez de traerse la página
+   entera —que pesa siete veces más— y tirar el 90% con un `object-fit`. Al ser
+   un recorte pequeño, un JPG progresivo ya baja de los 100 kB: no hace falta
+   cadena de respaldo. Se indexan por el `slug` del proyecto (ver locales). */
+import shotRecogras from "../../../assets/recograscolombia_escritorio_hero.jpg";
+import shotSystemslab from "../../../assets/systemslab_escritorio_hero.jpg";
 
-/* Capturas de página completa de las tres plantillas, en la misma cadena de
-   respaldo. Se indexan por el `slug` de cada plantilla (ver locales): así el
-   .astro no necesita saber el orden, solo pedir la captura de un slug. */
+/* Capturas de página completa de las tres plantillas, en la cadena de respaldo
+   del proyecto (AVIF → WebP → JPG progresivo). Se indexan por el `slug` de cada
+   plantilla (ver locales): así el .astro no necesita saber el orden, solo pedir
+   la captura de un slug. */
 import tplServAvif from "../../../assets/plantilla_web_servicios_profesionales.avif";
 import tplServWebp from "../../../assets/plantilla_web_servicios_profesionales.webp";
-import tplServPng from "../../../assets/plantilla_web_servicios_profesionales.png";
+import tplServJpg from "../../../assets/plantilla_web_servicios_profesionales.jpg";
 import tplLocalAvif from "../../../assets/plantilla_web_negocio_local.avif";
 import tplLocalWebp from "../../../assets/plantilla_web_negocio_local.webp";
-import tplLocalPng from "../../../assets/plantilla_web_negocio_local.png";
+import tplLocalJpg from "../../../assets/plantilla_web_negocio_local.jpg";
 import tplStartupAvif from "../../../assets/plantilla_web_startup.avif";
 import tplStartupWebp from "../../../assets/plantilla_web_startup.webp";
-import tplStartupPng from "../../../assets/plantilla_web_startup.png";
+import tplStartupJpg from "../../../assets/plantilla_web_startup.jpg";
 
-type Shot = { avif: ImageMetadata; webp: ImageMetadata; png: ImageMetadata };
+type Shot = { avif: ImageMetadata; webp: ImageMetadata; jpg: ImageMetadata };
+
+/* slug del proyecto entregado → recorte de su primer pliegue. Si un proyecto
+   no tuviera captura aquí, su ficha se pinta sin imagen sin romperse. */
+const DELIVERED_SHOTS: Record<string, ImageMetadata | undefined> = {
+  recogras: shotRecogras,
+  systemslab: shotSystemslab,
+};
 
 /* slug → captura. Los slugs viven en los locales (data/{es,en}.ts); si alguno
    no tiene captura aquí, la ficha se pinta sin imagen sin romperse. */
@@ -58,32 +68,32 @@ const TEMPLATE_SHOTS: Record<string, Shot> = {
   "servicios-profesionales": {
     avif: tplServAvif,
     webp: tplServWebp,
-    png: tplServPng,
+    jpg: tplServJpg,
   },
   "professional-services": {
     avif: tplServAvif,
     webp: tplServWebp,
-    png: tplServPng,
+    jpg: tplServJpg,
   },
   "negocios-locales": {
     avif: tplLocalAvif,
     webp: tplLocalWebp,
-    png: tplLocalPng,
+    jpg: tplLocalJpg,
   },
   "local-business": {
     avif: tplLocalAvif,
     webp: tplLocalWebp,
-    png: tplLocalPng,
+    jpg: tplLocalJpg,
   },
   "startups-productos": {
     avif: tplStartupAvif,
     webp: tplStartupWebp,
-    png: tplStartupPng,
+    jpg: tplStartupJpg,
   },
   "startups-products": {
     avif: tplStartupAvif,
     webp: tplStartupWebp,
-    png: tplStartupPng,
+    jpg: tplStartupJpg,
   },
 };
 
@@ -110,9 +120,11 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = locales[lang].projectsPage;
-const t2 = locales[lang].projects;
 const pj = locales[lang].projects;
-const featured = pj.featured;
+/* Los sitios entregados salen de `projects` —la misma fuente que alimenta el
+   caso destacado del Home—: la bitácora los abre TODOS, el Home solo el
+   primero. Así una cifra corregida se corrige en un único sitio. */
+const delivered = pj.delivered;
 const L = t.labels;
 
 /* Los ids de sección SALEN del índice: así el ancla y su entrada en el
@@ -153,111 +165,152 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
       aria-labelledby="bt-shipped-title"
     >
       <div class="bt-shipped-wrap">
-        <!-- Texto a babor: cabecera + ficha del proyecto, en una columna. -->
-        <div class="bt-shipped-text" data-reveal style="--i:0">
-          <SectionHead
-            idx={t.delivered.idx}
-            eyebrow={t.delivered.eyebrow}
-            title={t.delivered.title}
-            lead={t.delivered.lead}
-            id="bt-shipped-title"
-            noReveal
-          />
+        <SectionHead
+          idx={t.delivered.idx}
+          eyebrow={t.delivered.eyebrow}
+          title={t.delivered.title}
+          lead={t.delivered.lead}
+          id="bt-shipped-title"
+        />
 
-          <article class="bt-entry">
-            <p class="bt-status bt-status--live">
-              <span class="bt-status-dot" aria-hidden="true"></span>
-              {t.delivered.status}
-            </p>
+        <!-- Un asiento por sitio entregado. Cada uno alterna el lado de la
+             captura (el primero a estribor, el siguiente a babor) para que la
+             lista no caiga en columna: es el mismo zigzag que ordena la página
+             entera, dentro del asiento 01. -->
+        <ol class="bt-fleet" role="list">
+          {
+            delivered.map((project, i) => (
+              <li
+                class="bt-delivery"
+                id={project.slug}
+                data-reveal
+                style={`--i:${i}`}
+              >
+                <div class="bt-shipped-text">
+                  <article class="bt-entry">
+                    <p class="bt-status bt-status--live">
+                      <span class="bt-status-dot" aria-hidden="true" />
+                      {t.delivered.status}
+                    </p>
 
-            <h3 class="bt-entry-name">{featured.client}</h3>
-            <p class="bt-entry-tagline">{featured.tagline}</p>
-            <p class="bt-entry-body">{featured.summary}</p>
+                    <h3 class="bt-entry-name">{project.client}</h3>
+                    <p class="bt-entry-tagline">{project.tagline}</p>
+                    <p class="bt-entry-body">{project.summary}</p>
 
-            <StackList items={featured.stack} />
+                    <StackList items={project.stack} />
 
-            <!-- Contenedor para alinear métricas y reseña lado a lado -->
-            <div class="bt-metrics-and-quote">
-              <div class="bt-metrics-col">
-                <dl class="bt-metrics">
-                  {
-                    featured.metrics.map((m) => (
-                      <div class="bt-metric">
-                        <dt class="bt-metric-label">{m.label}</dt>
-                        <dd class="bt-metric-value">{m.value}</dd>
+                    {/* Las cifras a babor y, si el cliente dejó reseña, su voz
+                        a estribor. Sin reseña, las cifras se quedan con la
+                        fila entera. */}
+                    <div class="bt-metrics-and-quote">
+                      <div class="bt-metrics-col">
+                        <dl class="bt-metrics">
+                          {project.metrics.map((m) => (
+                            <div class="bt-metric">
+                              <dt class="bt-metric-label">{m.label}</dt>
+                              <dd class="bt-metric-value">{m.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                        <p class="bt-source">{pj.metricsSource}</p>
                       </div>
-                    ))
-                  }
-                </dl>
-                <p class="bt-source">{pj.metricsSource}</p>
-              </div>
 
-              <figure class="pj-quote">
-                <p class="pj-quote-label">{t2.testimonial.label}</p>
-                <blockquote
-                  class="pj-quote-text"
-                  cite={t2.testimonial.sourceUrl || undefined}
-                >
-                  {t2.testimonial.quote}
-                </blockquote>
+                      {project.testimonial && (
+                        <figure class="pj-quote">
+                          <p class="pj-quote-label">
+                            {project.testimonial.label}
+                          </p>
+                          <blockquote
+                            class="pj-quote-text"
+                            cite={project.testimonial.sourceUrl || undefined}
+                          >
+                            {project.testimonial.quote}
+                          </blockquote>
 
-                <figcaption class="pj-quote-by">
-                  <span class="pj-quote-author">{t2.testimonial.author}</span>
-                  <span class="pj-quote-source">
-                    {
-                      t2.testimonial.sourceUrl ? (
-                        <a
-                          href={t2.testimonial.sourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer nofollow"
-                        >
-                          {t2.testimonial.source}
-                        </a>
-                      ) : (
-                        t2.testimonial.source
-                      )
-                    }
-                  </span>
-                </figcaption>
+                          <figcaption class="pj-quote-by">
+                            <span class="pj-quote-author">
+                              {project.testimonial.author}
+                            </span>
+                            <span class="pj-quote-source">
+                              {project.testimonial.sourceUrl ? (
+                                <a
+                                  href={project.testimonial.sourceUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer nofollow"
+                                >
+                                  {project.testimonial.source}
+                                </a>
+                              ) : (
+                                project.testimonial.source
+                              )}
+                            </span>
+                          </figcaption>
 
-                {
-                  t2.testimonial.note && (
-                    <p class="pj-quote-note">{t2.testimonial.note}</p>
-                  )
-                }
-              </figure>
-            </div>
+                          {project.testimonial.note && (
+                            <p class="pj-quote-note">
+                              {project.testimonial.note}
+                            </p>
+                          )}
+                        </figure>
+                      )}
+                    </div>
 
-            <a
-              class="bt-visit"
-              href={featured.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {pj.visit}
-              <span class="bt-visit-arrow" aria-hidden="true">↗</span>
-            </a>
-          </article>
-        </div>
+                    <a
+                      class="bt-visit"
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {pj.visit}
+                      <span class="bt-visit-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  </article>
+                </div>
 
-        <!-- La captura a estribor, recortada a su PRIMER PLIEGUE (el sitio del
-             cliente es una página larga): se ancla arriba y se funde por abajo.
-             Va centrada con el texto y se asoma al borde de la página. -->
-        <figure class="bt-shot" data-reveal style="--i:1">
-          <picture>
-            <source srcset={deskAvif.src} type="image/avif" />
-            <source srcset={deskWebp.src} type="image/webp" />
-            <img
-              src={deskPng.src}
-              width={deskPng.width}
-              height={deskPng.height}
-              alt={`${featured.client} — ${featured.tagline}`}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
-          <figcaption class="bt-shot-url">{featured.urlLabel}</figcaption>
-        </figure>
+                {/* La columna de estribor: la captura y, debajo, lo que se
+                    entregó DETRÁS de la puerta. */}
+                {(DELIVERED_SHOTS[project.slug] || project.extra) && (
+                  <div class="bt-shot-col">
+                    {/* El PRIMER PLIEGUE del sitio: se ancla arriba y se funde
+                        por abajo, así se lee «esto sigue», que es la verdad.
+                        Se asoma al borde de la página. */}
+                    {DELIVERED_SHOTS[project.slug] && (
+                      <figure class="bt-shot">
+                        <img
+                          src={DELIVERED_SHOTS[project.slug]!.src}
+                          width={DELIVERED_SHOTS[project.slug]!.width}
+                          height={DELIVERED_SHOTS[project.slug]!.height}
+                          alt={`${project.client} — ${project.tagline}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <figcaption class="bt-shot-url">
+                          {project.urlLabel}
+                        </figcaption>
+                      </figure>
+                    )}
+
+                    {/* Lo entregado además del sitio (un panel, por ejemplo).
+                        Vive AQUÍ y no en el cuerpo del asiento por dos
+                        razones: no es algo que el visitante pueda ver
+                        visitando el sitio —la URL del panel no se publica,
+                        solo lo que el cliente hace con él— y, puesto bajo la
+                        captura, equilibra las dos columnas en vez de alargar
+                        una sola. */}
+                    {project.extra && (
+                      <div class="bt-extra">
+                        <p class="bt-mini-label">{t.delivered.extraLabel}</p>
+                        <p class="bt-extra-body">{project.extra}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </section>
 
@@ -426,9 +479,9 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                             <source srcset={shot.avif.src} type="image/avif" />
                             <source srcset={shot.webp.src} type="image/webp" />
                             <img
-                              src={shot.png.src}
-                              width={shot.png.width}
-                              height={shot.png.height}
+                              src={shot.jpg.src}
+                              width={shot.jpg.width}
+                              height={shot.jpg.height}
                               alt={item.name}
                               loading="lazy"
                               decoding="async"
@@ -440,9 +493,9 @@ const [idShipped, idHelio, idTemplates, idAutomations] = ids;
                           <source srcset={shot.avif.src} type="image/avif" />
                           <source srcset={shot.webp.src} type="image/webp" />
                           <img
-                            src={shot.png.src}
-                            width={shot.png.width}
-                            height={shot.png.height}
+                            src={shot.jpg.src}
+                            width={shot.jpg.width}
+                            height={shot.jpg.height}
                             alt={item.name}
                             loading="lazy"
                             decoding="async"

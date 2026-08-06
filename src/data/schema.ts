@@ -277,14 +277,15 @@ function projectsItemList(
   canonicalUrl: string,
 ) {
   const t = locales[lang].projectsPage;
-  const featured = locales[lang].projects.featured;
+  const delivered = locales[lang].projects.delivered;
 
   const entries: { name: string; description: string; url?: string }[] = [
-    {
-      name: featured.client,
-      description: featured.tagline,
-      url: featured.url,
-    },
+    // Los sitios entregados, en el mismo orden en que se leen en la página.
+    ...delivered.map((project) => ({
+      name: project.client,
+      description: project.tagline,
+      url: project.url,
+    })),
     { name: t.helio.name, description: t.helio.tagline },
     // Las plantillas ya NO apuntan a un ancla de esta misma página: cada una
     // tiene su URL propia, que es la que debe listarse y citarse.

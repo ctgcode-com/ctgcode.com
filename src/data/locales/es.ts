@@ -88,31 +88,52 @@ const es: LocaleSchema = {
         ctaAll: 'Ver todos los proyectos',
         indexSlug: 'proyectos',
         visit: 'Visitar el sitio',
-        metricsSource: 'Medido con PageSpeed Insights · julio 2026',
-        testimonial: {
-            label: 'lo que dice el cliente',
-            quote:
-                'Excelente trabajo realizado… todo muy profesional y eficiente. Lo recomiendo.',
-            author: 'Joseph Caballero Lamadrid',
-            source: 'Reseña en Google · julio 2026',
-            sourceUrl: 'https://maps.app.goo.gl/st6sCh5rgCaqkSri7',
-            note: '',
-        },
-        featured: {
-            client: 'Recogras',
-            tagline: 'Recolección certificada de aceite usado · Cartagena',
-            summary:
-                'Sitio corporativo para una gestora ambiental que recoge aceite de cocina usado y trampa grasa en restaurantes, hoteles y establecimientos gastronómicos. Construido con Astro y renderizado estático: sin capas de más, con el peso puesto en que abra rápido desde el móvil de un jefe de cocina.',
-            url: 'https://recograscolombia.com/',
-            urlLabel: 'recograscolombia.com',
-            stack: ['Astro', 'Tailwind', 'CSS propio'],
-            metrics: [
-                { label: 'Rendimiento (escritorio)', value: '100' },
-                { label: 'Rendimiento (móvil)', value: '98' },
-                { label: 'SEO', value: '100' },
-                { label: 'Accesibilidad', value: '96' },
-            ],
-        },
+        metricsSource: 'Medido con PageSpeed Insights · agosto 2026',
+        delivered: [
+            {
+                slug: 'recogras',
+                client: 'Recogras',
+                tagline: 'Recolección certificada de aceite usado · Cartagena',
+                summary:
+                    'Sitio corporativo para una gestora ambiental que recoge aceite de cocina usado y trampa grasa en restaurantes, hoteles y establecimientos gastronómicos. Construido con Astro y renderizado estático: sin capas de más, con el peso puesto en que abra rápido desde el móvil de un jefe de cocina.',
+                url: 'https://recograscolombia.com/',
+                urlLabel: 'recograscolombia.com',
+                stack: ['astro', 'tailwind', 'css'],
+                metrics: [
+                    { label: 'Rendimiento (escritorio)', value: '100' },
+                    { label: 'Rendimiento (móvil)', value: '100' },
+                    { label: 'SEO', value: '100' },
+                    { label: 'Accesibilidad', value: '100' },
+                ],
+                testimonial: {
+                    label: 'lo que dice el cliente',
+                    quote:
+                        'Excelente trabajo realizado… todo muy profesional y eficiente. Lo recomiendo.',
+                    author: 'Joseph Caballero Lamadrid',
+                    source: 'Reseña en Google · julio 2026',
+                    sourceUrl: 'https://maps.app.goo.gl/st6sCh5rgCaqkSri7',
+                    note: '',
+                },
+            },
+            {
+                slug: 'systemslab',
+                client: 'Systemslab',
+                tagline: 'Servicio técnico IT y seguridad electrónica · Cartagena',
+                summary:
+                    'Sitio corporativo y catálogo de productos para una empresa de servicio técnico IT, domótica, redes y seguridad electrónica. La landing explica el servicio y el catálogo tiene su propia página por producto, con filtros; todo se hornea como HTML estático, así que el visitante nunca toca la base de datos.',
+                extra:
+                    'El sitio se entregó con un panel de administración propio: el cliente da de alta categorías, crea y edita productos con sus fotos y precios, y arma las cintas de la portada eligiendo qué categorías se asoman en cada una. Al pulsar «Publicar», el sitio se reconstruye solo con lo que haya cambiado —sin tocar código y sin depender de nosotros.',
+                url: 'https://systemslab.com.co/',
+                urlLabel: 'systemslab.com.co',
+                stack: ['astro', 'tailwind', 'lucide', 'php', 'mysql', 'shadcn'],
+                metrics: [
+                    { label: 'Rendimiento (escritorio)', value: '100' },
+                    { label: 'Rendimiento (móvil)', value: '98' },
+                    { label: 'SEO', value: '100' },
+                    { label: 'Accesibilidad', value: '100' },
+                ],
+            },
+        ],
     },
     projectsPage: {
         metaTitle: 'Proyectos',
@@ -141,8 +162,9 @@ const es: LocaleSchema = {
             idx: '01',
             eyebrow: 'entregado',
             title: 'En producción, con el cliente al mando',
-            lead: 'El trabajo que ya vive fuera de nuestras manos: un sitio abierto al público, con cifras que cualquiera puede volver a medir.',
+            lead: 'El trabajo que ya vive fuera de nuestras manos: sitios abiertos al público, con cifras que cualquiera puede volver a medir.',
             status: 'entregado · en línea',
+            extraLabel: 'además del sitio',
         },
         helio: {
             idx: '02',

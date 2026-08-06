@@ -1,0 +1,23 @@
+<svg version="1.2" baseProfile="tiny-ps" width="256" height="256" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logotipo CTG Code">
+  <!-- Fondo blanco sólido para BIMI y compatibilidad con modo oscuro -->
+  <rect width="100%" height="100%" fill="#FFFFFF" />
+
+  <!-- Llaves de codigo: forma { } separadas del sol -->
+  <g stroke="#0C2233" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    <path d="M46 34 L36 42 L36 92 L26 100 L36 108 L36 158 L46 166" />
+    <path d="M154 34 L164 42 L164 92 L174 100 L164 108 L164 158 L154 166" />
+  </g>
+
+  <!-- Sol: anillo + 8 rayos triangulares pegados al circulo -->
+  <g fill="#F4A24C">
+    <path d="M100 50 L107 66 L93 66 Z" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(45 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(90 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(135 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(180 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(225 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(270 100 100)" />
+    <path d="M100 50 L107 66 L93 66 Z" transform="rotate(315 100 100)" />
+  </g>
+  <circle cx="100" cy="100" r="22" fill="none" stroke="#F4A24C" stroke-width="8" />
+</svg>

@@ -186,39 +186,56 @@ export type LocaleSchema = {
         /** Procedencia y fecha de las cifras: se citan, no se afirman. */
         metricsSource: string;
         /**
-         * Reseña real del cliente. Se transcribe a mano a propósito: traerla
-         * por la API de Places obligaría a no almacenarla (sus términos
-         * prohíben cachear el contenido), y este sitio hornea el HTML en el
-         * build. Se cita recortada —con elipsis— para no reproducir un desliz
-         * de redacción del autor; el sentido queda intacto.
+         * Los sitios ENTREGADOS, en el orden en que se leen. El Home enseña
+         * solo el primero (el caso destacado); la bitácora los abre todos. Es
+         * la ÚNICA fuente: la página de proyectos no repite estos textos.
          */
-        testimonial: {
-            label: string;
-            quote: string;
-            author: string;
-            /** Procedencia de la cita («Reseña en Google»). */
-            source: string;
-            /**
-             * Enlace a las reseñas de la ficha. Google no da permalink a una
-             * reseña suelta, así que apunta al listado completo. Si queda
-             * vacío, la atribución se muestra sin enlace en vez de romperse.
-             */
-            sourceUrl: string;
-            /** Aviso de traducción; vacío en el idioma original. */
-            note: string;
-        };
-        /** El proyecto destacado en el Home. */
-        featured: {
+        delivered: {
+            /** Ancla de la ficha dentro de la bitácora. */
+            slug: string;
             client: string;
             tagline: string;
             summary: string;
+            /**
+             * Lo entregado ADEMÁS del sitio (un panel, un catálogo…). Opcional:
+             * no todo encargo trae algo detrás de la puerta.
+             */
+            extra?: string;
             /** URL del sitio en producción. */
             url: string;
             /** La URL como se muestra en la barra del navegador simulado. */
             urlLabel: string;
+            /** Claves del registro de tecnologías (ver `data/tech.ts`). */
             stack: string[];
             metrics: { label: string; value: string }[];
-        };
+            /**
+             * Reseña real del cliente. Se transcribe a mano a propósito:
+             * traerla por la API de Places obligaría a no almacenarla (sus
+             * términos prohíben cachear el contenido), y este sitio hornea el
+             * HTML en el build. Se cita recortada —con elipsis— para no
+             * reproducir un desliz de redacción del autor; el sentido queda
+             * intacto.
+             *
+             * Opcional: hay clientes contentos que no dejan reseña pública, y
+             * la ficha se pinta sin ella en vez de inventarse una.
+             */
+            testimonial?: {
+                label: string;
+                quote: string;
+                author: string;
+                /** Procedencia de la cita («Reseña en Google»). */
+                source: string;
+                /**
+                 * Enlace a las reseñas de la ficha. Google no da permalink a
+                 * una reseña suelta, así que apunta al listado completo. Si
+                 * queda vacío, la atribución se muestra sin enlace en vez de
+                 * romperse.
+                 */
+                sourceUrl: string;
+                /** Aviso de traducción; vacío en el idioma original. */
+                note: string;
+            };
+        }[];
     };
     /**
      * La PÁGINA de proyectos («la bitácora»). No repite el caso destacado —lo
@@ -255,13 +272,15 @@ export type LocaleSchema = {
             /** Lo que trae una automatización. */
             includes: string;
         };
-        /** 01 · Lo entregado. El proyecto en sí vive en `projects.featured`. */
+        /** 01 · Lo entregado. Los proyectos viven en `projects.delivered`. */
         delivered: {
             idx: string;
             eyebrow: string;
             title: string;
             lead: string;
             status: string;
+            /** Rótulo de lo que se entregó además del sitio (`extra`). */
+            extraLabel: string;
         };
         /** 02 · El producto propio del estudio. */
         helio: {

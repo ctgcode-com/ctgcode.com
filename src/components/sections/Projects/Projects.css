@@ -106,24 +106,9 @@
 }
 
 /* ---- Stack: etiquetas en voz mono ---------------------------------------------- */
-.pj-stack {
-  margin-top: var(--space-md);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-  padding: 0;
-  list-style: none;
-}
-
-.pj-tech {
-  padding: var(--space-3xs) var(--space-xs);
-  border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-text-subtle);
-}
+/* El stack lo pinta <StackList> (ui/StackList), compartido con la bitácora:
+   las etiquetas de texto que vivían aquí eran la única forma del sitio que no
+   se parecía a las demás. */
 
 /* ---- Las cifras: el argumento duro --------------------------------------------- */
 .pj-metrics {

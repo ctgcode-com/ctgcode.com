@@ -13,11 +13,13 @@
  * desfasados se lee profundidad. En viewport estrecho solo se muestra la
  * captura móvil — un pantallazo de escritorio reducido no se lee.
  *
- * FORMATOS: cada captura llega en AVIF, WebP y PNG, y se sirven con <picture>
- * en cadena de respaldo. El navegador se queda con el primero que entienda:
- * AVIF (el más compacto) → WebP (soporte casi universal) → PNG (el último
- * recurso). Son ficheros ya optimizados a mano, así que se emiten tal cual
- * en vez de pasar por el transformador de Astro.
+ * FORMATOS: cada captura llega en AVIF, WebP y JPG progresivo, y se sirven con
+ * <picture> en cadena de respaldo. El navegador se queda con el primero que
+ * entienda: AVIF (el más compacto) → WebP (soporte casi universal) → JPG (el
+ * último recurso, y progresivo: si le toca, al menos entra de golpe en baja y
+ * afina, en vez de dibujarse por renglones). Son ficheros ya optimizados a
+ * mano, así que se emiten tal cual en vez de pasar por el transformador de
+ * Astro.
  *
  * El progreso se calcula por el avance PROPIO de la sección (mismo criterio
  * que el sol del descenso) e interpola por rAF, así el recorrido es sedoso
@@ -33,7 +35,7 @@ export interface ShotSources {
   avif: ImageMetadata;
   webp: ImageMetadata;
   /** Además de ser el último respaldo, aporta las dimensiones reales. */
-  png: ImageMetadata;
+  jpg: ImageMetadata;
 }
 
 interface Props {
@@ -62,9 +64,9 @@ const { desktop, mobile, alt, url } = Astro.props;
         <source type="image/webp" srcset={desktop.webp.src} />
         <img
           class="shot-img"
-          src={desktop.png.src}
-          width={desktop.png.width}
-          height={desktop.png.height}
+          src={desktop.jpg.src}
+          width={desktop.jpg.width}
+          height={desktop.jpg.height}
           alt={alt}
           loading="lazy"
           decoding="async"
@@ -82,9 +84,9 @@ const { desktop, mobile, alt, url } = Astro.props;
             <source type="image/webp" srcset={mobile.webp.src} />
             <img
               class="shot-img"
-              src={mobile.png.src}
-              width={mobile.png.width}
-              height={mobile.png.height}
+              src={mobile.jpg.src}
+              width={mobile.jpg.width}
+              height={mobile.jpg.height}
               alt={alt}
               loading="lazy"
               decoding="async"

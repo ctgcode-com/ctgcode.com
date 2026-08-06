@@ -12,17 +12,18 @@
  */
 import { locales, localizedPath } from "../../../data/i18n";
 import ScrollShot from "../../ui/ScrollShot/ScrollShot.astro";
+import StackList from "../../ui/StackList/StackList.astro";
 import "./Projects.css";
 
 /* Capturas de página completa del sitio del cliente, en los tres formatos de
-   la cadena de respaldo (AVIF → WebP → PNG). Ya vienen optimizadas: se
-   importan como assets y se emiten tal cual. */
+   la cadena de respaldo (AVIF → WebP → JPG progresivo). Ya vienen optimizadas:
+   se importan como assets y se emiten tal cual. */
 import deskAvif from "../../../assets/recograscolombia_escritorio.avif";
 import deskWebp from "../../../assets/recograscolombia_escritorio.webp";
-import deskPng from "../../../assets/recograscolombia_escritorio.png";
+import deskJpg from "../../../assets/recograscolombia_escritorio.jpg";
 import mobAvif from "../../../assets/recograscolombia_movil.avif";
 import mobWebp from "../../../assets/recograscolombia_movil.webp";
-import mobPng from "../../../assets/recograscolombia_movil.png";
+import mobJpg from "../../../assets/recograscolombia_movil.jpg";
 
 interface Props {
   lang: keyof typeof locales;
@@ -30,10 +31,12 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = locales[lang].projects;
-const p = t.featured;
+/* El Home enseña UN caso: el primero de los entregados. El resto se leen en la
+   bitácora, que es la que abre el cuaderno entero. */
+const p = t.delivered[0];
 
-const desktopShot = { avif: deskAvif, webp: deskWebp, png: deskPng };
-const mobileShot = { avif: mobAvif, webp: mobWebp, png: mobPng };
+const desktopShot = { avif: deskAvif, webp: deskWebp, jpg: deskJpg };
+const mobileShot = { avif: mobAvif, webp: mobWebp, jpg: mobJpg };
 ---
 
 <section
@@ -66,37 +69,42 @@ const mobileShot = { avif: mobAvif, webp: mobWebp, png: mobPng };
       <!-- La prueba humana ANTES de la visual: la voz de quien pagó el trabajo
            encabeza el caso y las capturas lo sustentan. La cita va RECORTADA
            (con elipsis) sobre el original de Google; se transcribe a mano a
-           propósito, no por API. -->
-      <figure class="pj-quote">
-        <p class="pj-quote-label">{t.testimonial.label}</p>
-        <blockquote
-          class="pj-quote-text"
-          cite={t.testimonial.sourceUrl || undefined}
-        >
-          {t.testimonial.quote}
-        </blockquote>
+           propósito, no por API. Si el caso no trae reseña, no se pinta nada:
+           antes que inventar una voz, silencio. -->
+      {
+        p.testimonial && (
+          <figure class="pj-quote">
+            <p class="pj-quote-label">{p.testimonial.label}</p>
+            <blockquote
+              class="pj-quote-text"
+              cite={p.testimonial.sourceUrl || undefined}
+            >
+              {p.testimonial.quote}
+            </blockquote>
 
-        <figcaption class="pj-quote-by">
-          <span class="pj-quote-author">{t.testimonial.author}</span>
-          <span class="pj-quote-source">
-            {
-              t.testimonial.sourceUrl ? (
-                <a
-                  href={t.testimonial.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                >
-                  {t.testimonial.source}
-                </a>
-              ) : (
-                t.testimonial.source
-              )
-            }
-          </span>
-        </figcaption>
+            <figcaption class="pj-quote-by">
+              <span class="pj-quote-author">{p.testimonial.author}</span>
+              <span class="pj-quote-source">
+                {p.testimonial.sourceUrl ? (
+                  <a
+                    href={p.testimonial.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                  >
+                    {p.testimonial.source}
+                  </a>
+                ) : (
+                  p.testimonial.source
+                )}
+              </span>
+            </figcaption>
 
-        {t.testimonial.note && <p class="pj-quote-note">{t.testimonial.note}</p>}
-      </figure>
+            {p.testimonial.note && (
+              <p class="pj-quote-note">{p.testimonial.note}</p>
+            )}
+          </figure>
+        )
+      }
       </div>
 
       <div class="pj-body">
@@ -104,9 +112,10 @@ const mobileShot = { avif: mobAvif, webp: mobWebp, png: mobPng };
         <h3 class="pj-client">{p.client}</h3>
         <p class="pj-summary">{p.summary}</p>
 
-        <ul class="pj-stack" role="list">
-          {p.stack.map((tech) => <li class="pj-tech">{tech}</li>)}
-        </ul>
+        <!-- El stack en la MISMA voz que el resto del sitio (placas de
+             logotipo, como en la sección de servicios): antes esta era la
+             única pieza que lo enseñaba como etiquetas de texto. -->
+        <StackList items={p.stack} />
 
         <!-- Las cifras: la prueba dura, con su procedencia declarada -->
         <dl class="pj-metrics">

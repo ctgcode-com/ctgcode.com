@@ -43,13 +43,13 @@ import "./Template.css";
    (AVIF → WebP → PNG). Ya vienen optimizadas: se emiten tal cual. */
 import tplServAvif from "../../../assets/plantilla_web_servicios_profesionales.avif";
 import tplServWebp from "../../../assets/plantilla_web_servicios_profesionales.webp";
-import tplServPng from "../../../assets/plantilla_web_servicios_profesionales.png";
+import tplServJpg from "../../../assets/plantilla_web_servicios_profesionales.jpg";
 import tplLocalAvif from "../../../assets/plantilla_web_negocio_local.avif";
 import tplLocalWebp from "../../../assets/plantilla_web_negocio_local.webp";
-import tplLocalPng from "../../../assets/plantilla_web_negocio_local.png";
+import tplLocalJpg from "../../../assets/plantilla_web_negocio_local.jpg";
 import tplStartupAvif from "../../../assets/plantilla_web_startup.avif";
 import tplStartupWebp from "../../../assets/plantilla_web_startup.webp";
-import tplStartupPng from "../../../assets/plantilla_web_startup.png";
+import tplStartupJpg from "../../../assets/plantilla_web_startup.jpg";
 
 /** Las tres claves del locale. El orden fija el de la sección «las otras dos». */
 export type TemplateKey =
@@ -73,19 +73,19 @@ const PAGE_NAMES: Record<TemplateKey, string> = {
   startupProduct: "template-startup-product",
 };
 
-type Shot = { avif: ImageMetadata; webp: ImageMetadata; png: ImageMetadata };
+type Shot = { avif: ImageMetadata; webp: ImageMetadata; jpg: ImageMetadata };
 
 const SHOTS: Record<TemplateKey, Shot> = {
   professionalServices: {
     avif: tplServAvif,
     webp: tplServWebp,
-    png: tplServPng,
+    jpg: tplServJpg,
   },
-  localBusiness: { avif: tplLocalAvif, webp: tplLocalWebp, png: tplLocalPng },
+  localBusiness: { avif: tplLocalAvif, webp: tplLocalWebp, jpg: tplLocalJpg },
   startupProduct: {
     avif: tplStartupAvif,
     webp: tplStartupWebp,
-    png: tplStartupPng,
+    jpg: tplStartupJpg,
   },
 };
 
@@ -237,9 +237,9 @@ const projectsHref = localizedPath(lang, pageSlug(lang, "projects"));
                 <source srcset={shot.avif.src} type="image/avif" />
                 <source srcset={shot.webp.src} type="image/webp" />
                 <img
-                  src={shot.png.src}
-                  width={shot.png.width}
-                  height={shot.png.height}
+                  src={shot.jpg.src}
+                  width={shot.jpg.width}
+                  height={shot.jpg.height}
                   alt={t.inside.shotAlt}
                   loading="lazy"
                   decoding="async"

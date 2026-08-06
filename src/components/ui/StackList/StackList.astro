@@ -1,0 +1,68 @@
+---
+/**
+ * StackList — el stack de una pieza, en la voz visual del sitio.
+ *
+ * Vive en `ui/` y no dentro de una vista porque lo consumen varias: la sección
+ * de proyectos del Home y la bitácora. Antes cada una pintaba su propio stack
+ * —el Home con etiquetas de texto, la bitácora con placas de logotipo— y la
+ * misma lista se leía distinta según la página. Ahora hay una sola forma.
+ *
+ * Regla: TODO íconos o TODO texto, nunca mezclado. Si cada tecnología de la
+ * lista tiene logotipo en el registro, se pintan las placas; si alguna no lo
+ * tiene (p. ej. una técnica como «SSG», que no es una marca con logo), la
+ * lista entera cae a etiquetas de texto. Así una fila nunca queda con un logo
+ * suelto junto a palabras.
+ *
+ * Los logotipos se pintan con <img> a PROPÓSITO, no por comodidad: incrustar
+ * los SVG en línea rompería el diseño. Varios traen su propia hoja `<style>`
+ * con clases genéricas (.st0, .st1) o degradados con ids `A`/`B`; al convivir
+ * en un mismo documento esas clases e ids son globales y se pisan entre sí.
+ * Dentro de un <img> cada SVG es un documento aparte y no se contamina.
+ */
+import { TECH, techKey, allHaveIcons } from "../../../data/tech";
+import "./StackList.css";
+
+interface Props {
+  items: string[];
+  /** Clases extra del consumidor (p. ej. para ajustar el margen superior). */
+  class?: string;
+}
+
+const { items, class: extraClass } = Astro.props;
+const allIcons = allHaveIcons(items);
+---
+
+{
+  allIcons ? (
+    <ul class:list={["techstack", extraClass]} role="list">
+      {items.map((raw) => {
+        const tech = TECH[techKey(raw)];
+        return (
+          <li class="techstack-item">
+            <img
+              src={tech.src}
+              alt={tech.name}
+              width="24"
+              height="24"
+              loading="lazy"
+              decoding="async"
+            />
+            {/* Rótulo propio en vez del `title` nativo: el del navegador tarda
+                un segundo, se pinta con los colores del sistema y rompe la voz
+                del sitio. Va oculto a lectores de pantalla porque el `alt` de
+                la imagen ya dice lo mismo. */}
+            <span class="techstack-name" aria-hidden="true">
+              {tech.name}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  ) : (
+    <ul class:list={["techstack", extraClass]} role="list">
+      {items.map((raw) => (
+        <li class="techstack-tag">{raw}</li>
+      ))}
+    </ul>
+  )
+}
