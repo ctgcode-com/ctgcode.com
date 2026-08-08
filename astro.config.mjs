@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { defaultLang, localizedPath, pageSlug } from "./src/data/i18n";
 import { legalDataPending } from "./src/data/legal";
 import es from "./src/data/locales/es";
 import en from "./src/data/locales/en";
@@ -34,6 +35,49 @@ const templatesHubAnchor = (locale) =>
   locale.projectsPage.manifest.find((m) => m.href === "#templates")?.href ??
   "";
 
+const siteUrl = "https://ctgcode.com";
+
+const normalizePathname = (pathname) => {
+  const normalized = pathname.replace(/\/+$/, "");
+  return normalized || "/";
+};
+
+const localizedRouteGroups = new Map();
+const routePageNames = [
+  "home",
+  "privacy",
+  "terms",
+  "projects",
+  "services",
+  "template-local-business",
+  "template-professional-services",
+  "template-startup-product",
+];
+
+for (const pageName of routePageNames) {
+  const defaultPath = localizedPath(
+    defaultLang,
+    pageSlug(defaultLang, pageName),
+  );
+  const englishPath = localizedPath("en", pageSlug("en", pageName));
+  const defaultUrl = `${siteUrl}${defaultPath}`;
+  const englishUrl = `${siteUrl}${englishPath}`;
+
+  const group = {
+    defaultUrl,
+    englishUrl,
+    defaultPath: normalizePathname(defaultPath),
+    englishPath: normalizePathname(englishPath),
+    links: [
+      { lang: "es", hreflang: "es-CO", url: defaultUrl },
+      { lang: "en", hreflang: "en", url: englishUrl },
+    ],
+  };
+
+  localizedRouteGroups.set(group.defaultPath, group);
+  localizedRouteGroups.set(group.englishPath, group);
+}
+
 export default defineConfig({
   output: "static",
 
@@ -59,6 +103,31 @@ export default defineConfig({
        * en el sitemap lo que prohibía indexar en la propia página.
        */
       filter: (page) => !(legalDataPending && LEGAL_URLS.has(page)),
+
+      /**
+       * Agrupa cada ruta localizada en un único elemento del sitemap: el
+       * español queda como URL canónica y el inglés se añade como alternativa
+       * con su `hreflang`. Esto evita que el build emita entradas separadas para
+       * `/` y `/en/`, `/privacidad/` y `/en/privacy/`, etc.
+       */
+      serialize: (item) => {
+        const currentPath = normalizePathname(new URL(item.url).pathname);
+        const group = localizedRouteGroups.get(currentPath);
+
+        if (!group) {
+          return item;
+        }
+
+        if (currentPath === group.englishPath) {
+          return undefined;
+        }
+
+        return {
+          ...item,
+          url: group.defaultUrl,
+          links: group.links,
+        };
+      },
 
       /**
        * Las doce URL de las demos NO se listan aquí —seis de plantillas y seis

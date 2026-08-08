@@ -605,8 +605,6 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 
 - Máscara gradual sobre `.ns-shore` para suavizar filos superiores y extensión del backdrop en los laterales.
 
-
-
 ## [0.29.2] - 2026-07-31
 
 ### Corregido
@@ -806,6 +804,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Salen con `PUBLIC_DEMO=true`, así que llevan `noindex, follow` y no entran en ningún sitemap: simulan negocios que no existen y un buscador podría tomarlas por fichas legítimas. A diferencia de las plantillas, aquí no hay página dedicada que posicione en su lugar —quien lo hace es la propia sección de automatizaciones de `/proyectos`, que es la que las enlaza—. `llms.txt` gana la nota equivalente a la que ya tenían las demos de plantilla.
 - Estas demos **sí llevan un framework de JavaScript**, a diferencia de las plantillas: Astro 5 con Tailwind 4, shadcn/ui y una isla de React 19 para el panel. Son ~85 KB comprimidos que las plantillas no pagan. Es una decisión deliberada —un panel con estado compartido entre tarjetas, tabla y bitácora es justo lo que React resuelve bien—, pero conviene tenerla presente antes de comparar sus cifras con las de las plantillas.
 - El comentario del filtro del sitemap en `astro.config.mjs` pasa de seis a doce URL de demo y separa las dos familias.
+
+## [0.33.1] - 2026-08-08
+
+### Cambiado
+
+- Ajuste del sitemap generado por Astro para agrupar cada ruta localizada con su homólogo en inglés y emitir alternancias de idioma correctas en el build.
+- Actualización de imágenes OG generadas durante el build para reflejar el estado actual de la compilación.
 
 ## [0.33.0] - 2026-08-05
 
