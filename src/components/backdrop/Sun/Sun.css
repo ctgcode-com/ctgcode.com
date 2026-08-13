@@ -26,7 +26,17 @@
 
 .ss-sun {
   position: absolute;
-  top: clamp(2.5rem, 6vh, 4.5rem);
+  /* El sol arranca por DEBAJO de la barra de navegación. El limbo del sextante
+     sobresale un 6% por encima del disco (.ss-ring, inset: -6%), así que el
+     margen se mide desde el ARCO, no desde el astro: pegado al tope, la barra
+     le cortaba la corona de marcas —23 px en móvil, 35 px en escritorio.
+
+     El valor está peleado por arriba y por abajo: el conjunto sol+sextante mide
+     1,12 × el disco, y entre la barra y el texto del hero no sobra sitio. Bajar
+     de más mete el NÚCLEO —lo brillante— debajo del eyebrow en móvil. Este
+     12vh es el punto en que el arco despeja la barra y el núcleo aún no toca
+     el texto; no es un número redondo por gusto, está medido. */
+  top: clamp(6rem, 12vh, 8.5rem);
   left: var(--sun-x);
   width: clamp(8.5rem, 18vw, 15rem);
   aspect-ratio: 1;
@@ -204,34 +214,75 @@
   }
 }
 
-/* Animation timeline nativo para el Compositor GPU */
+/* ---- Coreografía nativa ligada al scroll ---------------------------------
+   Todo esto corre en el compositor, sin JS: el descenso, el desvanecido, el
+   giro del sextante y —lo importante— la FORMACIÓN del resplandor. La bruma,
+   la línea de fuego y la senda no pueden estar ahí desde el principio: son la
+   dispersión de la luz al rozar el sol el horizonte y su reflejo especular
+   sobre el agua. Por eso arrancan escalonadas (15vh → 20vh → 25vh) y no a la
+   vez: primero enciende la bruma, luego la banda lateral, y solo con el sol
+   muy bajo aparece la senda.
+
+   OJO CON EL ATAJO `animation`: hay que declararlo en LONGHANDS. lightningcss
+   (el minificador de Astro) pliega `animation-timeline` dentro del atajo y
+   emite `animation: linear both x scroll(root)`, que ningún navegador acepta
+   —el timeline se sacó del atajo en la especificación—, así que Chrome
+   descartaba la declaración entera y toda esta vía quedaba muerta en el build.
+   Con longhands no la pliega. Verificado con `CSS.supports`. */
 @supports (animation-timeline: scroll()) {
   .ss-sun {
-    animation: ss-sun-descent linear both, ss-sun-fadeout linear both;
-    animation-timeline: scroll(root block), scroll(root block);
+    animation-name: ss-sun-descent, ss-sun-fadeout;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
     animation-range: 0 85vh, 65vh 90vh;
   }
 
+  /* El halo se aviva al bajar el sol (la dispersión crece con el ángulo
+     rasante). Faltaba en este bloque, y era el único motivo por el que el JS
+     seguía siendo imprescindible aun con la vía nativa en pie. */
+  .ss-halo {
+    animation-name: ss-halo-bloom;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 85vh;
+  }
+
   .ss-ring-rotor {
-    animation: ss-ring-rotate linear both;
+    animation-name: ss-ring-rotate;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root block);
     animation-range: 0 85vh;
   }
 
   .ss-haze {
-    animation: ss-haze-appear linear both;
+    animation-name: ss-haze-appear;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root block);
     animation-range: 15vh 80vh;
   }
 
   .ss-horizon {
-    animation: ss-horizon-appear linear both;
+    animation-name: ss-horizon-appear;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root block);
     animation-range: 20vh 80vh;
   }
 
   .ss-glitter {
-    animation: ss-glitter-appear linear both;
+    animation-name: ss-glitter-appear;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root block);
     animation-range: 25vh 80vh;
   }
@@ -252,6 +303,15 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes ss-halo-bloom {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 0.8;
   }
 }
 
@@ -297,6 +357,18 @@
     --sun-x: 58%;
   }
 
+  /* En el teléfono la banda libre entre la barra (77 px) y el eyebrow (174 px)
+     son 97 px, y el conjunto sol+sextante medía 152 px: NO CABÍA. De ahí venía
+     el recorte del que hablaba el encargo —o lo tapaba la barra por arriba, o
+     el texto le cruzaba el núcleo por abajo—. La única salida es encoger el
+     astro lo justo para que quepan los dos despejes; con 6rem quedan ~10 px por
+     cada lado. En escritorio no hace falta: allí el sol vive a estribor, lejos
+     del texto, y conserva su tamaño. */
+  .ss-sun {
+    top: 5rem;
+    width: 6rem;
+  }
+
   .ss-glitter-layer--b {
     display: none;
   }
@@ -306,6 +378,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ss-glitter-layer,
   .ss-sun,
+  .ss-halo,
   .ss-ring-rotor,
   .ss-haze,
   .ss-horizon,
@@ -316,6 +389,12 @@
   .ss-sun {
     transform: translate(-50%, 50vh); /* Posado en el horizonte */
     opacity: 0.8;
+  }
+
+  /* Con el astro posado en el horizonte, el halo va encendido: el 0.4 de la
+     regla base es el valor del sol ALTO y aquí dejaría la postal apagada. */
+  .ss-halo {
+    opacity: 0.7;
   }
 
   .ss-haze {

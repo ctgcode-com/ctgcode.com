@@ -830,3 +830,24 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - `projects.featured` y `projects.testimonial` se funden en `projects.delivered[]`, una lista de sitios entregados con su reseña dentro (opcional: hay clientes contentos que no dejan una pública). El inicio enseña el primero, la bitácora los abre todos y el JSON-LD los recorre: una cifra corregida se corrige en un único sitio.
 - El registro de tecnologías (`data/tech.ts`) gana `mysql`, `php` y `shadcn`.
 - Las clases de `<StackList>` llevan prefijo `techstack-` y no `stack-`: `.stack` ya existe en `styles/layout.css` como utilidad de apilado vertical y, al no declarar la hoja nueva su propio `flex-direction`, ganaba la de allí y las placas salían en columna.
+
+## [0.33.2] - 2026-08-13
+
+### Corregido
+
+- **El sol vuelve a animarse sin JavaScript.** La coreografía del atardecer —el descenso, el giro del sextante y la formación del resplandor— está escrita para correr en el compositor con `animation-timeline: scroll()`, pero llevaba tiempo muerta en producción: el minificador plegaba `animation-timeline` dentro del atajo y emitía `animation: linear both ss-sun-descent scroll(root)`, que ningún navegador acepta —el timeline se sacó del atajo en la especificación—, así que el navegador descartaba la declaración entera y toda esa vía quedaba inerte. Todo el movimiento lo sostenía el `requestAnimationFrame` de respaldo, en el hilo principal. Declarado en longhands, el minificador ya no puede plegarlo.
+- **El sextante deja de quedar debajo de la barra de navegación.** El arco graduado sobresale un 6% por encima del disco, y el astro arrancaba tan pegado al tope que la barra le cortaba la corona de marcas: 35 px en escritorio, 23 px en móvil.
+
+### Cambiado
+
+- **El sol arranca más abajo** (de `6vh` a `12vh`), lo justo para que el limbo del sextante despeje la barra sin que el núcleo se meta en el texto del hero.
+- **En el teléfono el astro se encoge** de 8,5rem a 6rem. Entre la barra (77 px) y el eyebrow (174 px) hay 97 px y el conjunto sol+sextante medía 152 px: no cabía, y de ahí venía el recorte de origen. Encogerlo es la única forma de que quepan los dos despejes —quedan ~10 px por lado—; en escritorio conserva su tamaño, porque allí vive a estribor y lejos del texto.
+- **El halo se aviva con el descenso** también sin JavaScript. Era la única pieza que faltaba en el bloque nativo, y por eso el respaldo seguía siendo imprescindible aunque el resto funcionara.
+
+### Técnico
+
+- El respaldo en `requestAnimationFrame` solo arranca donde no hay `animation-timeline`. Antes se ejecutaba siempre, también donde la vía nativa ya estaba animando: trabajo tirado a la basura para la gran mayoría del tráfico.
+- El respaldo mide el recorrido contra `85vh`, el mismo `animation-range` que el CSS. Antes normalizaba contra la altura del cielo (~704 px frente a ~612 px en un viewport de 720): con una sola vía viva la diferencia no se veía, con las dos la misma página caería a distinto ritmo según el navegador. Medido tras el cambio, a 22vh: 0,258 en el respaldo y 0,259 en el nativo.
+- Desaparece el `getBoundingClientRect()` por fotograma del respaldo. Al no depender ya de la altura del cielo, no hay nada que medir dentro del bucle.
+- `.ss-halo` entra en el bloque de `prefers-reduced-motion` con opacidad propia: sin ella la postal estática se quedaba con el valor del sol alto y salía apagada, con el astro ya posado en el horizonte.
+- Verificado en navegador: siete animaciones sobre `ScrollTimeline` y dos por tiempo, el respaldo sin escribir `--sun` donde hay soporte nativo, y el CSS compilado sin un solo atajo plegado.
