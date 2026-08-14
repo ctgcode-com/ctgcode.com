@@ -863,3 +863,16 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - El recorte se calculó contra el recorrido real, no a ojo: marco (`--frame-h`) más `--max-travel`, medido en los anchos que se prueban, y con margen de sobra por encima. El paseo se conserva entero en escritorio —a 1920 quedan 1689 px de imagen bajo el marco para 918 de recorrido— y en el marco del teléfono en cualquier ancho. El único punto donde se acorta es el marco de escritorio en viewport de móvil, que hace el 72% del recorrido: es justo donde ese marco va detrás del teléfono y donde los megas más pesan.
 - `min(100% - var(--frame-h), var(--max-travel))` ata el recorrido a lo que quede de imagen bajo el marco, de modo que recortar de más no atasca el paseo: lo acorta en silencio. Queda anotado junto a la regla, para quien vuelva a tocar las capturas.
 - Los tres formatos se reencodan desde el original —AVIF q52, WebP q78 y JPG progresivo con mozjpeg q74—, no se recortan los ficheros ya optimizados.
+
+## [0.34.0] - 2026-08-13
+
+### Añadido
+
+- **El formulario de contacto ofrece salida por WhatsApp.** En la misma fila del botón de enviar, al otro extremo y alineado con el borde derecho del formulario, «¿Algo más directo?» y un enlace que abre el chat con el motivo ya redactado en el idioma de la página: quien pulsa solo tiene que darle a enviar. Va ahí y no escondido entre los canales del pie porque es donde tiene sentido: si rellenar tres campos da pereza, la alternativa tiene que estar donde se está pidiendo el esfuerzo.
+
+### Técnico
+
+- El botón no trae estética propia: reusa `.ft-surface`, la misma pieza que «volver a la superficie», con un punto más de cuerpo y de aire —46 px de alto contra los 55 del CTA— para que levante la vista sin hacerle sombra al envío. La marca va escrita tal cual, «WhatsApp»: en versalitas se lee como una etiqueta cualquiera y deja de reconocerse de un vistazo. Como el rótulo visible es solo la marca, el nombre accesible lo pone `whatsappAria`, que la contiene (WCAG 2.5.3).
+- El número de atención pasa a `siteConfig.whatsapp`, en E.164 sin el «+» (el formato que exige `wa.me`). De ahí beben el atajo del formulario, el canal del pie y el `telephone` del JSON-LD, que lo publica con el «+». Estaba escrito a mano en tres sitios.
+- El enlace vive dentro del `<form>`, así que al enviarse con éxito se oculta con él. Quien ya escribió no necesita el atajo, y el WhatsApp de la columna de canales sigue ahí.
+- Contraste sobre la arena de noche: 5,4:1 en reposo y 5,5:1 en ámbar al pasar. Verificado en los dos idiomas y en 390, 600, 768, 900 y 1280: el borde derecho del botón cuadra con el del formulario hasta que la fila se parte, y en móvil el atajo baja a su propia línea y vuelve al margen izquierdo.

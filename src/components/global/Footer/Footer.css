@@ -134,9 +134,43 @@
   min-height: 6.5rem;
 }
 
+/* La fila de cierre: el envío a babor y la salida por WhatsApp a estribor,
+   cada uno pegado a su borde del formulario. En angosto el atajo baja a su
+   propia línea y vuelve al margen izquierdo (con una sola pieza en la fila,
+   `space-between` la deja al principio). */
 .ft-form-actions {
   margin-top: var(--space-2xs);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-lg);
 }
+
+/* La pregunta no se separa de su respuesta: viaja pegada al botón, no al
+   envío. Las dos piezas se van juntas a estribor. */
+.ft-direct {
+  margin: 0;
+  max-width: none; /* el <p> global viene acotado a una medida de lectura */
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-md);
+}
+
+/* Es una nota al margen del envío, no otro CTA — pero en cuerpo mono diminuto
+   no se leía: sube a `sm`, que es donde el monoespaciado del sitio deja de ser
+   letra pequeña. */
+.ft-direct-lead {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+/* El botón del atajo es `.ft-surface` sin retoques de forma; lo único suyo
+   vive junto a esa regla, más abajo (tiene que ir DESPUÉS para poder anular
+   el margen: misma especificidad, gana el último). */
 
 /* ---- El directorio: la sonda, los canales y lo legal ------------------------
    En angosto una sola columna; desde 30rem, dos: navegación y legal apiladas
@@ -272,6 +306,25 @@
 .ft-surface:hover .ft-arrow,
 .ft-surface:focus-visible .ft-arrow {
   transform: translateY(-3px);
+}
+
+/* El atajo por WhatsApp del formulario es esta misma pieza —contorno, voz mono
+   y encendido ámbar al acercarse— con tres ajustes:
+     · un punto más de cuerpo y de aire, para que levante la vista sin hacerle
+       sombra al envío (44 px de alto contra los 55 del CTA);
+     · la marca tal cual se escribe, «WhatsApp»: en versalitas se lee como una
+       etiqueta cualquiera y deja de reconocerse de un vistazo;
+     · pierde el margen que aquí sirve para despegarse en su rejilla (en la
+       fila del envío se centra en vertical) y se blinda contra el subrayado
+       global de <a>, que este sí es enlace. */
+.ft-wa {
+  margin-top: 0;
+  padding: var(--space-xs) var(--space-md);
+  background-image: none;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
+  white-space: nowrap;
 }
 
 /* ---- Colofón ---------------------------------------------------------------- */

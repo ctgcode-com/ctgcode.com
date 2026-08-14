@@ -21,6 +21,7 @@ import {
   localizedPath,
   type LocaleSchema,
 } from "../../../data/i18n";
+import { siteConfig } from "../../../data/site";
 import CTA from "../../ui/CTA/CTA.astro";
 import NightSand from "../../backdrop/NightSand/NightSand.astro";
 import "./Footer.css";
@@ -33,6 +34,10 @@ const { lang } = Astro.props;
 const t: LocaleSchema = locales[lang];
 
 const otherLang = lang === "es" ? "en" : "es";
+
+/* El chat abre con el motivo ya redactado en el idioma de la página: quien
+   pulsa solo tiene que darle a enviar. */
+const whatsappHref = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(t.footer.form.whatsappMessage)}`;
 const home = localizedPath(lang);
 const year = new Date().getFullYear();
 
@@ -56,7 +61,11 @@ const navItems = [
 // Canales de atención. Estos mismos perfiles se declaran como `sameAs` en el
 // JSON-LD (src/data/schema.ts): si cambia uno, hay que cambiar el otro.
 const channelItems = [
-  { code: "wa", label: "WhatsApp", href: "https://wa.me/573052532602" },
+  {
+    code: "wa",
+    label: "WhatsApp",
+    href: `https://wa.me/${siteConfig.whatsapp}`,
+  },
   {
     code: "ig",
     label: "Instagram",
@@ -173,8 +182,31 @@ const legalItems = [
             required></textarea>
         </label>
 
+        <!-- La fila se lee de izquierda a derecha como una frase: el envío (con
+             su pregunta al lado) y, al otro extremo, la salida para quien no
+             piensa rellenar nada. Va JUNTO al formulario y no escondida en los
+             canales de abajo: si rellenar da pereza, la alternativa tiene que
+             estar donde se está pidiendo el esfuerzo. -->
         <div class="ft-form-actions">
           <CTA type="submit">{t.footer.form.cta}</CTA>
+
+          <!-- La pregunta y su respuesta viajan juntas. El botón reusa
+               `ft-surface`, la misma pieza que «volver a la superficie», con
+               la flecha que aquí anuncia «se abre fuera». -->
+          <p class="ft-direct">
+            <span class="ft-direct-lead">{t.footer.form.direct}</span>
+
+            <a
+              class="ft-surface ft-wa"
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t.footer.form.whatsappAria}
+            >
+              WhatsApp
+              <span class="ft-arrow" aria-hidden="true">↗</span>
+            </a>
+          </p>
         </div>
       </form>
     </section>

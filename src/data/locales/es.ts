@@ -1237,6 +1237,12 @@ const es: LocaleSchema = {
             message: 'tu idea',
             messagePlaceholder: 'Una web, una app, una integración…',
             cta: 'Enviar',
+            // La alternativa al formulario, junto al botón de enviar. El botón
+            // enseña solo la marca («WhatsApp»); el nombre accesible lo pone
+            // `whatsappAria`, que la contiene (WCAG 2.5.3).
+            direct: '¿Algo más directo?',
+            whatsappAria: 'Escríbenos por WhatsApp',
+            whatsappMessage: 'Hola, CTG Code. Los encontré en su web y quiero contarles un proyecto.',
         },
         success: '¡Rumbo fijado!',
         messageSent: 'Hemos recibido tu idea. Nos pondremos en contacto contigo tan pronto como nos sea posible.',

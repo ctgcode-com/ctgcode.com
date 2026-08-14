@@ -106,7 +106,7 @@ function organization() {
       name: siteConfig.author,
     },
     email: `mailto:contacto@ctgcode.com`,
-    telephone: '+573052532602',
+    telephone: `+${siteConfig.whatsapp}`,
     // Solo ciudad: el estudio trabaja en remoto y no recibe clientes en un
     // local, así que declarar una calle sería falso.
     address: {
@@ -126,7 +126,7 @@ function organization() {
         '@type': 'ContactPoint',
         contactType: 'customer service',
         email: 'contacto@ctgcode.com',
-        telephone: '+573052532602',
+        telephone: `+${siteConfig.whatsapp}`,
         availableLanguage: ['es', 'en'],
         areaServed: 'Worldwide',
       },

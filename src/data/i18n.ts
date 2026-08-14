@@ -570,6 +570,12 @@ export type LocaleSchema = {
             message: string;
             messagePlaceholder: string;
             cta: string;
+            /** La pregunta que ofrece el atajo por WhatsApp. Corta. */
+            direct: string;
+            /** Nombre accesible del botón de WhatsApp (contiene la marca visible). */
+            whatsappAria: string;
+            /** Texto que llega prellenado en el chat. */
+            whatsappMessage: string;
         };
         success: string;
         messageSent: string;
