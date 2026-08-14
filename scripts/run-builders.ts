@@ -4,7 +4,6 @@ import { buildLegalOG } from './builders/legal-og';
 import { buildProjectsOG } from './builders/projects-og';
 import { buildServicesOG } from './builders/services-og';
 import { buildTemplatesOG } from './builders/templates-og';
-import { buildNotFoundOG } from './builders/not-found-og';
 
 async function main() {
     console.log('[i] Iniciando generación de imágenes OG...');
@@ -19,7 +18,6 @@ async function main() {
         await buildServicesOG(builder);
         await buildTemplatesOG(builder);
         await buildLegalOG(builder);
-        await buildNotFoundOG(builder);
 
         console.log('[✓] Todas las imágenes OG generadas exitosamente');
     } catch (error) {

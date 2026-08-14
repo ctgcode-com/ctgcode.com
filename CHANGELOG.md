@@ -876,3 +876,13 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - El número de atención pasa a `siteConfig.whatsapp`, en E.164 sin el «+» (el formato que exige `wa.me`). De ahí beben el atajo del formulario, el canal del pie y el `telephone` del JSON-LD, que lo publica con el «+». Estaba escrito a mano en tres sitios.
 - El enlace vive dentro del `<form>`, así que al enviarse con éxito se oculta con él. Quien ya escribió no necesita el atajo, y el WhatsApp de la columna de canales sigue ahí.
 - Contraste sobre la arena de noche: 5,4:1 en reposo y 5,5:1 en ámbar al pasar. Verificado en los dos idiomas y en 390, 600, 768, 900 y 1280: el borde derecho del botón cuadra con el del formulario hasta que la fila se parte, y en móvil el atajo baja a su propia línea y vuelve al margen izquierdo.
+
+## [0.34.1] - 2026-08-13
+
+### Cambiado
+
+- **La 404 deja de generar su propia tarjeta social.** Nunca se llegó a ver ni se verá: quien comparte un enlace roto hace que el rastreador pida esa URL, reciba un **404** y ahí no se monta previsualización —ni en WhatsApp, ni en Facebook, ni en X—. La única forma de que se pintara sería que el hosting devolviera 200 en la página de error, que es un fallo de configuración, no un caso a soportar. Se retiran el builder y los dos PNG de 275 kB que se rehacían con puppeteer en cada `prebuild` para no enseñarse jamás.
+
+### Técnico
+
+- `siteConfig.fallbackOgImage` empieza a usarse: estaba declarado desde que existen las tarjetas por página, con su comentario explicando que es el respaldo de las vistas sin tarjeta propia, pero no lo leía nadie. Ahora el `Layout` lo sirve a las páginas de `OG_LESS_PAGES` —hoy solo la 404— en vez de apuntar a un PNG que ya no existe.

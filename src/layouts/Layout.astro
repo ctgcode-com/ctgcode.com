@@ -29,7 +29,15 @@ const googleAdsId = 'AW-18316357590';
 const siteUrl = siteConfig.url;
 // El slug REAL de esta página en su idioma (privacy -> /privacidad/ en es).
 const canonicalUrl = `${siteUrl}${localizedPath(lang, pageSlug(lang, pageName))}`;
-const ogImageUrl = `${siteUrl}/images/og/${lang}/${pageName}.png`;
+/* Vistas SIN tarjeta propia. La 404 es la única, y a propósito: la tarjeta no
+   se llega a pintar nunca —el rastreador pide la URL rota, recibe un 404 y ahí
+   no monta previsualización—, así que generar dos PNG de un cuarto de mega en
+   cada build era trabajo para nadie. Se le sirve el respaldo para no apuntar a
+   un fichero que no existe. */
+const OG_LESS_PAGES = new Set(['404']);
+const ogImageUrl = OG_LESS_PAGES.has(pageName)
+  ? `${siteUrl}${siteConfig.fallbackOgImage}`
+  : `${siteUrl}/images/og/${lang}/${pageName}.png`;
 
 // hreflang: cada idioma es una URL real —y con su propio slug—; se lo
 // decimos a Google explícitamente.
