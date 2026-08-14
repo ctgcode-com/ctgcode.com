@@ -886,3 +886,18 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 ### Técnico
 
 - `siteConfig.fallbackOgImage` empieza a usarse: estaba declarado desde que existen las tarjetas por página, con su comentario explicando que es el respaldo de las vistas sin tarjeta propia, pero no lo leía nadie. Ahora el `Layout` lo sirve a las páginas de `OG_LESS_PAGES` —hoy solo la 404— en vez de apuntar a un PNG que ya no existe.
+
+## [1.0.0] - 2026-08-13
+
+### Cambiado
+
+- **El sitio sale de `0.x`.** `0.y.z` significa, literalmente, «desarrollo inicial: cualquier cosa puede cambiar en cualquier momento». Hace tiempo que eso es falso —el sitio está en línea, indexado, recibiendo tráfico y enseñando trabajo de clientes reales— y además dejaba el proyecto sin escalón MAJOR: añadir una página a la bitácora y rehacer la identidad visual entera se anotaban en el mismo dígito. Esta versión no toca una sola línea de la interfaz: marca que lo publicado es la versión estable y devuelve los tres niveles a su sitio.
+
+### Técnico
+
+- De aquí en adelante, la «API pública» de un sitio son sus URL y lo que un visitante que vuelve da por hecho:
+  - **MAJOR** — se rompe la continuidad hacia fuera: cambian slugs o rutas, desaparecen páginas, cambia la identidad visual o cambia lo que el sitio ofrece.
+  - **MINOR** — se añade sin romper: una página, una sección, una plantilla, un proyecto entrando en la bitácora.
+  - **PATCH** — correcciones, textos, rendimiento, accesibilidad y refactores invisibles desde fuera.
+- Es el mismo criterio que se venía aplicando, corrido un dígito: `0.33.0` (Systemslab entra en la bitácora) habría sido `1.1.0`, y `0.33.2` (el sol vuelve a animarse sin JavaScript), `1.0.1`.
+- El número no sale a ninguna parte: no lo lee nada de `src/`, no aparece en el HTML compilado ni en `llms.txt` ni en los datos estructurados. Vive entre `package.json` y este archivo, así que el salto no tiene efecto hacia fuera.
