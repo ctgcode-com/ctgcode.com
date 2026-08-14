@@ -851,3 +851,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - Desaparece el `getBoundingClientRect()` por fotograma del respaldo. Al no depender ya de la altura del cielo, no hay nada que medir dentro del bucle.
 - `.ss-halo` entra en el bloque de `prefers-reduced-motion` con opacidad propia: sin ella la postal estática se quedaba con el valor del sol alto y salía apagada, con el astro ya posado en el horizonte.
 - Verificado en navegador: siete animaciones sobre `ScrollTimeline` y dos por tiempo, el respaldo sin escribir `--sun` donde hay soporte nativo, y el CSS compilado sin un solo atajo plegado.
+
+## [0.33.3] - 2026-08-13
+
+### Cambiado
+
+- **Las capturas del escaparate se recortan a la franja que el paseo llega a enseñar.** El `<ScrollShot>` traslada la imagen dentro de su marco hasta un tope (`--max-travel`), así que del pie de una captura de página completa no se ve un solo píxel ni en la pantalla más alta: se estaban sirviendo megas por nada. La de escritorio pasa de 1905×7368 a 1905×4789 y la móvil, de 850×16384 a 480×4789 —el mismo alto exacto que la de escritorio, y con el ancho ajustado además, porque el teléfono nunca se pinta a más de 172 px y llegaban 850—. En AVIF, que es lo que recibe casi todo el tráfico, las dos juntas bajan de 1594 KiB a 260 KiB.
+
+### Técnico
+
+- El recorte se calculó contra el recorrido real, no a ojo: marco (`--frame-h`) más `--max-travel`, medido en los anchos que se prueban, y con margen de sobra por encima. El paseo se conserva entero en escritorio —a 1920 quedan 1689 px de imagen bajo el marco para 918 de recorrido— y en el marco del teléfono en cualquier ancho. El único punto donde se acorta es el marco de escritorio en viewport de móvil, que hace el 72% del recorrido: es justo donde ese marco va detrás del teléfono y donde los megas más pesan.
+- `min(100% - var(--frame-h), var(--max-travel))` ata el recorrido a lo que quede de imagen bajo el marco, de modo que recortar de más no atasca el paseo: lo acorta en silencio. Queda anotado junto a la regla, para quien vuelva a tocar las capturas.
+- Los tres formatos se reencodan desde el original —AVIF q52, WebP q78 y JPG progresivo con mozjpeg q74—, no se recortan los ficheros ya optimizados.

@@ -15,9 +15,10 @@ import ScrollShot from "../../ui/ScrollShot/ScrollShot.astro";
 import StackList from "../../ui/StackList/StackList.astro";
 import "./Projects.css";
 
-/* Capturas de página completa del sitio del cliente, en los tres formatos de
-   la cadena de respaldo (AVIF → WebP → JPG progresivo). Ya vienen optimizadas:
-   se importan como assets y se emiten tal cual. */
+/* Capturas del sitio del cliente —recortadas a la franja que el <ScrollShot>
+   llega a recorrer—, en los tres formatos de la cadena de respaldo
+   (AVIF → WebP → JPG progresivo). Ya vienen optimizadas: se importan como
+   assets y se emiten tal cual. */
 import deskAvif from "../../../assets/recograscolombia_escritorio.avif";
 import deskWebp from "../../../assets/recograscolombia_escritorio.webp";
 import deskJpg from "../../../assets/recograscolombia_escritorio.jpg";

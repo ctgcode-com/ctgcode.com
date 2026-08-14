@@ -2,11 +2,16 @@
 /**
  * ScrollShot — el sitio del cliente, recorrido sin salir del nuestro.
  *
- * Una captura de PÁGINA COMPLETA (muy alta) vive dentro de un marco de altura
+ * Una captura muy alta del sitio del cliente vive dentro de un marco de altura
  * fija: al avanzar el scroll por la sección anfitriona, la imagen se traslada
  * dentro del marco, de modo que al terminar la sección el visitante ya ha
- * recorrido el sitio entero. Enseña trabajo real en vez de una miniatura
- * muerta.
+ * recorrido un buen trecho del sitio. Enseña trabajo real en vez de una
+ * miniatura muerta.
+ *
+ * Las capturas vienen RECORTADAS a la franja que el recorrido llega a enseñar
+ * (marco + `--max-travel`, con margen de sobra). Servir la página entera era
+ * pagar megas por píxeles que nadie ve: lo que sobra del pie no se alcanza ni
+ * en la pantalla más alta.
  *
  * Si se pasa `mobile`, el teléfono se superpone al marco de escritorio y
  * recorre su propia captura a OTRA velocidad: sincronizados se ven mecánicos,

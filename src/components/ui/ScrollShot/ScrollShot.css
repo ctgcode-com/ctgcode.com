@@ -77,12 +77,16 @@
 }
 
 /* El recorrido arranca SIEMPRE en la cabecera del sitio y avanza como mucho
-   `--max-travel`. El tope existe porque estas capturas son larguísimas (la
-   móvil ronda 1:19): sin él, recorrer la imagen entera dentro del scroll
-   disponible la hace pasar volando y no se lee nada. Expresarlo en unidades
-   de viewport ata la velocidad a la del scroll — siempre por debajo de 1×.
-   Que no se llegue al pie de la captura es aceptable; perderse la cabecera,
-   no. */
+   `--max-travel`. El tope existe porque estas capturas son largas (1:2,5 la de
+   escritorio, 1:8,7 la móvil): sin él, recorrer la imagen entera dentro del
+   scroll disponible la hace pasar volando y no se lee nada. Expresarlo en
+   unidades de viewport ata la velocidad a la del scroll — siempre por debajo
+   de 1×. Que no se llegue al pie de la captura es aceptable; perderse la
+   cabecera, no.
+
+   OJO al recortar las capturas: `min()` ata el recorrido a lo que quede de
+   imagen bajo el marco, así que si se recorta de más el paseo se acorta solo
+   (no se atasca, pero se queda corto). Las de ahora dejan margen de sobra. */
 .shot-img {
   display: block;
   width: 100%;
