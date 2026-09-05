@@ -1093,7 +1093,7 @@ const en: LocaleSchema = {
             title: 'Privacy Policy',
             summary:
                 'How CTG Code collects, uses and protects your personal data under the data protection laws of the Republic of Colombia.',
-            intro: `This website, CTG Code, is operated by ${controller} (hereinafter, the "Data Controller"). We take your privacy and the protection of your personal data very seriously. This Privacy Policy describes how we collect, use, store, and protect your information in accordance with applicable data protection regulations.`,
+            intro: `This website, CTG Code, is operated by ${controller} (hereinafter, "CTG Code" or the "Data Controller"). We take your privacy and the protection of your personal data very seriously. This Privacy Policy describes how we collect, use, store, and protect your information in accordance with applicable data protection regulations.`,
             sections: [
                 {
                     heading: 'Information We Collect and Its Purpose',

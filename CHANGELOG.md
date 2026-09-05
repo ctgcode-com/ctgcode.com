@@ -930,3 +930,14 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - La razón social sigue apareciendo donde tiene que aparecer y en ningún sitio más: el intro de los cuatro documentos legales, el colofón del footer y el `legalName`/`taxID` del JSON-LD. Repetirla en cada artículo no añade peso legal —lo añade la definición— y sí ensucia la lectura.
 - El texto de la cláusula de propiedad intelectual vuelve a ser una cadena literal: ya no interpola `legalEntity`, porque lo que nombra es la marca definida en el intro, no la entidad registrada.
 
+## [1.0.3] - 2026-09-04
+
+### Corregido
+
+- **Los dos documentos legales llamaban de forma distinta a la misma parte.** La Política de Privacidad definía «el Responsable» y los Términos, «CTG Code»; quien leía una después de la otra no tenía cómo saber que hablan de la misma empresa. El intro de la Privacidad ata ahora las dos designaciones —«en adelante, "CTG Code" o el "Responsable"»— y la duda desaparece sin tocar el resto del documento.
+
+### Técnico
+
+- No se unifican a un solo término a propósito. «Responsable del Tratamiento» es la figura que define la Ley 1581 de 2012: una política de privacidad colombiana tiene que identificarla con ese nombre, y cambiarlo por la marca perdería el enganche con la norma. En los Términos ese rol no existe —ahí la parte es el proveedor y nada más—, así que forzar «Responsable» allí sería inventarse una figura. Cada documento conserva el término que le toca; lo que faltaba era decir en voz alta que son la misma persona jurídica.
+- El cuerpo de la Privacidad sigue usando «el Responsable» en la cláusula de habeas data, que es justo donde el rol legal importa.
+

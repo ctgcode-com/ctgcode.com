@@ -1093,7 +1093,7 @@ const es: LocaleSchema = {
             title: 'Política de Privacidad',
             summary:
                 'Cómo CTG Code recopila, usa y protege tus datos personales conforme a la Ley 1581 de 2012 de la República de Colombia.',
-            intro: `El presente sitio web CTG Code es operado por ${responsable} (en adelante, el «Responsable»). Nos tomamos muy en serio la privacidad y la protección de tus datos personales. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos la información de acuerdo con la Ley 1581 de 2012 y demás normas vigentes en la República de Colombia.`,
+            intro: `El presente sitio web CTG Code es operado por ${responsable} (en adelante, «CTG Code» o el «Responsable»). Nos tomamos muy en serio la privacidad y la protección de tus datos personales. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos la información de acuerdo con la Ley 1581 de 2012 y demás normas vigentes en la República de Colombia.`,
             sections: [
                 {
                     heading: 'Información que Recopilamos y Finalidad',
