@@ -1136,14 +1136,14 @@ const es: LocaleSchema = {
             title: 'Términos y Condiciones de Uso',
             summary:
                 'Condiciones de uso del sitio y de los servicios de desarrollo de CTG Code: propiedad intelectual, licenciamiento, responsabilidad y jurisdicción.',
-            intro: `Bienvenido al sitio web de CTG Code. Este sitio web y los servicios de desarrollo de software relacionados son operados por ${responsable}. Al acceder a este sitio o contratar nuestros servicios, aceptas cumplir y estar sujeto a los siguientes términos y condiciones. Si no estás de acuerdo con alguna parte, por favor no utilices este sitio ni adquieras nuestros servicios.`,
+            intro: `Bienvenido al sitio web de CTG Code. Este sitio web y los servicios de desarrollo de software relacionados son operados por ${responsable} (en adelante, «CTG Code»). Al acceder a este sitio o contratar nuestros servicios, aceptas cumplir y estar sujeto a los siguientes términos y condiciones. Si no estás de acuerdo con alguna parte, por favor no utilices este sitio ni adquieras nuestros servicios.`,
             sections: [
                 {
                     heading: 'Propiedad Intelectual y Licenciamiento de Software',
                     items: [
                         {
                             term: 'Propiedad de CTG Code',
-                            text: `Todo el contenido, diseño de interfaz, código fuente base, herramientas, marcas y gráficos propios expuestos en este sitio web o integrados en nuestras soluciones son propiedad exclusiva de ${legalEntity.legalName}.`,
+                            text: 'Todo el contenido, diseño de interfaz, código fuente base, herramientas, marcas y gráficos propios expuestos en este sitio web o integrados en nuestras soluciones son propiedad exclusiva de CTG Code.',
                         },
                         {
                             term: 'Entregas a Clientes',

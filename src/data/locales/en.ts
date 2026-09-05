@@ -1136,14 +1136,14 @@ const en: LocaleSchema = {
             title: 'Terms and Conditions of Use',
             summary:
                 'Conditions for using the site and CTG Code development services: intellectual property, licensing, liability and governing law.',
-            intro: `Welcome to the CTG Code website. This website and its related software development services are operated by ${controller}. By accessing this website or hiring our services, you agree to comply with and be bound by the following terms and conditions. If you disagree with any part of these terms, please do not use our website or services.`,
+            intro: `Welcome to the CTG Code website. This website and its related software development services are operated by ${controller} (hereinafter, "CTG Code"). By accessing this website or hiring our services, you agree to comply with and be bound by the following terms and conditions. If you disagree with any part of these terms, please do not use our website or services.`,
             sections: [
                 {
                     heading: 'Intellectual Property and Software Licensing',
                     items: [
                         {
                             term: 'Ownership by CTG Code',
-                            text: `All content, interface designs, base source code, tools, trademarks, and graphics displayed on this website or embedded in our solutions are the exclusive property of ${legalEntity.legalName}.`,
+                            text: 'All content, interface designs, base source code, tools, trademarks, and graphics displayed on this website or embedded in our solutions are the exclusive property of CTG Code.',
                         },
                         {
                             term: 'Client Deliverables',

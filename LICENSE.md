@@ -1,6 +1,6 @@
 # Licencia de Software y Derechos de Autor / Software License & Copyright
 
-**Copyright (c) 2026 Franklin David Serrano Montes.**  
+**Copyright (c) 2026 CTG Code SAS.**  
 _Todos los derechos reservados. All rights reserved._
 
 > **Nota legal / Legal notice:** La versión en español de este documento es la única legalmente vinculante bajo la normativa vigente de la República de Colombia. La traducción al inglés se proporciona exclusivamente para facilitar su comprensión. / The Spanish version of this document is the only legally binding version under the regulations of the Republic of Colombia. The English translation is provided for convenience only.
@@ -11,7 +11,7 @@ _Todos los derechos reservados. All rights reserved._
 
 ### 1. Titularidad de la Propiedad Intelectual
 
-Este software, su código fuente, arquitectura, interfaces gráficas, elementos de diseño, logotipos, activos de marca y cualquier documentación asociada son propiedad intelectual exclusiva de **Franklin David Serrano Montes**.
+Este software, su código fuente, arquitectura, interfaces gráficas, elementos de diseño, logotipos, activos de marca y cualquier documentación asociada son propiedad intelectual exclusiva de **CTG Code SAS**, sociedad por acciones simplificada con domicilio en Cartagena de Indias, Bolivar, Colombia, identificada con NIT 902102421-8.
 
 ### 2. Restricciones de Uso y Licenciamiento
 
@@ -25,7 +25,7 @@ Queda estrictamente prohibida cualquier acción que no cuente con la autorizaci�
 
 El acceso público a este repositorio se otorga exclusivamente para efectos de:
 
-- Auditoría técnica y visualización del portafolio profesional del autor.
+- Auditoría técnica y visualización del portafolio profesional del estudio.
 - Indexación legítima en motores de búsqueda.
 
 ---
@@ -34,7 +34,7 @@ El acceso público a este repositorio se otorga exclusivamente para efectos de:
 
 ### 1. Ownership of Intellectual Property
 
-This software, its source code, architecture, graphical interfaces, design elements, logos, brand assets, and any associated documentation are the exclusive intellectual property of **Franklin David Serrano Montes**.
+This software, its source code, architecture, graphical interfaces, design elements, logos, brand assets, and any associated documentation are the exclusive intellectual property of **CTG Code SAS**, a simplified joint-stock company domiciled in Cartagena de Indias, Bolivar, Colombia, identified with Tax ID (NIT) 902102421-8.
 
 ### 2. Usage and Licensing Restrictions
 
@@ -48,7 +48,7 @@ Any action without the express, prior, and written authorization of the copyrigh
 
 Public access to this repository is granted exclusively for the purposes of:
 
-- Technical audit and review of the author's professional portfolio.
+- Technical audit and review of the studio's professional portfolio.
 - Legitimate indexing in search engines.
 
 ---

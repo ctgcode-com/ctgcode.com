@@ -918,3 +918,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
 - El JSON-LD de `Organization` gana `legalName` y `taxID`. La marca («CTG Code») y la entidad registrada eran, para un buscador o un asistente, dos fichas sin puente; ahora el grafo dice explícitamente que son la misma cosa. `foundingDate` se queda en `2026`: es cuando nació el estudio, y adelantarla a septiembre para que cuadre con la constitución de la sociedad contradiría los proyectos que la bitácora ya declara entregados antes.
 - `founder` sigue siendo David Serrano: es dato público y cierto, y no es una identificación fiscal.
 
+## [1.0.2] - 2026-09-04
+
+### Corregido
+
+- **La licencia del repositorio seguía a nombre de la persona natural.** `LICENSE.md` reservaba los derechos y declaraba la titularidad de la propiedad intelectual —código, arquitectura, interfaces, logotipos y activos de marca— a nombre de Franklin David Serrano Montes. Pasa a CTG Code SAS, con su NIT y su domicilio, en las dos versiones del documento. Era el único sitio del proyecto donde quedaba la identidad anterior: se había escapado del barrido de la 1.0.1 porque allí el nombre está en capitalización normal y la búsqueda fue sensible a mayúsculas.
+- **Los Términos mezclaban «CTG Code SAS» y «CTG Code» sin decir que son lo mismo.** El intro identificaba a la sociedad y dos artículos después el documento hablaba de «CTG Code» a secas, así que la cláusula de propiedad intelectual decía «SAS» y la de entregas a clientes no: parecían dos partes distintas. Ahora el intro define el término corto —«en adelante, "CTG Code"»— y el cuerpo lo usa siempre. Es como se redacta un contrato: la razón social completa se escribe una vez, al identificar a quien firma, y a partir de ahí manda la designación definida.
+
+### Técnico
+
+- La razón social sigue apareciendo donde tiene que aparecer y en ningún sitio más: el intro de los cuatro documentos legales, el colofón del footer y el `legalName`/`taxID` del JSON-LD. Repetirla en cada artículo no añade peso legal —lo añade la definición— y sí ensucia la lectura.
+- El texto de la cláusula de propiedad intelectual vuelve a ser una cadena literal: ya no interpola `legalEntity`, porque lo que nombra es la marca definida en el intro, no la entidad registrada.
+
