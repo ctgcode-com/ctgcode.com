@@ -901,3 +901,20 @@ Todos los cambios notables en este proyecto serán documentados en este archivo 
   - **PATCH** — correcciones, textos, rendimiento, accesibilidad y refactores invisibles desde fuera.
 - Es el mismo criterio que se venía aplicando, corrido un dígito: `0.33.0` (Systemslab entra en la bitácora) habría sido `1.1.0`, y `0.33.2` (el sol vuelve a animarse sin JavaScript), `1.0.1`.
 - El número no sale a ninguna parte: no lo lee nada de `src/`, no aparece en el HTML compilado ni en `llms.txt` ni en los datos estructurados. Vive entre `package.json` y este archivo, así que el salto no tiene efecto hacia fuera.
+
+## [1.0.1] - 2026-09-04
+
+### Cambiado
+
+- **El sitio pasa a operar bajo CTG Code SAS.** El registro mercantil de persona natural queda atrás: la Política de Privacidad y los Términos y Condiciones —en español y en inglés— identifican ahora a la sociedad por acciones simplificada, con su NIT y su domicilio social, en lugar del comerciante inscrito ante la Cámara de Comercio. Ya no aparece el nombre de una persona en ninguna página del sitio.
+- **La cláusula de propiedad intelectual deja de dar un rodeo.** Decía que lo publicado es «propiedad exclusiva de CTG Code (propiedad de <persona>)»; con la sociedad de por medio ese paréntesis se volvía una redundancia («CTG Code, propiedad de CTG Code SAS»). Ahora nombra directamente al titular.
+- **El colofón del footer reserva los derechos a nombre de la sociedad**, no de la marca: `© 2026 CTG Code SAS`. Es la línea que se lee en todas las páginas y la que tiene que sostener el peso legal, así que ya no se escribe a mano en la plantilla —sale de `legal.ts` como los documentos.
+
+### Técnico
+
+- `legalEntity.fullName` se renombra a `legalName` (lo que se declara ya no es el nombre de una persona) y se le añade `domicile`. El NIT de la sociedad es `902102421-8`; el dígito de verificación se comprobó con el algoritmo de la DIAN.
+- La razón social se escribe **`CTG Code SAS`**, con su capitalización real. El RUT y el certificado de existencia la imprimen en mayúsculas sostenidas, pero eso es cómo la pinta el sistema de la DIAN —hace lo mismo con los nombres de las personas—, no cómo se llama la empresa. De paso coincide con la marca.
+- La matrícula mercantil **no** se publica: Colombia no obliga a exponerla en un sitio web y el RUES se consulta por NIT, así que no añade verificabilidad —solo un dato más que mantener sincronizado.
+- El JSON-LD de `Organization` gana `legalName` y `taxID`. La marca («CTG Code») y la entidad registrada eran, para un buscador o un asistente, dos fichas sin puente; ahora el grafo dice explícitamente que son la misma cosa. `foundingDate` se queda en `2026`: es cuando nació el estudio, y adelantarla a septiembre para que cuadre con la constitución de la sociedad contradiría los proyectos que la bitácora ya declara entregados antes.
+- `founder` sigue siendo David Serrano: es dato público y cierto, y no es una identificación fiscal.
+

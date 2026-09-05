@@ -22,6 +22,7 @@ import {
   type LocaleSchema,
 } from "../../../data/i18n";
 import { siteConfig } from "../../../data/site";
+import { legalEntity } from "../../../data/legal";
 import CTA from "../../ui/CTA/CTA.astro";
 import NightSand from "../../backdrop/NightSand/NightSand.astro";
 import "./Footer.css";
@@ -291,7 +292,11 @@ const legalItems = [
   <!-- Colofón: la voz de terminal despidiéndose -->
   <div class="ft-colophon">
     <p>{t.footer.colophon}</p>
-    <p>© {year} CTG Code · {t.footer.rights}</p>
+    <!-- El colofón nombra a la SOCIEDAD, no a la marca: es la única línea
+         de todo el sitio donde «CTG Code» tiene que ser la entidad que
+         reserva los derechos, así que sale de `legal.ts` como los
+         documentos legales y no se escribe a mano aquí. -->
+    <p>© {year} {legalEntity.legalName} · {t.footer.rights}</p>
   </div>
 
   <!-- La marca, medio hundida, disolviéndose en el abismo -->

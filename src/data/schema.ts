@@ -1,4 +1,5 @@
 import { siteConfig } from './site';
+import { legalEntity } from './legal';
 import { locales, localizedPath, pageSlug } from './i18n';
 
 /**
@@ -90,6 +91,12 @@ function organization() {
     '@type': 'Organization',
     '@id': ORG_ID,
     name: siteConfig.name,
+    // La marca es «CTG Code»; la entidad que firma es la sociedad. Declarar
+    // ambas —y el NIT— es lo que permite a un buscador o a un asistente
+    // resolver que el estudio y la empresa registrada son la misma cosa, en
+    // vez de tratarlos como dos fichas sueltas.
+    legalName: legalEntity.legalName,
+    taxID: legalEntity.taxId,
     url: `${siteConfig.url}/`,
     logo: {
       '@type': 'ImageObject',
@@ -107,8 +114,9 @@ function organization() {
     },
     email: `mailto:contacto@ctgcode.com`,
     telephone: `+${siteConfig.whatsapp}`,
-    // Solo ciudad: el estudio trabaja en remoto y no recibe clientes en un
-    // local, así que declarar una calle sería falso.
+    // Solo ciudad —la misma que declara `legal.ts` como domicilio social—: el
+    // estudio trabaja en remoto y no tiene local abierto al público, así que
+    // declarar una calle sería falso.
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Cartagena de Indias',

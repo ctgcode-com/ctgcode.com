@@ -2,7 +2,7 @@ import type { LocaleSchema } from '../i18n';
 import { legalEntity } from '../legal';
 
 /** Identificación del responsable, común a los dos documentos legales. */
-const responsable = `${legalEntity.fullName}, persona natural formalmente registrada como comerciante ante la Cámara de Comercio, identificado con NIT ${legalEntity.taxId}`;
+const responsable = `${legalEntity.legalName}, sociedad por acciones simplificada constituida bajo las leyes de la República de Colombia, con domicilio en ${legalEntity.domicile.es} e identificada con NIT ${legalEntity.taxId}`;
 
 const es: LocaleSchema = {
     nav: {
@@ -1143,7 +1143,7 @@ const es: LocaleSchema = {
                     items: [
                         {
                             term: 'Propiedad de CTG Code',
-                            text: `Todo el contenido, diseño de interfaz, código fuente base, herramientas, marcas y gráficos propios expuestos en este sitio web o integrados en nuestras soluciones son propiedad exclusiva de CTG Code (propiedad de ${legalEntity.fullName}).`,
+                            text: `Todo el contenido, diseño de interfaz, código fuente base, herramientas, marcas y gráficos propios expuestos en este sitio web o integrados en nuestras soluciones son propiedad exclusiva de ${legalEntity.legalName}.`,
                         },
                         {
                             term: 'Entregas a Clientes',

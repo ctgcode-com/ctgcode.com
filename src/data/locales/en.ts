@@ -2,7 +2,7 @@ import type { LocaleSchema } from '../i18n';
 import { legalEntity } from '../legal';
 
 /** Identification of the Data Controller, shared by both legal documents. */
-const controller = `${legalEntity.fullName}, a natural person formally registered as a merchant with the Chamber of Commerce, identified with Tax ID (NIT) ${legalEntity.taxId}`;
+const controller = `${legalEntity.legalName}, a simplified joint-stock company (sociedad por acciones simplificada) incorporated under the laws of the Republic of Colombia, domiciled in ${legalEntity.domicile.en} and identified with Tax ID (NIT) ${legalEntity.taxId}`;
 
 const en: LocaleSchema = {
     nav: {
@@ -1143,7 +1143,7 @@ const en: LocaleSchema = {
                     items: [
                         {
                             term: 'Ownership by CTG Code',
-                            text: `All content, interface designs, base source code, tools, trademarks, and graphics displayed on this website or embedded in our solutions are the exclusive property of CTG Code (owned by ${legalEntity.fullName}).`,
+                            text: `All content, interface designs, base source code, tools, trademarks, and graphics displayed on this website or embedded in our solutions are the exclusive property of ${legalEntity.legalName}.`,
                         },
                         {
                             term: 'Client Deliverables',
